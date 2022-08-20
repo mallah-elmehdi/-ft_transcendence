@@ -9,7 +9,7 @@ type Props = {
 
 export const Card = ({ children, ...props }: Props) => {
     return (
-        <Box p={5} bg="dark" borderRadius="2xl" boxShadow="default" w="fit-content" {...props}>
+        <Box p={10} _dark={{ bg: 'grey.700' }} borderRadius="2xl" boxShadow="default" {...props}>
             {children}
         </Box>
     );

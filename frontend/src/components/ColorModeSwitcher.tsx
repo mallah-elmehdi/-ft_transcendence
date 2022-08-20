@@ -10,21 +10,17 @@ export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = (props) => {
     const SwitchIcon = useColorModeValue(RiMoonClearFill, RiSunFill);
 
     return (
-        <Flex w="100%">
-            <Spacer />
-
-            <IconButton
-                size="lg"
-                // p={3}
-                fontSize="4xl"
-                borderRadius="2xl"
-                variant="ghost"
-                color="current"
-                onClick={toggleColorMode}
-                icon={<SwitchIcon />}
-                aria-label={`Switch to ${text} mode`}
-                {...props}
-            />
-        </Flex>
+        <IconButton
+            size="lg"
+            // p={3}
+            fontSize="4xl"
+            borderRadius="2xl"
+            variant="ghost"
+            color="current"
+            onClick={toggleColorMode}
+            icon={<SwitchIcon />}
+            aria-label={`Switch to ${text} mode`}
+            {...props}
+        />
     );
 };
