@@ -28,7 +28,7 @@ export const Profile = () => {
                 <Card w="100%" h="100%">
                     <Stack alignItems="center" spacing={5} h="100%">
                         <Avatar name="yousef noam" src="https://cdn.intra.42.fr/users/ynoam.jpg" size="2xl">
-                            <AvatarBadge boxSize="1em" bg="primary" />
+                            <AvatarBadge boxSize="0.8em" bg="primary" />
                         </Avatar>
                         <Text textTransform="capitalize" fontSize="5xl">
                             ynoam
@@ -70,7 +70,7 @@ export const Profile = () => {
                         <Button
                             variant="solid"
                             bg="secondary"
-                            color="gray.900"
+                            // color="gray.900"
                             borderRadius="3xl"
                             fontSize="5xl"
                             fontWeight="light"

@@ -37,8 +37,8 @@ export const Navbar = () => {
                     </Tabs>
                 </Card>
                 <Spacer />
-                <Spacer />
-                <Spacer />
+                {/*<Spacer />*/}
+                {/*<Spacer />*/}
                 <ColorModeSwitcher />
             </HStack>
         );
