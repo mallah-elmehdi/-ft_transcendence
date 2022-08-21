@@ -1,39 +1,73 @@
-import * as React from 'react';
-import { Stack, VStack, Heading, Button, Image } from '@chakra-ui/react';
+import intra from '../assets/intra.png';
+import {
+    Text,
+    Box,
+    Flex,
+    Button,
+    Heading,
+    useColorMode,
+    Image,
+} from "@chakra-ui/react";
+import Logo from "../component/logo.tsx";
+import ToggleMode from "../component/toggleMode.tsx";
 
-// COMPONENTS
-import { Card } from '../components/Card';
-
-// ICONS
-// import Logo42 from '../assets/icons/42_Logo.svg';
-
-export const SignIn = () => {
+export  default function SignInPage() {
+    const { colorMode, toggleColorMode } = useColorMode()
+    // const width =
     return (
-        <Stack w="100%" h="100%" alignItems="center" justifyContent="center">
-            <Card px={20} py={10}>
-                <VStack spacing={5}>
-                    <Heading as="h1" fontSize="6xl">
+        <Box
+            p={10}
+            h={'100vh'}
+        >
+            <Flex mb={0} px={10} justifyContent={"right"} >
+                <ToggleMode colorMode={colorMode} toggleColorMode={toggleColorMode} />
+            </Flex>
+            <Flex
+                w={'100%'}
+                h={'100%'}
+                m={0} p={0}
+                alignItems={"center"}
+                justifyContent={"center"}
+            >
+                <Flex
+                    boxShadow={colorMode === 'dark' ? "dark-lg" : "md"}
+                    rounded='30px'
+                    w={{base:'700px',md:'500px'}}
+                    h={"400px"}
+                    direction={"column"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                >
+                    <Heading
+                        mb={"30px"}
+                        // fontSize={{base: 45,md:60}}
+                        fontSize={60}
+                    >
                         Welcome To
                     </Heading>
+                    <Logo />
                     <Button
-                        // leftIcon={<Logo42 />}
-                        variant="solid"
-                        bg="main.secondary"
-                        color="white"
-                        borderRadius="2xl"
-                        fontSize="lg"
-                        w="100%"
-                        _focus={{
-                            bg: 'main.secondary',
-                        }}
-                        _hover={{
-                            bg: 'main.secondary',
-                        }}
+                        _hover={{ bg: 'green' }}
+                        _active={{}} // TIPS: on click keep the color green
+                        // _focus={{
+                        //     // boxShadow:
+                        //     //     '0 0 1px 2px rgba(88, 144, 255, .75), 0 1px 1px rgba(0, 0, 0, .15)',
+                        // }}
+                        rounded='20px'
+                        p={8} h={'50px'} mt={10}
+                        // w={{base:'200px',md:'300px'}}
+                        w={'300px'}
+                        bg={"green"}
                     >
-                        Sign In
+                        <Image w={10} mr={8} src={intra}></Image>
+                        <Text
+                            fontSize={30}
+                        >
+                            Sign In
+                        </Text>
                     </Button>
-                </VStack>
-            </Card>
-        </Stack>
-    );
-};
+                </Flex>
+            </Flex>
+        </Box>
+    )
+}

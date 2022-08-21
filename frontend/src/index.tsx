@@ -1,15 +1,16 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom/client';
-import { ColorModeScript } from '@chakra-ui/react';
-import { AppRoutes } from './routes';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import theme from "./style/theme";
+import {ChakraProvider} from "@chakra-ui/react";
+// import {SignInPage} from "./pages/";
+// import GamePage from "./pages/game.tsx";
+import SignInPage from "./pages/signin.tsx";
 
-const container = document.getElementById('root');
-if (!container) throw new Error('Failed to find the root element');
-const root = ReactDOM.createRoot(container);
-
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <ColorModeScript />
-        <AppRoutes />
+        <ChakraProvider theme={theme} >
+            <SignInPage />
+        </ChakraProvider>
     </React.StrictMode>
 );
