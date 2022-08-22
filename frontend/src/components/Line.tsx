@@ -7,5 +7,5 @@ type Props = {
 };
 
 export const Line = ({ maxW }: Props) => {
-    return <Divider maxW={maxW} border="2px" _light={{ borderColor: 'black' }} _dark={{ borderColor: 'gray.400' }} />;
+    return <Divider maxW={maxW} border="1px" _light={{ borderColor: 'gray.400' }} _dark={{ borderColor: 'gray.200' }} />;
 };

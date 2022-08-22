@@ -17,6 +17,7 @@ import { UserWrapper } from './components/UserWrapper';
 // PAGES
 import { SignIn } from './pages/SignIn';
 import { Profile } from './pages/Profile';
+import { Chat } from './pages/Chat';
 
 export const AppRoutes = () => (
     <ChakraProvider theme={theme}>
@@ -26,7 +27,7 @@ export const AppRoutes = () => (
                     <Route path={pagesContent.signIn.url} element={<SignIn />} />
                     <Route element={<UserWrapper />}>
                         <Route path={pagesContent.profile.url} element={<Profile />} />
-                        <Route path={pagesContent.chat.url} element={<div>chat</div>} />
+                        <Route path={pagesContent.chat.url} element={<Chat />} />
                         <Route path={pagesContent.play.url} element={<div>play</div>} />
                     </Route>
                 </Route>

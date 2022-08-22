@@ -9,8 +9,17 @@ import { Logo } from '../components/Logo';
 
 // ICONS
 import Logo42 from '../assets/icons/42_Logo.png';
+// HOOKS
+import { usePageTitle } from '../hooks/usePageTitle';
+
+// CONSTANTS
+import { pagesContent } from '../constants';
 
 export const SignIn = () => {
+    // page title
+    usePageTitle(pagesContent.signIn.title);
+
+    // breakpoint
     const paddingX = useBreakpointValue({
         md: 12,
         base: 10,
@@ -20,7 +29,7 @@ export const SignIn = () => {
         base: '5xl',
     });
     return (
-        <Stack h="100%">
+        <Stack h="90vh">
             <Flex justifyContent="flex-end">
                 <ColorModeSwitcher />
             </Flex>
