@@ -2,8 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5cd2ea18-4c7a-48bc-97c3-f440052e3092" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/components/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Navbar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Profile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Profile.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/component/Navbar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/GamePage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/ProfilePage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/SignInPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/logo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/logo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/SignIn.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/game.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/game.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/signin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/SignInPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,11 +78,22 @@
       <updated>1661030980224</updated>
       <workItem from="1661030982693" duration="1356000" />
       <workItem from="1661088735091" duration="115000" />
+      <workItem from="1661161668877" duration="1635000" />
+      <workItem from="1661174694430" duration="73000" />
+      <workItem from="1661176554816" duration="764000" />
+      <workItem from="1661269887090" duration="1639000" />
+      <workItem from="1661276981429" duration="4635000" />
+      <workItem from="1661289735348" duration="330000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/src/index.jsx" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

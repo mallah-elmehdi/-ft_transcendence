@@ -1,7 +1,7 @@
 import intra from '../assets/intra.png';
 import {
     Text,
-    Box,
+    // Box,
     Flex,
     Button,
     Heading,
@@ -9,19 +9,11 @@ import {
     Image,
 } from "@chakra-ui/react";
 import Logo from "../component/logo.tsx";
-import ToggleMode from "../component/toggleMode.tsx";
 
 export  default function SignInPage() {
-    const { colorMode, toggleColorMode } = useColorMode()
-    // const width =
+    const { colorMode } = useColorMode()
     return (
-        <Box
-            p={10}
-            h={'100vh'}
-        >
-            <Flex mb={0} px={10} justifyContent={"right"} >
-                <ToggleMode colorMode={colorMode} toggleColorMode={toggleColorMode} />
-            </Flex>
+        <>
             <Flex
                 w={'100%'}
                 h={'100%'}
@@ -68,6 +60,6 @@ export  default function SignInPage() {
                     </Button>
                 </Flex>
             </Flex>
-        </Box>
+        </>
     )
 }
