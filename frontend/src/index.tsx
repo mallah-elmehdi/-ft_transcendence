@@ -24,12 +24,11 @@ root.render(
                 <BrowserRouter>
                     <Navbar isSignIn={isSignIn}/>
                     <Routes>
-                        <Route path={'/'} element={isSignIn ? <Navigate to={'/home'}/> : <SignInPage />} />
-                        <Route path={'/game'} element={isSignIn ?  <GamePage/> : <Navigate to={'/'}/> } />
-                        <Route path={'/profile'} element={isSignIn ?  <ProfilePage /> : <Navigate to={'/'}/> } />
-                        <Route path={'/chat'} element={isSignIn ?  <ChatPage /> : <Navigate to={'/'}/> } />
-                        <Route path={'/home'} element={isSignIn ?  <HomePage /> : <Navigate to={'/'}/> } />
-                        <Route path={'/play'} element={isSignIn ?  <PlayPage /> : <Navigate to={'/'}/> } />
+                        <Route path={'/login'} element={isSignIn ? <Navigate to={'/home'}/> : <SignInPage />} />
+                        <Route path={'/home'} element={isSignIn ?  <HomePage /> : <Navigate to={'/login'}/> } />
+                        <Route path={'/play'} element={isSignIn ?  <PlayPage /> : <Navigate to={'/login'}/> } />
+                        <Route path={'/chat'} element={isSignIn ?  <ChatPage /> : <Navigate to={'/login'}/> } />
+                        <Route path={'/profile'} element={isSignIn ?  <ProfilePage /> : <Navigate to={'/login'}/> } />
                     </Routes>
                 </BrowserRouter>
             </Box>
