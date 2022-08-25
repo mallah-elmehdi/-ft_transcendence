@@ -11,7 +11,6 @@ import {
 import Logo from "../component/logo.tsx";
 
 export  default function SignInPage() {
-    const { colorMode } = useColorMode()
     return (
         <>
             <Flex
@@ -22,7 +21,7 @@ export  default function SignInPage() {
                 justifyContent={"center"}
             >
                 <Flex
-                    boxShadow={colorMode === 'dark' ? "dark-lg" : "md"}
+                    _dark={{ boxShadow: 'dark-lg' }} _light={{ boxShadow: 'md' }}
                     rounded='30px'
                     w={{base:'700px',md:'500px'}}
                     h={"400px"}

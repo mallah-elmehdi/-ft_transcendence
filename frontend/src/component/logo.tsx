@@ -7,10 +7,11 @@ import {
 } from "@chakra-ui/react";
 
 export default function Logo(props) {
-    const logoColor = useColorModeValue('#000000', 'white')
     return (
         // <Image src={logo} width={"170px"} {...props}></Image>
-        <Heading color={logoColor}>
+        <Heading
+            _dark={{ color: 'white' }} _light={{ color: '#000000' }}
+        >
             Pon
             <Text as={"span"} color={'red'}>G</Text>
             ame

@@ -1,4 +1,4 @@
-import { Flex, Spacer, Tabs, TabList, Text, useColorMode, Tab, Show, Hide, useDisclosure } from '@chakra-ui/react';
+import {Flex, Spacer, Tabs, TabList, Text, useColorMode, Tab, Show, Hide, useDisclosure, Box} from '@chakra-ui/react';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import React from 'react';
@@ -17,7 +17,7 @@ export default function Navbar(props) {
         setSize(newSize);
         onOpen();
     };
-    const tabs = ['Home', 'Play', 'Chat', 'Profile'];
+    const tabs = ['Home', 'Chat', 'Profile'];
     const location = useLocation();
     return (
         <Flex
@@ -28,7 +28,9 @@ export default function Navbar(props) {
             // bg={'#777777'}
         >
             <Show above="md">
-                <Logo />
+                <Link to={'/home'} >
+                    <Logo />
+                </Link>
             </Show>
             <Show below="md">
                 <Button
@@ -40,9 +42,17 @@ export default function Navbar(props) {
                 </Button>
             </Show>
             <Modal onClose={onClose} size={'full'} isOpen={isOpen}>
-                <ModalContent >
+                <ModalContent
+                    _light={{ bg: 'white' }} _dark={{ bg: '#000000' }}
+                >
                     <ModalHeader>
-                        <Logo />
+                        <Link to={'/home'} >
+                            <Box
+                                onClick={onClose}
+                            >
+                                <Logo />
+                            </Box>
+                        </Link>
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
@@ -58,13 +68,13 @@ export default function Navbar(props) {
                                 display={'row'}
                             >
                                 {
-                                    tabs.map((tab) => (
-                                        <Link to={'/' + tab.toLowerCase()} >
+                                    tabs.map((tab, i) => (
+                                        <Link to={'/' + tab.toLowerCase()} key={i.toString()} >
                                             <Text
                                                 onClick={onClose}
                                                 fontSize={'30px'}
                                                 p={'10px'}
-                                                color={location.pathname === '/' + tab.toLowerCase() ? 'red' : 'none'}
+                                                color={location.pathname === '/' + tab.toLowerCase() ? 'red' : 'none' }
                                             >
                                                 {tab}
                                             </Text>
@@ -80,9 +90,11 @@ export default function Navbar(props) {
             <Show above="md">
                 {props.isSignIn && (
                     <Show above="sm">
-                        <Flex boxShadow={colorMode === 'dark' ? 'dark-lg' : 'md'} rounded="20px" justifyContent={'center'} alignItems={'center'} px={'20px'}>
-                            {tabs.map((tab) => (
-                                <Link to={'/' + tab.toLowerCase()}>
+                        <Flex
+                            _dark={{ boxShadow: 'dark-lg' }} _light={{ boxShadow: 'md' }}
+                            rounded="20px" justifyContent={'center'} alignItems={'center'} px={'20px'}>
+                            {tabs.map((tab, i) => (
+                                <Link to={'/' + tab.toLowerCase()} key={i.toString()}>
                                     <Text
                                         px={'10px'}
                                         fontSize={'30px'}
@@ -98,7 +110,7 @@ export default function Navbar(props) {
             </Show>
             <Spacer />
 
-            <ToggleMode colorMode={colorMode} toggleColorMode={toggleColorMode} />
+            <ToggleMode />
         </Flex>
     );
 }
