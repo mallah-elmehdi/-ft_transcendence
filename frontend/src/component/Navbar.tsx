@@ -27,6 +27,9 @@ export default function Navbar(props) {
             alignItems={'center'}
             // bg={'#777777'}
         >
+            {props.isSignIn && (
+                <>
+
             <Show above="md">
                 <Link to={'/home'} >
                     <Logo />
@@ -92,11 +95,12 @@ export default function Navbar(props) {
                     <Show above="sm">
                         <Flex
                             _dark={{ boxShadow: 'dark-lg' }} _light={{ boxShadow: 'md' }}
-                            rounded="20px" justifyContent={'center'} alignItems={'center'} px={'20px'}>
+                            rounded="20px" justifyContent={'center'} alignItems={'center'} px={'20px'}
+                        >
                             {tabs.map((tab, i) => (
                                 <Link to={'/' + tab.toLowerCase()} key={i.toString()}>
                                     <Text
-                                        px={'10px'}
+                                        px={['10px', '20px', '20px', '30px']}
                                         fontSize={'30px'}
                                         color={location.pathname === '/' + tab.toLowerCase() ? 'red' : 'none'}
                                     >
@@ -109,6 +113,8 @@ export default function Navbar(props) {
                 )}
             </Show>
             <Spacer />
+                </>
+            )}
 
             <ToggleMode />
         </Flex>

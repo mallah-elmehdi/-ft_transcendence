@@ -22,7 +22,7 @@ root.render(
         <ChakraProvider theme={theme} >
             <Center>
             <Box
-                p={10}
+                p={[1, 10, 10,10]}
                 h={'100vh'}
                 // mx={{base: 0,md: 0,lg:0, xl: '2em', '2xl': '6em',  }}
                 // mx={[0, 0, 0, 0, '1em', '4em', '8em']}
