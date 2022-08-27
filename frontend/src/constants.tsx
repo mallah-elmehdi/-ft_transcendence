@@ -1,6 +1,10 @@
 export const pagesContent = {
-    signIn: {
+    home: {
         url: '/',
+        title: 'PonGame | Welcome',
+    },
+    signIn: {
+        url: '/sign-in',
         title: 'PonGame | Welcome',
     },
     profile: {

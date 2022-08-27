@@ -1,29 +1,28 @@
 import * as React from 'react';
 import { Tab as ChakraTab } from '@chakra-ui/react';
-import { Link as RRDLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 // TYPE
 type Props = {
     children: string;
     to: string;
+    isSelected?: boolean;
     [other: string]: any;
 };
 
-export const Tab = ({ children, to, ...props }: Props) => {
+export const Tab = ({ children, isSelected, to, ...props }: Props) => {
     return (
-        <RRDLink to={to}>
+        <Link to={to}>
             <ChakraTab
                 fontSize="2xl"
                 {...props}
                 _hover={{
                     textDecoration: 'none',
                 }}
-                _selected={{
-                    color: 'secondary',
-                }}
+                color={isSelected ? 'secondary' : ''}
             >
                 {children}
             </ChakraTab>
-        </RRDLink>
+        </Link>
     );
 };

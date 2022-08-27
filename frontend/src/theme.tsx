@@ -33,4 +33,19 @@ export const theme = extendTheme({
         heading: `'jua', sans-serif`,
         body: `'jua', sans-serif`,
     },
+    sidebar: {
+        '::-webkit-scrollbar': {
+            width: '0.6rem',
+        },
+        '::-webkit-scrollbar-track': {
+            background: 'gray.100',
+            borderRadius: 'full',
+        },
+        '::-webkit-scrollbar-thumb': {
+            backgroundColor: 'gray.300',
+            border: '0.125rem solid rgba(0, 0, 0, 0)',
+            backgroundClip: 'padding-box',
+            borderRadius: 'full',
+        },
+    },
 });

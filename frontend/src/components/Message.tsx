@@ -28,10 +28,10 @@ export const Message = ({ children, isSent }: Props) => {
                           borderBottomLeftRadius: 'sm',
                       }
                     : {
-                          borderTopRightRadius: '2xl',
+                          borderTopRightRadius: 'sm',
                           borderTopLeftRadius: '2xl',
                           borderBottomLeftRadius: '2xl',
-                          borderBottomRightRadius: 'sm',
+                          borderBottomRightRadius: '2xl',
                       }
             }
         >
