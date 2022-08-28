@@ -1,17 +1,18 @@
-/*.App {*/
-/*    !*cursor: url('./assets/PonGame.png');*!*/
-/*    text-align: center;*/
-/*    z-index: 1;*/
-/*    width: 10%;*/
-/*    height: 10%;*/
-/*    !*position: fixed;*!*/
-/*    background: red;*/
-/*    top: 0;*/
-/*    left: 0;*/
-/*    cursor: url(assets/pong.svg), auto;*/
 
-/*}*/
-/*a{*/
-/*    cursor: url(assets/pong.svg), auto;*/
+::-webkit-scrollbar {
+    width: 5px;
+}
 
-/*}*/
+::-webkit-scrollbar-track {
+    background: none;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #BFC5DC;
+    border-radius:10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+
+}

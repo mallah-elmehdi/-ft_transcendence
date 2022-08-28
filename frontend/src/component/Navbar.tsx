@@ -46,7 +46,7 @@ export default function Navbar(props) {
             </Show>
             <Modal onClose={onClose} size={'full'} isOpen={isOpen}>
                 <ModalContent
-                    _light={{ bg: 'white' }} _dark={{ bg: '#000000' }}
+                    _light={{ bg: 'white' }} _dark={{ bg: '#475772' }}
                 >
                     <ModalHeader>
                         <Link to={'/home'} >

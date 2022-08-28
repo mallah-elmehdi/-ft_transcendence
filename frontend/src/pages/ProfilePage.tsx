@@ -34,7 +34,7 @@ export  default function ProfilePage() {
             avatar:'https://cdn.intra.42.fr/users/ynoam.jpg',
             username: 'ynoam',
             facebook: 'ynoam',
-            discord: 'ynoam',
+            discord: '831112187321253928',
             instagram: 'ynoam__',
             two_factor_auth: false,
             achievement: {
@@ -327,7 +327,7 @@ export  default function ProfilePage() {
                         <a target={'_blank'} href={`https://www.instagram.com/${data.profile.instagram}`} >
                             <FaInstagram size={35}/>
                         </a>
-                        <a target={'_blank'} href={`https://www.discord.com/${data.profile.discord}`} >
+                        <a target={'_blank'} href={`https://www.discordapp.com/users/${data.profile.discord}`} >
                             <FaDiscord size={35}/>
                         </a>
                     </HStack>
