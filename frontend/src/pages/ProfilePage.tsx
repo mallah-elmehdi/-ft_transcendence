@@ -1,6 +1,4 @@
 import {
-    Avatar,
-    AvatarBadge,
     Box,
     Button,
     Divider,
@@ -12,25 +10,21 @@ import {
     Text,
     useColorMode, Stack, SimpleGrid, Center, Show,
     Hide, VStack,
-    useDisclosure, Tooltip
+    useDisclosure, Tooltip,
+    Avatar
+
 } from "@chakra-ui/react";
-import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-} from '@chakra-ui/react'
-import { useBoolean } from '@chakra-ui/react'
 import { Wrap, WrapItem } from '@chakra-ui/react'
-import {FaFacebook, FaInstagram, FaDiscord, FaShieldAlt, FaPen } from "react-icons/fa";
-import React from "react";
+import {FaFacebook, FaInstagram, FaDiscord, FaShieldAlt, FaPen, FaPlus } from "react-icons/fa";
+
+// component
+import MyAvatar  from "../component/MyAvatar.tsx"
+
 
 export  default function ProfilePage() {
     const data = {
         profile : {
+            id: '1234567890',
             avatar:'https://cdn.intra.42.fr/users/ynoam.jpg',
             username: 'ynoam',
             facebook: 'ynoam',
@@ -230,10 +224,6 @@ export  default function ProfilePage() {
             ],
         }
     }
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const [hoverAvatar, setHoverAvatar] = useBoolean()
-    const [hoverUsername, setHoverUsername] = useBoolean()
-
     return (
         <Flex
             w={'100%'}
@@ -260,63 +250,12 @@ export  default function ProfilePage() {
                     alignItems={"center"}
                     my={'50px'}
                 >
-                    <Avatar
-                        size={'xl'}
-                        bg={'red'}
-                        name={'Youssef Noam'}
-                        src={data.profile.avatar}
-                        _hover={{
-                            bg:'red',
-                            transitionDelay: '1s'
-                        }}
-                        position={'relative'}
-                        onClick={onOpen}
-                    >
-                        <Flex
-                            position={'absolute'}
-                            w={'100%'}
-                            h={'100%'}
-                            rounded={'50%'}
-                            _hover={{bg:'#aaaaaaaa'}}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            onMouseEnter={setHoverAvatar.toggle}
-                            onMouseLeave={setHoverAvatar.toggle}
-                        >
-                            {hoverAvatar && <Text as={'Button'} fontSize={13}>Change Avatar</Text>}
-                        </Flex>
-                        <AvatarBadge boxSize={'0.7em'} bg={'green'} />
-                    </Avatar>
-                    <Modal
-                        isCentered
-                        onClose={onClose}
-                        isOpen={isOpen}
-                        motionPreset='slideInBottom'
-                    >
-                        <ModalOverlay />
-                        <ModalContent>
-                            <ModalHeader>Edit Profile</ModalHeader>
-                            <ModalBody align={"center"} >
-                                <Avatar
-                                    size={'xl'}
-                                    bg={'red'}
-                                    name={'Youssef Noam'}
-                                    src={data.profile.avatar}
-                                >
-                                </Avatar>
-                            </ModalBody>
-                            <ModalFooter>
-                                <Button rounded='20px' bg={"green"} >
-                                    <Text fontSize={20} onClick={onClose}></Text>
-                                </Button>
-                                <Button rounded='20px' bg={"red"} >
-                                    <Text fontSize={20} onClick={onClose}>Discard</Text>
-                                </Button>
-                            </ModalFooter>
-                        </ModalContent>
-                    </Modal>
+                    <MyAvatar name={data.profile.username} src={data.profile.avatar} />
                     <Tooltip label={"Click to Change"}>
                         <Text my={7} fontSize={25} fontWeight={'bold'} > {data.profile.username} </Text>
+                        <Text>
+                        lkjlkjlkj
+                        </Text>
                     </Tooltip>
                     <Divider border="1px" bg={'#2F3A53'} w={40} />
                     <HStack my={5} spacing={8} >
@@ -382,7 +321,6 @@ export  default function ProfilePage() {
                 justifyContent={"center"}
                 alignItems={"center"}
                 direction={'column'}
-                // maxHeight={1000}
                 minHeight={1000}
             >
                 <Flex
@@ -390,17 +328,11 @@ export  default function ProfilePage() {
                     w={'100%'}
                     pt={10}
                     direction={['column','column','column', 'column', 'row']}
-                    // justifyContent={"center"}
-                    // alignItems={"center"}
-                    // minHeight={100}
-                    // bg={'red'}
                 >
                     <Flex
                         direction={'column'}
                         w={['100%', '100%', '100%', '100%', '40%']}
                         alignItems={"center"}
-                        // bg={'red'}
-                        // justifyContent={"center"}
                     >
                         <Text
                             my={7}
@@ -420,7 +352,6 @@ export  default function ProfilePage() {
                                 justifyContent={"left"}
                                 alignItems={"left"}
                                 spacing={3}
-                                // bg={'red'}
                             >
                                 <Text>Total Games</Text>
                                 <Text>Wins</Text>
@@ -429,7 +360,6 @@ export  default function ProfilePage() {
                             </VStack>
                             <Spacer/>
                             <VStack
-                                // bg={'red'}
                                 justifyContent={"right"}
                                 alignItems={"right"}
                                 align={'right'}
@@ -442,11 +372,11 @@ export  default function ProfilePage() {
                             </VStack>
                         </Flex>
                     </Flex>
-                    <Hide below="md" >
-                    {/*<Center>*/}
-                    {/*    <Divider mt={200} orientation='vertical' border="1px" bg={'#2F3A53'} h={'30%'}/>*/}
-                    {/*</Center>*/}
-                    </Hide>
+                    {/*<Hide below="md" >*/}
+                    {/*/!*<Center>*!/*/}
+                    {/*/!*    <Divider mt={200} orientation='vertical' border="1px" bg={'#2F3A53'} h={'30%'}/>*!/*/}
+                    {/*/!*</Center>*!/*/}
+                    {/*</Hide>*/}
                     <Flex
                         direction={'column'}
                         alignItems={"center"}
@@ -456,19 +386,14 @@ export  default function ProfilePage() {
                             my={7}
                             fontSize={25}
                             fontWeight={'bold'}
-                            // bg={'red'}
                         >
                             Matches History
                         </Text>
                         <Divider border="1px" bg={'#2F3A53'} w={'50%'} />
-                        {/*<Divider border="1px" bg={'#2F3A53'} w={'50%'} />*/}
                         <Flex
-                            // bg={'red'}
                             mt={7}
-                            // p={10}
                             direction={'column'}
                             w={['100%', '100%', '70%', '70%', '80%']}
-                            // w={'80%'}
                             justifyContent={"center"}
                             alignItems={"center"}
                             maxHeight={500}
@@ -484,18 +409,13 @@ export  default function ProfilePage() {
                                             spacing={3}
                                             my={2}
                                             w={'100%'}
-                                            // bg={'red'}
                                         >
                                             <Text>{match.player}</Text>
-                                            {/*<Spacer/>*/}
                                             <Avatar name={match.player} src={match.player_avatar} ></Avatar>
-                                            {/*<Spacer/>*/}
                                             <Text>{match.player_pointes}</Text>
                                             <Divider border="2px" bg={'#FFFFFF'} w={'20px'} />
                                             <Text>{match.opponent_pointes}</Text>
-                                            {/*<Spacer/>*/}
                                             <Avatar name={match.opponent} src={match.opponent_avatar} ></Avatar>
-                                            {/*<Spacer/>*/}
                                             <Text>{match.opponent}</Text>
                                         </HStack>
                                     </>
