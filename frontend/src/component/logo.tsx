@@ -1,14 +1,9 @@
-import logo from '../assets/PonGame.png';
 import {
     Heading,
-    Image,
-    Text,
-    useColorModeValue
-} from "@chakra-ui/react";
+    Text} from "@chakra-ui/react";
 
-export default function Logo(props) {
+export default function Logo() {
     return (
-        // <Image src={logo} width={"170px"} {...props}></Image>
         <Heading
             _dark={{ color: 'white' }} _light={{ color: '#000000' }}
         >

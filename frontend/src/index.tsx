@@ -4,18 +4,18 @@ import theme from "./style/theme";
 import {ChakraProvider, Box, Center} from "@chakra-ui/react";
 import {BrowserRouter, Link, Navigate, Route, Routes} from "react-router-dom";
 
-import Navbar from "./component/Navbar.tsx";
+import Navbar from "./component/Navbar";
 // pages
 
-import SignInPage from "./pages/SignInPage.tsx";
-import ProfilePage from "./pages/ProfilePage.tsx";
-import ChatPage from "./pages/ChatPage.tsx";
-import PlayPage from "./pages/PlayPage.tsx";
-import HomePage from "./pages/HomePage.tsx";
+import SignInPage from "./pages/SignInPage";
+import ProfilePage from "./pages/ProfilePage";
+import ChatPage from "./pages/ChatPage";
+import PlayPage from "./pages/PlayPage";
+import HomePage from "./pages/HomePage";
 
 
-import "./index.css"
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import "./style/index.css"
+const root = ReactDOM.createRoot(document.getElementById('root')!);
 const isSignIn = true;
 root.render(
     <React.StrictMode>

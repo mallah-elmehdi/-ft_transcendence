@@ -30,6 +30,7 @@ import {
     WrapItem,
     Alert,
     AlertIcon,
+    SkeletonCircle,
 
 } from "@chakra-ui/react";
 import {  } from '@chakra-ui/react'
@@ -37,22 +38,22 @@ import {FaFacebook, FaInstagram, FaDiscord, FaShieldAlt, FaPen, FaPlus } from "r
 import {MdError} from "react-icons/md"
 import {RiImageAddFill} from "react-icons/ri"
 import {InfoOutlineIcon} from "@chakra-ui/icons"
-import {useEffect, useState} from "react";
+import {SetStateAction, useEffect, useState} from "react";
 import axios from "axios";
 
 // component
 
 
-function Avatar(props)
+function Avatar(props: { name: string | undefined; src: string | undefined; })
 {
-    var fileInput;
+    var fileInput: HTMLInputElement | null;
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [hoverAvatar, setHoverAvatar] = useBoolean()
     const [selectedAvatar , setSelectedAvatar] = useState(null)
     const selectImageToast = useToast()
 
-    function avatarSelectHandler(event){
-        console.log(event.target.files[0].name)
+    function avatarSelectHandler(event:any){
+        console.log(event.target.files[0]!.name)
         setSelectedAvatar(event.target.files[0])
     }
 
@@ -60,24 +61,24 @@ function Avatar(props)
         if (selectedAvatar != null)
         {
             // send data to backend
-            const fd = new FormData();
-            fd.append('avatarImage', selectedAvatar, selectedAvatar.name)
-            const backEndLink = 'http://www.oac.uci.edu/indiv/franklin/cgi-bin/values';
-            axios.post(backEndLink, fd, {
-                onUploadProgress: progressEvent => {
-                    console.log('upload Progress: ' + Math.round(progressEvent.load / progressEvent.total * 100) + "%")
-                }
-            })
-                .then(res => {
-                    console.log('RESULT');
-                    console.log(res);
-                })
-                .catch(err => {
-                    console.log('--------------------ERROR--------------------')
-                    console.log(err)
+            // const fd = new FormData();
+            // fd.append('avatarImage', selectedAvatar, selectedAvatar.name)
+            // const backEndLink = 'http://www.oac.uci.edu/indiv/franklin/cgi-bin/values';
+            // axios.post(backEndLink, fd, {
+            //     onUploadProgress: progressEvent => {
+            //         console.log('upload Progress: ' + Math.round(progressEvent.load / progressEvent.total * 100) + "%")
+            //     }
+            // })
+            //     .then(res => {
+            //         console.log('RESULT');
+            //         console.log(res);
+            //     })
+            //     .catch(err => {
+            //         console.log('--------------------ERROR--------------------')
+            //         console.log(err)
 
-                    console.log('---------------------------------------------')
-                })
+            //         console.log('---------------------------------------------')
+            //     })
         }
         else
         {
@@ -121,7 +122,7 @@ function Avatar(props)
                     onMouseEnter={setHoverAvatar.toggle}
                     onMouseLeave={setHoverAvatar.toggle}
                 >
-                    {hoverAvatar && <Text as={'Button'} fontSize={13}>Change Avatar</Text>}
+                    {hoverAvatar && <Text as={'button'} fontSize={13}>Change Avatar</Text>}
                 </Flex>
             </ChakraAvatar>
             <Modal
@@ -131,12 +132,20 @@ function Avatar(props)
                 motionPreset={'slideInBottom'}
             >
                 <ModalOverlay />
-                <ModalContent>
+                <ModalContent
+                        justifyContent={"center"}
+                        alignItems={"center"}
+                >
                     <ModalHeader>Select Image</ModalHeader>
                     <ModalBody
                         justifyContent={"center"}
                         alignItems={"center"}
-                        align={"center"}
+                        // align={
+                        //     {
+                        // justifyContent:"center",
+                        // alignItems:"center",
+                        //     }
+                        // }
                     >{!selectedAvatar ?
                         <ChakraAvatar
                             size={'xl'}
@@ -151,7 +160,7 @@ function Avatar(props)
                                 h={'100%'}
                                 rounded={'50%'}
                                 bg={'#aaaaaaaa'}
-                                onClick={() => fileInput.click()}
+                                onClick={() => fileInput!.click()}
                             >
                                 <RiImageAddFill color={'white'} size={30}/>
                                 <input
@@ -597,7 +606,7 @@ export  default function ProfilePage() {
                                             spacing={3}
                                             my={2}
                                             w={'100%'}
-                                            id = {id.toString()}
+                                            key = {id.toString()}
                                         >
                                             <Text>{match.player.slice(0,10)}</Text>
                                             <ChakraAvatar name={match.player} src={match.player_avatar} ></ChakraAvatar>

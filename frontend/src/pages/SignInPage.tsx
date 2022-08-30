@@ -8,7 +8,7 @@ import {
     useColorMode,
     Image,
 } from "@chakra-ui/react";
-import Logo from "../component/logo.tsx";
+import Logo from "../component/logo";
 
 export  default function SignInPage() {
     return (

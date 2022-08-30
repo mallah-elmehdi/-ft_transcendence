@@ -1,20 +1,23 @@
 import {Flex, Spacer, Tabs, TabList, Text, useColorMode, Tab, Show, Hide, useDisclosure, Box} from '@chakra-ui/react';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
-import React from 'react';
+import React, {useState} from 'react';
 
-import ToggleMode from './toggleMode.tsx';
-import Logo from './logo.tsx';
+import ToggleMode from './toggleMode';
+import Logo from './logo';
 
 import {Link, useLocation} from 'react-router-dom';
 
-export default function Navbar(props) {
+interface props{
+    isSignIn: boolean;
+}
+export default function Navbar(props: props) {
     const { colorMode, toggleColorMode } = useColorMode();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [size, setSize] = React.useState('md');
+    const [size, setSize] = useState<String>('md');
 
-    const handleSizeClick = (newSize) => {
-        setSize(newSize);
+    const handleSizeClick = (newSize: String) => {
+        setSize(newSize );
         onOpen();
     };
     const tabs = ['Home', 'Chat', 'Profile'];
@@ -40,13 +43,15 @@ export default function Navbar(props) {
                     // _active={{bg:'red'}} // TIPS: on click keep the color green
                     // _focus={{}}
                     _hover={{bg:'green'}}
-                    onClick={() => handleSizeClick(size)} key={size}>
+                    // FIXME: i dont know the solution for this error below, i will fix if is harmful for the project if not don't care 
+                    // onClick={() => handleSizeClick(size)} key={size}>
+                    onClick={() => handleSizeClick(size)} >
                     <HamburgerIcon />
                 </Button>
             </Show>
             <Modal onClose={onClose} size={'full'} isOpen={isOpen}>
                 <ModalContent
-                    _light={{ bg: 'white' }} _dark={{ bg: '#475772' }}
+                    _light={{ bg: 'white' }} _dark={{ bg: '#000' }}
                 >
                     <ModalHeader>
                         <Link to={'/home'} >
