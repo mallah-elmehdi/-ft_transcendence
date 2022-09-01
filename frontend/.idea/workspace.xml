@@ -3,12 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5cd2ea18-4c7a-48bc-97c3-f440052e3092" name="Changes" comment="start working on chat page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Navbar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/ChatPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ChatPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/ProfilePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProfilePage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/style/theme.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/theme.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -124,6 +119,7 @@
       <workItem from="1662043096278" duration="5342000" />
       <workItem from="1662053216519" duration="687000" />
       <workItem from="1662054660045" duration="2536000" />
+      <workItem from="1662063034028" duration="4120000" />
     </task>
     <task id="LOCAL-00001" summary="implementing the routes">
       <created>1661291634634</created>
