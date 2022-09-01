@@ -7,10 +7,10 @@ const fonts = {
         body: `Jua, ${base.fonts?.body}`,
 }
 const colors = {
-    // white: '#FFFFFF',
-    // black: '#475772',
-    // green: '#A2CE73',
-    // red:   '#EF9795',
+    white: '#FFFFFF',
+    black: '#475772',
+    green: '#A2CE73',
+    red:   '#EF9795',
 }
 
 const config = {
