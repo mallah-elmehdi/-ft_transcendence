@@ -12,6 +12,7 @@ import ProfilePage from "./pages/ProfilePage";
 import ChatPage from "./pages/ChatPage";
 import PlayPage from "./pages/PlayPage";
 import HomePage from "./pages/HomePage";
+import PageNotFound from "./pages/PageNotFound";
 
 
 import "./style/index.css"
@@ -35,12 +36,13 @@ root.render(
                 <BrowserRouter>
                     <Navbar isSignIn={isSignIn}/>
                     <Routes>
-                        <Route path={'/login'} element={isSignIn ? <Navigate to={'/home'}/> : <SignInPage />} />
-                        <Route path={'/'} element={isSignIn ? <Navigate to={'/home'}/> : <SignInPage />} />
-                        <Route path={'/home'} element={isSignIn ?  <HomePage /> : <Navigate to={'/login'}/> } />
-                        <Route path={'/play'} element={isSignIn ?  <PlayPage /> : <Navigate to={'/login'}/> } />
-                        <Route path={'/chat'} element={isSignIn ?  <ChatPage /> : <Navigate to={'/login'}/> } />
+                        <Route path={'/login'}  element={isSignIn ? <Navigate to={'/home'}/> : <SignInPage />} />
+                        <Route path={'/'}       element={isSignIn ? <Navigate to={'/home'}/> : <SignInPage />} />
+                        <Route path={'/home'}   element={isSignIn ?  <HomePage /> : <Navigate to={'/login'}/> } />
+                        <Route path={'/play'}   element={isSignIn ?  <PlayPage /> : <Navigate to={'/login'}/> } />
+                        <Route path={'/chat'}   element={isSignIn ?  <ChatPage /> : <Navigate to={'/login'}/> } />
                         <Route path={'/profile'} element={isSignIn ?  <ProfilePage /> : <Navigate to={'/login'}/> } />
+                        <Route path="*"         element={isSignIn ?  <PageNotFound /> : <Navigate to={'/login'}/> }/>
                     </Routes>
                 </BrowserRouter>
             </Box>

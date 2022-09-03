@@ -7,7 +7,8 @@ const fonts = {
         body: `Jua, ${base.fonts?.body}`,
 }
 const colors = {
-    white: '#E0E0E0',
+    // white: '#E0E0E0',
+    white: '#FFF',
     black: '#475772',
     green: '#A2CE73',
     red:   '#EF9795',
