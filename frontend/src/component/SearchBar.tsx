@@ -1,18 +1,34 @@
-import React, {FC} from "react";
-import {
-    HStack,
-    Input,
-    InputGroup,
-    InputLeftElement,
-} from "@chakra-ui/react";
+import {HStack, Input, InputGroup, InputLeftElement,} from "@chakra-ui/react";
 import {ArrowBackIcon, Search2Icon} from "@chakra-ui/icons";
+import {useRef, useEffect} from "react";
 
-interface searchBarProps {
+type Props = {
     setSearch: (value: boolean) => void;
     search: boolean;
 }
 
-const SearchBar: FC<searchBarProps> = ({search, setSearch}: searchBarProps) => {
+const SearchBar = ({search, setSearch}: Props) => {
+    const searchInputRef = useRef<any>(null);
+
+    useEffect(() => {
+        const keyDownHandler = (event: any) => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                if (!search)
+                    searchInputRef.current!.focus();
+                else {
+                    searchInputRef.current.value = '';
+                    searchInputRef.current.blur();
+                }
+                setSearch(false);
+            }
+        };
+        document.addEventListener('keydown', keyDownHandler);
+        return () => {
+            document.removeEventListener('keydown', keyDownHandler);
+        };
+    }, [search]);
+
     return (
         <>
             <HStack
@@ -27,6 +43,7 @@ const SearchBar: FC<searchBarProps> = ({search, setSearch}: searchBarProps) => {
                     <InputLeftElement h={'100%'} pointerEvents='none'
                                       children={<Search2Icon color={!search ? 'gray.500' : 'red'}/>}/>
                     <Input
+                        ref={searchInputRef}
                         alignItems={'center'}
                         variant={'unstyled'}
                         _hover={{border: search ? '1px solid #EF9795' : '1px solid #BEBEBE'}}

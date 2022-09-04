@@ -2,13 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5cd2ea18-4c7a-48bc-97c3-f440052e3092" name="Changes" comment="start working on chat page">
-      <change afterPath="$PROJECT_DIR$/src/component/SearchBar.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/component/SideBar.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/PageNotFound.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/component/Tabs.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/ChatPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ChatPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/style/theme.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/theme.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/CustomButton.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/SearchBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/SearchBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/SideBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/SideBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/logo.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/toggleMode.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/SignInPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/style/theme.jsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +42,7 @@
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editing.templates&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/Users/ynoam/Desktop/ft_transcendence/frontend/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -131,6 +133,10 @@
       <workItem from="1662213237355" duration="662000" />
       <workItem from="1662223577344" duration="1324000" />
       <workItem from="1662225133017" duration="5273000" />
+      <workItem from="1662293173450" duration="1297000" />
+      <workItem from="1662304097372" duration="1764000" />
+      <workItem from="1662310245853" duration="1700000" />
+      <workItem from="1662322650415" duration="4616000" />
     </task>
     <task id="LOCAL-00001" summary="implementing the routes">
       <created>1661291634634</created>
