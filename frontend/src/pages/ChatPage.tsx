@@ -1,5 +1,6 @@
-import { Text, Flex, } from '@chakra-ui/react'
+import {Text, Flex, Show,Hide} from '@chakra-ui/react'
 import SideBar from "../component/SideBar"
+import SearchBarContextProvider from "../hooks/SearchBarContext";
 
 export default function ChatPage() {
     const data = {
@@ -56,34 +57,36 @@ export default function ChatPage() {
                 pb={10}
                 // direction={{ base: 'column', md: 'column', lg: 'row' }}
                 direction={'row'}
-                minHeight={1000}
-                minWidth={1500}
+                // minHeight={1000}
+                // minWidth={1500}
                 // bg={'red'}
             >
-                <SideBar data={data}/>
-                <Flex
-                    // w={['100%', '100%', '100%', '60%', '65%', '80%']}
-                    w={'75%'}
-                    h={'100%'}
-                    _light={{boxShadow: 'md'}}
-                    _dark={{boxShadow: 'dark-lg'}}
-                    rounded='30px'
-                    justifyContent={"center"}
-                    alignItems={"center"}
-                    direction={'column'}
-                    minHeight={[1000, 1000, 1000, 1000, 700]}
-                >
+                <SearchBarContextProvider>
+                    <SideBar data={data}/>
+                </SearchBarContextProvider>
+                <Hide below={'md'}>
                     <Flex
+                        w={'75%'}
                         h={'100%'}
-                        w={'100%'}
-                        pt={10}
-                        direction={['column', 'column', 'column', 'column', 'row']}
-                        alignItems={"center"}
+                        _light={{boxShadow: 'md'}}
+                        _dark={{boxShadow: 'dark-lg'}}
+                        rounded='30px'
                         justifyContent={"center"}
+                        alignItems={"center"}
+                        direction={'column'}
                     >
-                        <Text>No Chat Selected </Text>
+                        <Flex
+                            h={'100%'}
+                            w={'100%'}
+                            pt={10}
+                            direction={['column', 'column', 'column', 'column', 'row']}
+                            alignItems={"center"}
+                            justifyContent={"center"}
+                        >
+                            <Text>No Chat Selected </Text>
+                        </Flex>
                     </Flex>
-                </Flex>
+                </Hide>
             </Flex>
         </>
     )

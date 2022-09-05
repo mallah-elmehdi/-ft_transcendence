@@ -55,7 +55,7 @@ export default function Navbar(props: props) {
                             // FIXME: i dont know the solution for this error below, i will fix if is harmful for the project if not don't care
                             // onClick={() => handleSizeClick(size)} key={size}>
                             onClick={() => handleSizeClick(size)}>
-                            <HamburgerIcon/>
+                            <HamburgerIcon  />
                         </Button>
                     </Show>
                     <Modal onClose={onClose} size={'full'} isOpen={isOpen}>

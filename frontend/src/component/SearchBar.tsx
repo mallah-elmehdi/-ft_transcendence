@@ -1,54 +1,54 @@
 import {HStack, Input, InputGroup, InputLeftElement,} from "@chakra-ui/react";
 import {ArrowBackIcon, Search2Icon} from "@chakra-ui/icons";
-import {useRef, useEffect} from "react";
+import {useRef, useEffect, useContext} from "react";
+import {SearchContext} from "../hooks/SearchBarContext";
 
-type Props = {
-    setSearch: (value: boolean) => void;
-    search: boolean;
-}
-
-const SearchBar = ({search, setSearch}: Props) => {
+const SearchBar = () => {
     const searchInputRef = useRef<any>(null);
+    // @ts-ignore
+    const {isSearch, toggleSearch} = useContext(SearchContext);
 
     useEffect(() => {
         const keyDownHandler = (event: any) => {
             if (event.key === 'Escape') {
                 event.preventDefault();
-                if (!search)
+                if (!isSearch)
                     searchInputRef.current!.focus();
                 else {
                     searchInputRef.current.value = '';
                     searchInputRef.current.blur();
                 }
-                setSearch(false);
+                toggleSearch();
             }
         };
         document.addEventListener('keydown', keyDownHandler);
         return () => {
             document.removeEventListener('keydown', keyDownHandler);
         };
-    }, [search]);
+    }, [isSearch]);
 
     return (
         <>
             <HStack
                 w={'90%'}
                 m={0} p={0} h={'2em'}>
-                {search && <ArrowBackIcon m={0} p={0} h={30} fontSize={25} onClick={() => setSearch(false)}/>}
+                {isSearch && <ArrowBackIcon m={0} p={0} h={30} fontSize={25} onClick={() => toggleSearch()}/>}
                 <InputGroup
                     h={'2.5em'}
                     boxSizing={'border-box'}
                     alignContent={'center'}
                 >
-                    <InputLeftElement h={'100%'} pointerEvents='none'
-                                      children={<Search2Icon color={!search ? 'gray.500' : 'red'}/>}/>
+                    <InputLeftElement h={'100%'} pointerEvents='none' children={<Search2Icon color={!isSearch ? 'gray.500' : 'red'}/>}/>
                     <Input
                         ref={searchInputRef}
                         alignItems={'center'}
                         variant={'unstyled'}
-                        _hover={{border: search ? '1px solid #EF9795' : '1px solid #BEBEBE'}}
-                        border={search ? '1px solid #EF9795' : '1px solid #707070'}
-                        onClick={() => setSearch(true)}
+                        _hover={{border: isSearch ? '1px solid #EF9795' : '1px solid #BEBEBE'}}
+                        border={isSearch ? '1px solid #EF9795' : '1px solid #707070'}
+                        onClick={() => {
+                            if(!isSearch)
+                                toggleSearch();
+                        }}
                         onChange={
                             (event) => console.log(event.target.value)
                         }

@@ -9,10 +9,10 @@ export  default function PageNotFound()
 {
     return(
         <Flex
+            h={'98%'}
             alignItems={'center'}
             justifyContent={'center'}
             w={'100%'}
-            h={'100%'}
         >
             <Text fontSize={40}>
                 Opps, Page Not Found

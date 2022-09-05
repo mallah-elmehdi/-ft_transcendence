@@ -1,9 +1,9 @@
-import React, {useState} from "react";
-import {Flex, useColorModeValue} from "@chakra-ui/react";
+import {Flex} from "@chakra-ui/react";
 import SearchBar from "./SearchBar";
 import {AnimatePresence} from "framer-motion";
-import {useEffect} from "react";
+import {useEffect, useContext} from "react";
 import Tabs from "./Tabs"
+import {SearchContext} from "../hooks/SearchBarContext";
 
 type Props = {
     data: {
@@ -13,13 +13,14 @@ type Props = {
 }
 
 const SideBar = ({data}: Props) => {
-    const [isSearch, setIsSearch] = useState<boolean>(false);
+    const {isSearch, toggleSearch} = useContext<any>(SearchContext);
 
     useEffect(() => {
         const keyDownHandler = (event: any) => {
             if (event.key === 'Escape') {
                 event.preventDefault();
-                setIsSearch(true);
+                toggleSearch();
+                // setIsSearch(true);
             }
         };
         document.addEventListener('keydown', keyDownHandler);
@@ -31,20 +32,17 @@ const SideBar = ({data}: Props) => {
     return (
         <>
             <Flex
-                w={'25%'}
+                w={['100%','100%','25%','25%','25%']}
                 _light={{boxShadow: 'md'}}
                 _dark={{boxShadow: 'dark-lg'}}
                 rounded='30px'
                 direction={"column"}
                 alignItems={"center"}
-                pt={50}
+                p={5}
             >
-                <SearchBar search={isSearch} setSearch={setIsSearch}/>
+                <SearchBar />
                 <AnimatePresence>
-                    {!isSearch ?
-                        <Tabs data={data}/>
-                        : undefined
-                    }
+                    {!isSearch ? <Tabs data={data}/> : undefined}
                 </AnimatePresence>
             </Flex>
         </>

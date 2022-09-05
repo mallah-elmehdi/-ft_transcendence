@@ -2,15 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5cd2ea18-4c7a-48bc-97c3-f440052e3092" name="Changes" comment="start working on chat page">
-      <change afterPath="$PROJECT_DIR$/src/component/Tabs.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/hooks/SearchBarContext.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/CustomButton.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Navbar.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/SearchBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/SearchBar.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/SideBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/SideBar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/logo.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/toggleMode.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/SignInPage.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/style/theme.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/Tabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Tabs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ChatPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ChatPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/PageNotFound.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PageNotFound.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/react-app-env.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/react-app-env.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/style/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/index.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,6 +140,9 @@
       <workItem from="1662304097372" duration="1764000" />
       <workItem from="1662310245853" duration="1700000" />
       <workItem from="1662322650415" duration="4616000" />
+      <workItem from="1662372848438" duration="4646000" />
+      <workItem from="1662401827067" duration="2393000" />
+      <workItem from="1662410190526" duration="3623000" />
     </task>
     <task id="LOCAL-00001" summary="implementing the routes">
       <created>1661291634634</created>
