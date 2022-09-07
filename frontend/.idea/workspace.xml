@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5cd2ea18-4c7a-48bc-97c3-f440052e3092" name="Changes" comment="refactor files">
-      <change afterPath="$PROJECT_DIR$/src/component/TabPanelContent.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/Tabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Tabs.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/ChatPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ChatPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/SearchBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/SearchBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/SideBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/SideBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/TabPanelContent.tsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,6 +138,8 @@
       <workItem from="1662401827067" duration="2393000" />
       <workItem from="1662410190526" duration="3871000" />
       <workItem from="1662459411988" duration="6359000" />
+      <workItem from="1662571994215" duration="6704000" />
+      <workItem from="1662585724738" duration="1225000" />
     </task>
     <task id="LOCAL-00001" summary="implementing the routes">
       <created>1661291634634</created>

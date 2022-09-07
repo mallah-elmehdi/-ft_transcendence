@@ -12,6 +12,7 @@ const SearchBar = () => {
     useEffect(() => {
         const keyDownHandler = (event: any) => {
             if (event.key === 'Escape') {
+                console.log('SearchBar')
                 event.preventDefault();
                 if (!isSearch)
                     searchInputRef.current!.focus();
