@@ -40,6 +40,7 @@ import {RiImageAddFill} from "react-icons/ri"
 import {InfoOutlineIcon} from "@chakra-ui/icons"
 import {SetStateAction, useEffect, useState} from "react";
 import axios from "axios";
+import React from "react"
 
 // component
 

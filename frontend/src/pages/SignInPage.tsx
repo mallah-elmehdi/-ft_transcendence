@@ -9,6 +9,7 @@ import {
     Image,
 } from "@chakra-ui/react";
 import Logo from "../component/logo";
+import React from "react"
 
 export  default function SignInPage() {
     return (

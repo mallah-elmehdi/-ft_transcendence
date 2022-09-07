@@ -15,16 +15,11 @@ import {
 import { Avatar as ChakraAvatar } from "@chakra-ui/avatar";
 import {SearchContext} from "../hooks/ChatPageContext"
 
-type Props = {
-    data: {
-        friends: { id: String, username: String, avatar: String }[],
-        groups: { id: String, groupname: String, }[],
-    },
-}
 
-function Tabs({ data }: Props) {
+function Tabs() {
     const value = useColorModeValue('blackAlpha.200', 'whiteAlpha.200')
     const { setSelectedChat } = useContext<any>(SearchContext)
+    const {data} = useContext<any>(SearchContext)
     return (
         <ChakraTabs
             // isLazy={true}
@@ -66,7 +61,7 @@ function Tabs({ data }: Props) {
 
                         {
                             data.friends.length ?
-                                data.friends.map((friend, index) => (
+                                data.friends.map((friend:any, index:any) => (
                                     <HStack
                                         as={'button'}
                                         p={5}
@@ -77,15 +72,15 @@ function Tabs({ data }: Props) {
                                         w={'100%'}
                                         key={index.toString()}
                                         onClick={()=> {
-                                            setSelectedChat(friend.id)
+                                            setSelectedChat({chat: "F", id: friend.id})
                                         }}
                                     >
                                         <ChakraAvatar
-                                            name={friend.username.toString()}
+                                            name={friend.name.toString()}
                                             src={friend.avatar.toString()}
                                         ></ChakraAvatar>
                                         <Text>
-                                            {friend.username}
+                                            {friend.name}
                                         </Text>
                                     </HStack>
                                 ))
@@ -107,14 +102,14 @@ function Tabs({ data }: Props) {
                         spacing={0} w={'100%'}>
                         {
                             data.groups.length ?
-                                data.groups.map((group, index) => (
+                                data.groups.map((group:any, index:any) => (
                                     <HStack
                                         onClick={()=> {
-                                            setSelectedChat(group.id)
+                                            setSelectedChat({chat: "G", id: group.id})
                                         }}
                                      as={'button'} p={5} alignItems={'center'} _hover={{ bg: value }} rounded={5} h={'4.5em'} w={'100%'} key={index.toString()} >
                                         <Text>
-                                            {group.groupname}
+                                            {group.name}
                                         </Text>
                                     </HStack>
                                 ))

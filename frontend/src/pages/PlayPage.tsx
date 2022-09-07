@@ -8,6 +8,7 @@ import {
     // Image,
 } from "@chakra-ui/react";
 // import Logo from "../component/logo.tsx";
+import React from "react"
 
 export  default function PlayPage() {
     return (

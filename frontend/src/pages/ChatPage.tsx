@@ -1,6 +1,8 @@
+import React from "react"
 import { Text, Flex, Show, Hide } from '@chakra-ui/react'
 import SideBar from "../component/SideBar"
 import ChatPageContext from "../hooks/ChatPageContext";
+
 
 export default function ChatPage() {
     const data = {

@@ -2,6 +2,7 @@ import {HStack, Input, InputGroup, InputLeftElement,} from "@chakra-ui/react";
 import {ArrowBackIcon, Search2Icon} from "@chakra-ui/icons";
 import {useRef, useEffect, useContext} from "react";
 import {SearchContext} from "../hooks/ChatPageContext";
+import React from "react"
 
 const SearchBar = () => {
     const searchInputRef = useRef<any>(null);

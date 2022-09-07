@@ -7,7 +7,8 @@ import {
     // useColorMode,
     // Image,
 } from "@chakra-ui/react";
-// import Logo from "../component/logo.tsx";
+// im
+import React from "react"
 
 export  default function HomePage() {
     return (
