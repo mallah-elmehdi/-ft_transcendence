@@ -77,7 +77,7 @@ function Avatar(props: { name: string | undefined; src: string | undefined; })
             //     .catch(err => {
             //         console.log('--------------------ERROR--------------------')
             //         console.log(err)
-
+            //
             //         console.log('---------------------------------------------')
             //     })
         }

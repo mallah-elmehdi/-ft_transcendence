@@ -24,8 +24,10 @@ function App() {
                     <BrowserRouter>
                         <Navbar isSignIn={isSignIn}/>
                         <Routes>
-                            <Route path={'/login'}  element={isSignIn ? <Navigate to={'/home'}/> : <SignInPage />} />
-                            <Route path={'/'}       element={isSignIn ? <Navigate to={'/home'}/> : <SignInPage />} />
+                            {/*<Route path={'/login'}  element={isSignIn ? <Navigate to={'/home'}/> : <SignInPage />} />*/}
+                            {/*<Route path={'/'}       element={isSignIn ? <Navigate to={'/home'}/> : <SignInPage />} />*/}
+                            <Route path={'/login'}  element={<SignInPage />} />
+                            <Route path={'/'}       element={<HomePage />} />
                             <Route path={'/home'}   element={isSignIn ?  <HomePage /> : <Navigate to={'/login'}/> } />
                             <Route path={'/play'}   element={isSignIn ?  <PlayPage /> : <Navigate to={'/login'}/> } />
                             <Route path={'/chat'}   element={isSignIn ?  <ChatPage /> : <Navigate to={'/login'}/> } />

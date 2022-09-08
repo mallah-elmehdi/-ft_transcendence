@@ -10,8 +10,25 @@ import {
 } from "@chakra-ui/react";
 import Logo from "../component/logo";
 import React from "react"
+import axios from "axios";
 
-export  default function SignInPage() {
+export default function SignInPage() {
+    const backEnd = 'http://10.11.10.5:3333/auth'
+    const backEnd2 = 'http://10.11.10.5:3333/auth/ynoam'
+    function submitHandler()
+    {
+        const fd = new FormData();
+        axios.post(backEnd, fd )
+            .then(res => {
+                console.log('RESULT');
+                console.log(res);
+            })
+            .catch(err => {
+                console.log('--------------------ERROR--------------------')
+                console.log(err)
+                console.log('---------------------------------------------')
+            })
+    }
     return (
         <>
             <Flex
@@ -22,14 +39,15 @@ export  default function SignInPage() {
                 justifyContent={"center"}
             >
                 <Flex
-                    _dark={{ boxShadow: 'dark-lg' }} _light={{ boxShadow: 'md' }}
+                    _dark={{boxShadow: 'dark-lg'}} _light={{boxShadow: 'md'}}
                     rounded='30px'
-                    w={{base:'700px',md:'500px'}}
+                    w={{base: '700px', md: '500px'}}
                     h={"400px"}
                     direction={"column"}
                     justifyContent={"center"}
                     alignItems={"center"}
                 >
+
                     <Heading
                         mb={"30px"}
                         // fontSize={{base: 45,md:60}}
@@ -37,9 +55,38 @@ export  default function SignInPage() {
                     >
                         Welcome To
                     </Heading>
-                    <Logo />
+                    <Logo/>
+                    <form
+                        method={'GET'}
+                        action={backEnd}
+                    >
                     <Button
-                        _hover={{ bg: 'green' }}
+                        // onClick={(e) => {
+                        //     e.preventDefault()
+                        //     const fd = new FormData();
+                        //     axios.get(backEnd,fd)
+                        //         .then(function (response) {
+                        //             // console.log(response)
+                        //             console.log('lkjlkjlkjlkjjlkj')
+                        //             // if (response.data.redirect == '/') {
+                        //             //     {
+                        //             //         <Link to={'/'}/>
+                        //             //     }
+                        //             //     // window.location = "/"
+                        //             // }
+                        //             // else if (response.data.redirect == '/login') {
+                        //             //     window.location = "/login"
+                        //             // }
+                        //         })
+                        //         .catch(function (error) {
+                        //             // console.log(error)
+                        //             console.log('ERRRRRR')
+                        //             // window.location = "/login"
+                        //         })
+                        // }
+                        // }
+                        type={'submit'}
+                        _hover={{bg: 'green'}}
                         _active={{}} // TIPS: on click keep the color green
                         // _focus={{
                         //     // boxShadow:
@@ -58,6 +105,7 @@ export  default function SignInPage() {
                             Sign In
                         </Text>
                     </Button>
+                    </form>
                 </Flex>
             </Flex>
         </>
