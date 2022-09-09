@@ -7,7 +7,7 @@ type Props = {
     children: JSX.Element,
 }
 
-const ChatPageContext = ({ children }: Props) => {
+const ChatProvider = ({ children }: Props) => {
     const [isSearch, setSearch] = useState(false);
     const [selectedChat, setSelectedChat] = useState(null);
     const toggleSearch = () => {
@@ -77,4 +77,4 @@ const ChatPageContext = ({ children }: Props) => {
 
 };
 
-export default ChatPageContext;
+export default ChatProvider;

@@ -3,7 +3,6 @@ import SearchBar from './SearchBar';
 import {AnimatePresence} from 'framer-motion';
 import {useEffect, useContext, useState, useRef} from 'react';
 import Tabs from './Tabs';
-import {SearchContext} from '../hooks/ChatPageContext';
 import {ArrowBackIcon, Search2Icon} from '@chakra-ui/icons';
 import {HStack, VStack, Input, InputGroup, InputLeftElement} from '@chakra-ui/react';
 import {IoSend} from 'react-icons/io5';
@@ -11,6 +10,7 @@ import React from 'react';
 import MessageInput from "./MessageInput"
 import Message from "./Message"
 import Messaging from "./Messaging";
+import {SearchContext} from "../hooks/ChatProvider";
 
 const ChatTabs = () => {
     const {isSearch, toggleSearch} = useContext<any>(SearchContext);

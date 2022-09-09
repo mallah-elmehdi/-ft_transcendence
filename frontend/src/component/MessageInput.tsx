@@ -1,14 +1,26 @@
-import React, {useEffect, useState} from "react";
-import {Box, HStack, Input, useColorModeValue} from "@chakra-ui/react";
+import React, {useContext, useEffect, useState} from "react";
+import {Box, HStack, Input, useColorMode, useColorModeValue} from "@chakra-ui/react";
 import {IoSend} from "react-icons/io5";
+import {MessagesContext} from "../hooks/MessagingProvider";
 
 const MessageInput = () => {
-    const [message, setMessage] = useState('');
-    const msgInputBg = useColorModeValue('white', 'black')
+    // const [message, setMessage] = useState('');
+    // const sendIconBg = useColorModeValue('rgb(81,143,229)','rgb(132,119,218)')
+    const {typingMessage, setTypingMessage} = useContext<any>(MessagesContext);
+    const msgInputBg = useColorModeValue('white', 'rgb(33,33,33)')
+    const {setMessages} = useContext<any>(MessagesContext)
 
     function sendMessageHandler() {
-        console.log('Sending Message' + message)
-        setMessage('')
+        if (typingMessage.trim()) {
+            setMessages((messagesinfo: any) => {
+                return [
+                    ...messagesinfo,
+                    {isSender: true, content: typingMessage}
+                ]
+            })
+        }
+        setTypingMessage('')
+
     }
 
     useEffect(() => {
@@ -24,38 +36,29 @@ const MessageInput = () => {
         return () => {
             document.removeEventListener('keydown', keyDownHandler);
         };
-    }, []);
+    }, [typingMessage]);
     return (
         <>
             <HStack
-                px={4}
-                overflow={'auto'}
-                rounded={20}
+                pl={5}
+                pr={6}
                 w={'100%'}
                 m={5}
-                minH={'3em'}
+                h={'3em'}
                 spacing={4}
             >
 
                 <Input
                     bg={msgInputBg}
-                    value={message}
-                    onChange={(m) => setMessage(m.target.value)}
+                    value={typingMessage}
+                    onChange={(m) => setTypingMessage(m.target.value)}
                     focusBorderColor="none" border={'none'} placeholder="Message" w={'100%'}
                 />
-                <Box
-                    justifyContent={'center'}
-                    alignItems={'center'}
-                    rounded={50}
-                    // bg={msgInputBg}
-                    p={2}
-                    color={'black'}
-                    _hover={{bg: 'black', color: 'green'}}
-                >
-                    <IoSend
-                        onClick={sendMessageHandler}
-                        size={30}/>
-                </Box>
+                <IoSend
+                    color={'rgb(132,119,218)'}
+                    // color={sendIconBg}
+                    onClick={sendMessageHandler}
+                    size={30}/>
             </HStack>
         </>
     );

@@ -1,14 +1,17 @@
 import React, {useContext, useEffect, useRef} from "react";
-import {SearchContext} from "../hooks/ChatPageContext";
+import {SearchContext} from "../hooks/ChatProvider";
 import {Avatar, HStack, Text, useColorModeValue, VStack} from "@chakra-ui/react";
 import {ArrowBackIcon} from "@chakra-ui/icons";
 import Message from "./Message";
 import MessageInput from "./MessageInput";
+import MessagingProvider from "../hooks/MessagingProvider";
+import MessagesList from "./MessagesList";
 
 const Messaging = () => {
     const {setSelectedChat} = useContext<any>(SearchContext);
     const {selectedChat} = useContext<any>(SearchContext);
     const {data} = useContext<any>(SearchContext);
+    // const
     const chatBg = useColorModeValue('black', 'white')
 
     useEffect(() => {
@@ -34,55 +37,70 @@ const Messaging = () => {
         // @ts-ignore
         useEffect(() => elementRef.current.scrollIntoView());
         // @ts-ignore
-        return <div ref={elementRef} />;
+        return <div ref={elementRef}/>;
     };
 
 
     return (
-        <VStack h={'100%'} w={'100%'}
-                overflow={'auto'}
-        >
-            <HStack
-                px={3} w={'100%'} m={0} h={''} spacing={4}>
-                <ArrowBackIcon m={0} p={0} h={30} fontSize={25} onClick={() => setSelectedChat(null)}/>
-                <Avatar
-                    name={selectedChat.chat === 'G' ? data.groups[searchIndex].name.toString() : data.friends[searchIndex].name.toString()}
-                    src={selectedChat.chat === 'G' ? data.groups[searchIndex].name.toString() : data.friends[searchIndex].avatar}
-                ></Avatar>
-                <Text>{selectedChat.chat === 'G' ? data.groups[searchIndex].name : data.friends[searchIndex].name}</Text>
-            </HStack>
-            <VStack
-                overflow={'auto'}
-
-                bgGradient={[
-                    'linear(to-t, purple.3000, black)',
-                    'linear(to-b, pink.900, red)',
-                ]}
-                alignItems={'center'} h={'100%'} w={'100%'} flex={1}  p={3} pb={1.5}>
+        <MessagingProvider>
+            <VStack h={'100%'} w={'100%'}
+                    overflow={'auto'}
+            >
+                <HStack
+                    px={5} w={'100%'} m={0} h={''} spacing={4}>
+                    <ArrowBackIcon m={0} p={0} h={30} fontSize={25} onClick={() => setSelectedChat(null)}/>
+                    <Avatar
+                        name={selectedChat.chat === 'G' ? data.groups[searchIndex].name.toString() : data.friends[searchIndex].name.toString()}
+                        src={selectedChat.chat === 'G' ? data.groups[searchIndex].name.toString() : data.friends[searchIndex].avatar}
+                    ></Avatar>
+                    <Text>{selectedChat.chat === 'G' ? data.groups[searchIndex].name : data.friends[searchIndex].name}</Text>
+                </HStack>
                 <VStack
-                    maxW={'100%'}
-                    flex={1}
-                    h={'100%'} w={'100%'}
-                    overflowY={'auto'}
+                    overflow={'auto'}
+                    maxW={'62em'}
+                    bgGradient={[
+                        'linear(to-t, purple.3000, black)',
+                        'linear(to-b, pink.900, red)',
+                    ]}
+                    alignItems={'center'} h={'100%'} w={'100%'} flex={1} p={3} pb={1.5}>
+                    <VStack
+                        maxW={'100%'}
+                        flex={1}
+                        h={'100%'} w={'100%'}
+                        overflowY={'auto'}
+                        px={5}
+                    >
+                        {/*{*/}
 
-                >
-                    <Message isSender={false} content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>
-                    <Message isSender={false} content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>
-                    <Message isSender={false} content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>
-                    <Message isSender={false} content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>
-                    <Message isSender={false} content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>
-                    <Message isSender={true} content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>
-                    <Message isSender={true} content={'testetstmlkjlkj'}/>
-                    <Message isSender={true} content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>
-                    <Message isSender={true} content={'testetstmlkjlkj'}/>
-                    <Message isSender={true} content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>
-                    <Message isSender={true} content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>
-                    <Message isSender={true} content={'testetstmlkjlkj'}/>
-                    <AlwaysScrollToBottom />
+                        {/*}*/}
+                        {/*<Message isSender={false}*/}
+                        {/*         content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>*/}
+                        {/*<Message isSender={false}*/}
+                        {/*         content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>*/}
+                        {/*<Message isSender={false}*/}
+                        {/*         content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>*/}
+                        {/*<Message isSender={false}*/}
+                        {/*         content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>*/}
+                        {/*<Message isSender={false}*/}
+                        {/*         content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>*/}
+                        {/*<Message isSender={true}*/}
+                        {/*         content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>*/}
+                        {/*<Message isSender={true} content={'testetstmlkjlkj'}/>*/}
+                        {/*<Message isSender={true}*/}
+                        {/*         content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>*/}
+                        {/*<Message isSender={true} content={'testetstmlkjlkj'}/>*/}
+                        {/*<Message isSender={true}*/}
+                        {/*         content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>*/}
+                        {/*<Message isSender={true}*/}
+                        {/*         content={'testesdfsdfsdfsdfsdfsdfsdfffffffffffffffffffffffffffffffffffffffffffffffffsdfsdfssdfsdfsdfsddfsdfsdfsdfsdfsdfsdfsdfsdfsddftstmlkjlkj'}/>*/}
+                        {/*<Message isSender={true} content={'testetstmlkjlkj'}/>*/}
+                        {/*<AlwaysScrollToBottom/>*/}
+                        <MessagesList/>
+                    </VStack>
+                    <MessageInput/>
                 </VStack>
-                <MessageInput/>
             </VStack>
-        </VStack>
+        </MessagingProvider>
     );
 };
 

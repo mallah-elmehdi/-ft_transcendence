@@ -13,7 +13,7 @@ import {
     Flex,
 } from "@chakra-ui/react";
 import { Avatar as ChakraAvatar } from "@chakra-ui/avatar";
-import {SearchContext} from "../hooks/ChatPageContext"
+import {SearchContext} from "../hooks/ChatProvider"
 
 
 function Tabs() {

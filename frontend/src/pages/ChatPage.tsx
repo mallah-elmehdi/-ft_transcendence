@@ -1,7 +1,7 @@
 import React from "react"
 import { Text, Flex, Show, Hide } from '@chakra-ui/react'
 import SideBar from "../component/SideBar"
-import ChatPageContext from "../hooks/ChatPageContext";
+import ChatProvider from "../hooks/ChatProvider";
 
 
 export default function ChatPage() {
@@ -51,7 +51,7 @@ export default function ChatPage() {
     }
     return (
         <>
-            <ChatPageContext>
+            <ChatProvider>
                 <Flex
                     w={'100%'}
                     h={'98%'}
@@ -85,7 +85,7 @@ export default function ChatPage() {
                         </Flex>
                     </Hide>
                 </Flex>
-            </ChatPageContext>
+            </ChatProvider>
         </>
     )
 }
