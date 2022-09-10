@@ -1,18 +1,17 @@
 import {HStack, Input, InputGroup, InputLeftElement,} from "@chakra-ui/react";
 import {ArrowBackIcon, Search2Icon} from "@chakra-ui/icons";
 import {useRef, useEffect, useContext} from "react";
-import {SearchContext} from "../hooks/ChatProvider";
+import {ChatContext} from "../hooks/ChatProvider";
 import React from "react"
 
 const SearchBar = () => {
     const searchInputRef = useRef<any>(null);
     // @ts-ignore
-    const {isSearch, toggleSearch} = useContext(SearchContext);
+    const {isSearch, toggleSearch} = useContext(ChatContext);
 
     useEffect(() => {
         const keyDownHandler = (event: any) => {
             if (event.key === 'Escape') {
-                console.log('SearchBar')
                 event.preventDefault();
                 if (!isSearch)
                     searchInputRef.current!.focus();

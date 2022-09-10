@@ -2,19 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5cd2ea18-4c7a-48bc-97c3-f440052e3092" name="Changes" comment="refactor files">
-      <change afterPath="$PROJECT_DIR$/src/component/ChatDetails.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/component/MessagesList.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/hooks/MessagingProvider.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/component/ChatHeader.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/component/MiniProfil.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/ChatDetails.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/ChatDetails.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/Message.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Message.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/MessageInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/MessageInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/MessagesList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/MessagesList.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/Messaging.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Messaging.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/SearchBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/SearchBar.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/SideBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/SideBar.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/Tabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Tabs.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/ChatPageContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/ChatProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/MessagingContext.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/ChatProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/ChatProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/MessagingProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/MessagingProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/ChatPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ChatPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ProfilePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProfilePage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/style/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/index.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,7 +51,7 @@
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editing.templates&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/Users/ynoam/Desktop/ft_transcendence/frontend/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -151,7 +155,14 @@
       <workItem from="1662633624606" duration="2612000" />
       <workItem from="1662648309128" duration="8195000" />
       <workItem from="1662668388454" duration="3593000" />
-      <workItem from="1662739081095" duration="7028000" />
+      <workItem from="1662739081095" duration="9050000" />
+      <workItem from="1662809365483" duration="3755000" />
+      <workItem from="1662821169783" duration="23000" />
+      <workItem from="1662821218304" duration="120000" />
+      <workItem from="1662821364074" duration="74000" />
+      <workItem from="1662821454258" duration="105000" />
+      <workItem from="1662821575150" duration="8758000" />
+      <workItem from="1662842611079" duration="432000" />
     </task>
     <task id="LOCAL-00001" summary="implementing the routes">
       <created>1661291634634</created>

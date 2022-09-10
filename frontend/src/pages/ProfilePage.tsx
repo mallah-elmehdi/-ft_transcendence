@@ -410,7 +410,6 @@ export  default function ProfilePage() {
             // h={'100%'}
             h={'98%'}
             mx={{base: 0,md: 0,lg:0}}
-            pb={10}
             direction={{base: 'column',md: 'column',lg:'row'}}
             minHeight={700}
             minWidth={300}

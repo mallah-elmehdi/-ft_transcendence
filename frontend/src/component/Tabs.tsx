@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import { motion } from "framer-motion";
+import {motion} from "framer-motion";
 import {
     HStack,
     Tabs as ChakraTabs,
@@ -12,36 +12,36 @@ import {
     VStack,
     Flex,
 } from "@chakra-ui/react";
-import { Avatar as ChakraAvatar } from "@chakra-ui/avatar";
-import {SearchContext} from "../hooks/ChatProvider"
+import {Avatar as ChakraAvatar} from "@chakra-ui/avatar";
+import {ChatContext} from "../hooks/ChatProvider"
 
 
 function Tabs() {
     const value = useColorModeValue('blackAlpha.200', 'whiteAlpha.200')
-    const { setSelectedChat } = useContext<any>(SearchContext)
-    const {data} = useContext<any>(SearchContext)
+    const {setSelectedChat} = useContext<any>(ChatContext)
+    const {data} = useContext<any>(ChatContext)
     return (
         <ChakraTabs
             // isLazy={true}
-            onChange={(index) => {
-                console.log(index)
-            }}
+            // onChange={(index) => {
+            //     console.log(index)
+            // }}
             as={motion.div}
-            initial={{ opacity: 0, scale: 0.99, }}
-            animate={{ y: 0, opacity: 1, scale: 1, }}
-            exit={{ transition: { duration: 0.1 }, opacity: 0, scale: 0.99, }}
+            initial={{opacity: 0, scale: 0.99,}}
+            animate={{y: 0, opacity: 1, scale: 1,}}
+            exit={{transition: {duration: 0.1}, opacity: 0, scale: 0.99,}}
             pt={3}
             w={'90%'}
             h={'99%'}
             m={0}
             overflow={'hidden'}
-            align="center" _selected={{ color: 'pink' }}>
+            align="center" _selected={{color: 'pink'}}>
             <TabList>
-                <Tab _selected={{ color: 'red' }}>
+                <Tab _selected={{color: 'red'}}>
                     <Text fontSize={20}> Friends </Text>
                 </Tab>
                 <Tab
-                    _selected={{ color: 'red' }}>
+                    _selected={{color: 'red'}}>
                     <Text fontSize={20}> Groups </Text>
                 </Tab>
             </TabList>
@@ -61,17 +61,17 @@ function Tabs() {
 
                         {
                             data.friends.length ?
-                                data.friends.map((friend:any, index:any) => (
+                                data.friends.map((friend: any, index: any) => (
                                     <HStack
                                         as={'button'}
                                         p={5}
                                         alignItems={'center'}
-                                        _hover={{ bg: value }}
+                                        _hover={{bg: value}}
                                         rounded={5}
                                         h={'4.5em'}
                                         w={'100%'}
                                         key={index.toString()}
-                                        onClick={()=> {
+                                        onClick={() => {
                                             setSelectedChat({chat: "F", id: friend.id})
                                         }}
                                     >
@@ -85,8 +85,8 @@ function Tabs() {
                                     </HStack>
                                 ))
                                 :
-                                <Flex h={'100%'} justifyContent={'center'} alignItems={'center'} >
-                                    <Text >No Chat</Text>
+                                <Flex h={'100%'} justifyContent={'center'} alignItems={'center'}>
+                                    <Text>No Chat</Text>
                                 </Flex>
                         }
                     </VStack>
@@ -102,19 +102,20 @@ function Tabs() {
                         spacing={0} w={'100%'}>
                         {
                             data.groups.length ?
-                                data.groups.map((group:any, index:any) => (
+                                data.groups.map((group: any, index: any) => (
                                     <HStack
-                                        onClick={()=> {
+                                        onClick={() => {
                                             setSelectedChat({chat: "G", id: group.id})
                                         }}
-                                     as={'button'} p={5} alignItems={'center'} _hover={{ bg: value }} rounded={5} h={'4.5em'} w={'100%'} key={index.toString()} >
+                                        as={'button'} p={5} alignItems={'center'} _hover={{bg: value}} rounded={5}
+                                        h={'4.5em'} w={'100%'} key={index.toString()}>
                                         <Text>
                                             {group.name}
                                         </Text>
                                     </HStack>
                                 ))
                                 :
-                                <Flex h={'100%'} justifyContent={'center'} alignItems={'center'} >
+                                <Flex h={'100%'} justifyContent={'center'} alignItems={'center'}>
                                     <Text>No Chat</Text>
                                 </Flex>
                         }

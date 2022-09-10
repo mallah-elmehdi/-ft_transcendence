@@ -1,24 +1,18 @@
-import {Flex, Box, Avatar, Text, useColorModeValue, Grid} from '@chakra-ui/react';
+import {Flex} from '@chakra-ui/react';
 import SearchBar from './SearchBar';
 import {AnimatePresence} from 'framer-motion';
-import {useEffect, useContext, useState, useRef} from 'react';
+import {useEffect, useContext} from 'react';
 import Tabs from './Tabs';
-import {ArrowBackIcon, Search2Icon} from '@chakra-ui/icons';
-import {HStack, VStack, Input, InputGroup, InputLeftElement} from '@chakra-ui/react';
-import {IoSend} from 'react-icons/io5';
 import React from 'react';
-import MessageInput from "./MessageInput"
-import Message from "./Message"
 import Messaging from "./Messaging";
-import {SearchContext} from "../hooks/ChatProvider";
+import {ChatContext} from "../hooks/ChatProvider";
 
 const ChatTabs = () => {
-    const {isSearch, toggleSearch} = useContext<any>(SearchContext);
+    const {isSearch, toggleSearch} = useContext<any>(ChatContext);
 
     useEffect(() => {
         const keyDownHandler = (event: any) => {
             if (event.key === 'Escape') {
-                console.log('SideBar')
                 event.preventDefault();
                 toggleSearch();
             }
@@ -37,11 +31,7 @@ const ChatTabs = () => {
 }
 
 const SideBar = () => {
-    const {selectedChat, setSelectedChat} = useContext<any>(SearchContext);
-    useEffect(() => {
-        setSelectedChat({chat: "F", id: '1'});
-
-    }, []);
+    const {selectedChat} = useContext<any>(ChatContext);
 
     return (
         <>
@@ -49,12 +39,7 @@ const SideBar = () => {
                   rounded="30px" direction={'column'} alignItems={'center'} p={5}
                   overflow={'auto'}
             >
-                {
-                    !selectedChat ?
-                        <ChatTabs/>
-                        :
-                        <Messaging/>
-                }
+                {!selectedChat ? <ChatTabs/> : <Messaging/>}
             </Flex>
         </>
     );

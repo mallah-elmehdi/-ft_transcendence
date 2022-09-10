@@ -1,7 +1,7 @@
 import React, { useState, createContext } from 'react';
 
 // @ts-ignore
-export const SearchContext = createContext();
+export const ChatContext = createContext();
 
 type Props = {
     children: JSX.Element,
@@ -60,8 +60,18 @@ const ChatProvider = ({ children }: Props) => {
         }
 
     )
+    const [typingMessage, setTypingMessage] = useState('');
+    const [messages, setMessages] = useState([
+        { isSender: false, content: 'asddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdas' },
+        { isSender: true, content: 'asddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdas' }
+    ]);
+
+    const [chatDetails, setChatDetails] = useState(false)
+    const toggleDetails = () => {
+        setChatDetails(!chatDetails)
+    }
     return (
-        <SearchContext.Provider
+        <ChatContext.Provider
             value={{
                 isSearch: isSearch,
                 toggleSearch: toggleSearch,
@@ -69,10 +79,16 @@ const ChatProvider = ({ children }: Props) => {
                 setSelectedChat: setSelectedChat,
                 data: data,
                 setData: setData,
+                typingMessage: typingMessage,
+                setTypingMessage: setTypingMessage,
+                messages: messages,
+                setMessages: setMessages,
+                toggleDetails: toggleDetails,
+                chatDetails: chatDetails,
             }}
         >
             {children}
-        </SearchContext.Provider>
+        </ChatContext.Provider>
     );
 
 };

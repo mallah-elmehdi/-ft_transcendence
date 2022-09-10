@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useRef} from 'react';
-import {MessagesContext} from "../hooks/MessagingProvider";
 import Message from "./Message";
+import {ChatContext} from "../hooks/ChatProvider";
 
 const AlwaysScrollToBottom = () => {
     const elementRef = useRef();
@@ -11,7 +11,7 @@ const AlwaysScrollToBottom = () => {
 };
 
 function MessagesList() {
-    const {messages} = useContext<any>(MessagesContext)
+    const {messages} = useContext<any>(ChatContext)
     return (
         <>
             {

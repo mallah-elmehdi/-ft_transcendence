@@ -14,9 +14,9 @@ function App() {
     const isSignIn = true;
     return (
         <ChakraProvider theme={theme} >
-            <Center>
+            <Center >
                 <Box
-                    p={[1, 10, 10,10]}
+                    p={[0, 10, 10,10]}
                     h={'99vh'}
                     w={['100%','100%','100%','100%','100%', '95%' ]}
                     maxW={'2000px'}

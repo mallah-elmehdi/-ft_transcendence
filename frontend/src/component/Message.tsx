@@ -21,6 +21,8 @@ const Message = ({isSender, content}: MsgProps) => {
                 rounded={20}
                 roundedBottomRight={isSender ? 0 : 20}
                 roundedTopLeft={isSender ? 20 : 0}
+                maxW={'20em'}
+                // minW={'10em'}
                 px={3}
                 py={2}
                 bg={isSender ?

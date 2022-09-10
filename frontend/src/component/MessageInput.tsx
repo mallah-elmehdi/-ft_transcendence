@@ -1,14 +1,12 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Box, HStack, Input, useColorMode, useColorModeValue} from "@chakra-ui/react";
 import {IoSend} from "react-icons/io5";
-import {MessagesContext} from "../hooks/MessagingProvider";
+import {ChatContext} from "../hooks/ChatProvider";
 
 const MessageInput = () => {
-    // const [message, setMessage] = useState('');
-    // const sendIconBg = useColorModeValue('rgb(81,143,229)','rgb(132,119,218)')
-    const {typingMessage, setTypingMessage} = useContext<any>(MessagesContext);
+    const {typingMessage, setTypingMessage} = useContext<any>(ChatContext);
     const msgInputBg = useColorModeValue('white', 'rgb(33,33,33)')
-    const {setMessages} = useContext<any>(MessagesContext)
+    const {setMessages} = useContext<any>(ChatContext)
 
     function sendMessageHandler() {
         if (typingMessage.trim()) {
