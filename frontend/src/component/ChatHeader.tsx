@@ -2,9 +2,12 @@ import React, {useContext} from 'react';
 import {Avatar, HStack, Spacer, Text} from "@chakra-ui/react";
 import {ArrowBackIcon} from "@chakra-ui/icons";
 import {ChatContext} from "../hooks/ChatProvider";
+import {ChevronDownIcon} from "@chakra-ui/icons";
 import {BsThreeDotsVertical} from  "react-icons/bs"
+import { Menu, MenuButton, MenuList, MenuItem, MenuItemOption, MenuGroup, MenuOptionGroup, MenuDivider, } from '@chakra-ui/react'
 
 // import {ChatContext} from "../hooks/MessagingProvider";
+
 
 function ChatHeader() {
     const {data} = useContext<any>(ChatContext);
@@ -30,9 +33,37 @@ function ChatHeader() {
                 <Text>{selectedChat.chat === 'G' ? data.groups[searchIndex].name : data.friends[searchIndex].name}</Text>
             </HStack>
             <Spacer/>
-            <BsThreeDotsVertical onClick={()=>{
-               console.log('Clicked three dot')
-            }}  size={22}/>
+            <Menu>
+                {({ isOpen }) => (
+                    <>
+                        <MenuButton isActive={isOpen} as={'button'} rightIcon={<ChevronDownIcon />}>
+                            {isOpen ? 'Close' : 'Open'}
+                        </MenuButton>
+                        <MenuList>
+                            <MenuItem>Download</MenuItem>
+                            <MenuItem onClick={() => alert('Kagebunshin')}>Create a Copy</MenuItem>
+                        </MenuList>
+                    </>
+                )}
+            </Menu>
+            {/*<Menu>*/}
+            {/*    <>*/}
+            {/*    <MenuButton >*/}
+            {/*        <BsThreeDotsVertical onClick={()=>{*/}
+            {/*           console.log('Clicked three dot')*/}
+            {/*        }}  size={22}/>*/}
+            {/*    </MenuButton>*/}
+            {/*    <MenuList>*/}
+            {/*        <MenuItem onClick={()=> console.log('Download')}>Block User</MenuItem>*/}
+            {/*        <MenuItem onClick={()=> console.log('Download')}>Block User</MenuItem>*/}
+            {/*        <MenuItem onClick={()=> console.log('Download')}>Block User</MenuItem>*/}
+            {/*        <MenuItem onClick={()=> console.log('Download')}>Block User</MenuItem>*/}
+            {/*    </MenuList>*/}
+            {/*    </>*/}
+            {/*</Menu>*/}
+            {/*<BsThreeDotsVertical onClick={()=>{*/}
+            {/*   console.log('Clicked three dot')*/}
+            {/*}}  size={22}/>*/}
         </HStack>
     );
 }

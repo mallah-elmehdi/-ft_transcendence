@@ -2,24 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5cd2ea18-4c7a-48bc-97c3-f440052e3092" name="Changes" comment="refactor files">
-      <change afterPath="$PROJECT_DIR$/src/component/MessagingBox.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/ChatDetails.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/ProfileDetails.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/ChatHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/ChatHeader.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/Message.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Message.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/MessageInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/MessageInput.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/MessagesList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/MessagesList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/Messaging.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Messaging.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/MiniProfil.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/MiniProfile.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Navbar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/SearchBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/SearchBar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/SideBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/SideBar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/Tabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Tabs.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/logo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/logo.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/toggleMode.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/toggleMode.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/ChatProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/ChatProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/MessagingProvider.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/style/theme.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/theme.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,6 +151,7 @@
       <workItem from="1662991081691" duration="5757000" />
       <workItem from="1662998010861" duration="747000" />
       <workItem from="1663004263003" duration="3446000" />
+      <workItem from="1663015872032" duration="1061000" />
     </task>
     <task id="LOCAL-00001" summary="implementing the routes">
       <created>1661291634634</created>
