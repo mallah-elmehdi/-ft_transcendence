@@ -49,27 +49,55 @@ const ChatProvider = ({ children }: Props) => {
                 { id: '31', name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
             ],
             groups: [
-                { id: '1', name: 'GroupNAme' },
-                { id: '2', name: 'GroupNAme' },
-                { id: '3', name: 'GroupNAme' },
-                { id: '4', name: 'GroupNAme' },
-                { id: '5', name: 'GroupNAme' },
-                { id: '5', name: 'GroupNAme' },
-                { id: '6', name: 'GraaaoupNAme' },
+                { id: '1', name: 'Group1' },
+                { id: '2', name: 'Group2' },
+                { id: '3', name: 'Group3' },
+                { id: '4', name: 'Group4' },
+                { id: '5', name: 'Group5' },
+                { id: '5', name: 'Group6' },
+                { id: '6', name: 'Group7' },
             ],
         }
 
     )
     const [typingMessage, setTypingMessage] = useState('');
     const [messages, setMessages] = useState([
-        { isSender: false, content: 'asddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdas' },
-        { isSender: true, content: 'asddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdasasddfasddfasfdasfasdfdas' }
+        { isSender: false, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: false, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: false, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: false, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: false, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: false, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: false, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: false, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: false, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: false, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: false, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: true, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
+        { isSender: false, content: 'lkjlkjlkjjlkkjlkkjlkkjlkjlkjlkjlkjjlkkjlkj', time: '12:00' },
     ]);
 
     const [chatDetails, setChatDetails] = useState(false)
-    const toggleDetails = () => {
-        setChatDetails(!chatDetails)
-    }
+    // const toggleDetails = () => {
+    //     setChatDetails(!chatDetails)
+    // }
     return (
         <ChatContext.Provider
             value={{
@@ -83,7 +111,7 @@ const ChatProvider = ({ children }: Props) => {
                 setTypingMessage: setTypingMessage,
                 messages: messages,
                 setMessages: setMessages,
-                toggleDetails: toggleDetails,
+                setChatDetails: setChatDetails,
                 chatDetails: chatDetails,
             }}
         >

@@ -1,16 +1,16 @@
 import React, {useContext} from 'react';
 import {motion} from "framer-motion";
 import {
+    Flex,
     HStack,
-    Tabs as ChakraTabs,
     Tab,
     TabList,
     TabPanel,
     TabPanels,
+    Tabs as ChakraTabs,
     Text,
     useColorModeValue,
     VStack,
-    Flex,
 } from "@chakra-ui/react";
 import {Avatar as ChakraAvatar} from "@chakra-ui/avatar";
 import {ChatContext} from "../hooks/ChatProvider"

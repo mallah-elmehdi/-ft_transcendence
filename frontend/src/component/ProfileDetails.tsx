@@ -1,34 +1,33 @@
-import React, {useContext} from 'react';
-import {Divider, HStack, Text, Tooltip, Avatar, Flex, VStack} from "@chakra-ui/react";
-import {FaDiscord, FaFacebook, FaInstagram} from "react-icons/fa";
+import React, {useContext, useEffect} from 'react';
+import {Flex, HStack, Text, VStack} from "@chakra-ui/react";
 import {ChatContext} from "../hooks/ChatProvider";
 import {CloseIcon} from "@chakra-ui/icons";
-import MiniProfil from "./MiniProfil";
-import {useEffect} from "react";
+import MiniProfile from "./MiniProfile";
 
 
-function ChatDetails() {
+function ProfileDetails() {
     const {data} = useContext<any>(ChatContext);
     const {selectedChat} = useContext<any>(ChatContext);
-    const {toggleDetails, ChatDetails } = useContext<any>(ChatContext);
+    const {setChatDetails} = useContext<any>(ChatContext);
     let searchIndex;
     if (selectedChat.chat === 'F') searchIndex = data.friends.findIndex((id: any) => selectedChat.id === id.id);
     else searchIndex = data.groups.findIndex((id: any) => selectedChat.id === id.id);
 
-    // useEffect(() => {
-    //     const keyDownHandler = (event: any) => {
-    //         if (event.key === 'Escape') {
-    //             event.preventDefault();
-    //             console.log('Chat Details : Escape')
-    //             toggleDetails()
-    //         }
-    //     };
-    //     document.addEventListener('keydown', keyDownHandler);
-    //     return () => {
-    //         document.removeEventListener('keydown', keyDownHandler);
-    //     };
-    // }, );
-    // console.log('>>>>>>>>> Enter to ChatDetails <<<<<<<<<<<<<')
+    useEffect(() => {
+        console.log('useEffect: Enter to ProfileDetails')
+        const keyDownHandler = (event: any) => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                console.log('Chat Details : Escape')
+                setChatDetails(false)
+            }
+        };
+        document.addEventListener('keydown', keyDownHandler);
+        return () => {
+            document.removeEventListener('keydown', keyDownHandler);
+        };
+    },);
+    console.log('>>>>>>>>> Enter to ProfileDetails <<<<<<<<<<<<<')
 
 
     return (
@@ -36,7 +35,7 @@ function ChatDetails() {
             <HStack h={14} px={5} w={'100%'} m={0} spacing={8}>
                 <CloseIcon m={0} p={0} h={30} fontSize={15} onClick={() => {
                     console.log('Chat Details : Icon')
-                    toggleDetails()
+                    setChatDetails(false)
                 }}/>
                 <Text fontSize={20}>Profile</Text>
             </HStack>
@@ -48,7 +47,7 @@ function ChatDetails() {
                 justifyContent={'center'}
             >
                 {
-                    <MiniProfil
+                    <MiniProfile
                         name={'Youssef'}
                         src={selectedChat.chat === 'G' ? data.groups[searchIndex].name.toString() : data.friends[searchIndex].avatar}
                         facebook={'face'}
@@ -61,4 +60,4 @@ function ChatDetails() {
     );
 }
 
-export default ChatDetails;
+export default ProfileDetails;

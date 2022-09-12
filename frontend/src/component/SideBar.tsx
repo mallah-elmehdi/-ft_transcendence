@@ -1,16 +1,17 @@
 import {Flex} from '@chakra-ui/react';
 import SearchBar from './SearchBar';
 import {AnimatePresence} from 'framer-motion';
-import {useEffect, useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import Tabs from './Tabs';
-import React from 'react';
 import Messaging from "./Messaging";
 import {ChatContext} from "../hooks/ChatProvider";
 
 const ChatTabs = () => {
     const {isSearch, toggleSearch} = useContext<any>(ChatContext);
+    const {setChatDetails} = useContext<any>(ChatContext);
 
     useEffect(() => {
+        setChatDetails(false);
         const keyDownHandler = (event: any) => {
             if (event.key === 'Escape') {
                 event.preventDefault();
@@ -32,6 +33,13 @@ const ChatTabs = () => {
 
 const SideBar = () => {
     const {selectedChat} = useContext<any>(ChatContext);
+    const {setSelectedChat,setChatDetails } = useContext<any>(ChatContext);
+    useEffect(() => {
+        // setSelectedChat({chat: "F", id: "1"})
+        // setChatDetails(true);
+    }, [selectedChat]);
+
+
 
     return (
         <>
@@ -40,6 +48,7 @@ const SideBar = () => {
                   overflow={'auto'}
             >
                 {!selectedChat ? <ChatTabs/> : <Messaging/>}
+
             </Flex>
         </>
     );

@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useRef} from 'react';
 import Message from "./Message";
 import {ChatContext} from "../hooks/ChatProvider";
+import {Box} from "@chakra-ui/react"
 
 const AlwaysScrollToBottom = () => {
     const elementRef = useRef();
@@ -13,14 +14,14 @@ const AlwaysScrollToBottom = () => {
 function MessagesList() {
     const {messages} = useContext<any>(ChatContext)
     return (
-        <>
+        <Box bottom={0} w={'100%'}>
             {
                 messages.map((item: any, id: any) =>
-                    <Message key={id.toString()} isSender={item.isSender} content={item.content}/>
+                    <Message key={id.toString()} isSender={item.isSender} content={item.content} time={item.time}/>
                 )
             }
             <AlwaysScrollToBottom/>
-        </>
+        </Box>
     );
 }
 

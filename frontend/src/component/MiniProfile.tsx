@@ -1,5 +1,5 @@
 import React from 'react';
-import {Flex, Text,HStack,Avatar,  }  from "@chakra-ui/react";
+import {Avatar, Button, HStack, Text, VStack,} from "@chakra-ui/react";
 import {FaDiscord, FaFacebook, FaInstagram} from "react-icons/fa";
 
 type Props = {
@@ -9,14 +9,16 @@ type Props = {
     instagram: string,
     discord: string,
 }
-function MiniProfil({name, src, facebook, discord, instagram}:Props) {
+
+function MiniProfile({name, src, facebook, discord, instagram}: Props) {
     return (
-        <Flex
+        <VStack
             h={'100%'}
             w={'100%'}
             alignItems={'center'}
             justifyContent={'center'}
             direction={'column'}
+            spacing={6}
         >
             <Avatar
                 size={'2xl'}
@@ -35,8 +37,23 @@ function MiniProfil({name, src, facebook, discord, instagram}:Props) {
                     <FaDiscord size={35}/>
                 </Text>
             </HStack>
-        </Flex>
+            <Button
+                _hover={{bg: 'red'}}
+                mb={7}
+                bg={'#BFC5DC'}
+                color={'#000000'}
+                w={200}
+                h={35}
+                rounded={20}
+                // leftIcon={<FaShieldAlt color={'black'} size={20}/>}
+                colorScheme='gray' variant='solid'>
+                <HStack spacing={4} >
+                    <Text fontSize={30} > 🏓 </Text>
+                    <Text> Invite to Game </Text>
+                </HStack>
+            </Button>
+        </VStack>
     );
 }
 
-export default MiniProfil;
+export default MiniProfile;

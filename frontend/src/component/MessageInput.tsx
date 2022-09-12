@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState} from "react";
-import {Box, HStack, Input, useColorMode, useColorModeValue} from "@chakra-ui/react";
+import React, {useContext, useEffect} from "react";
+import {HStack, Input, useColorModeValue} from "@chakra-ui/react";
 import {IoSend} from "react-icons/io5";
 import {ChatContext} from "../hooks/ChatProvider";
 
@@ -38,8 +38,8 @@ const MessageInput = () => {
     return (
         <>
             <HStack
-                pl={5}
-                pr={6}
+                // pl={5}
+                // pr={6}
                 w={'100%'}
                 m={5}
                 h={'3em'}
@@ -54,7 +54,6 @@ const MessageInput = () => {
                 />
                 <IoSend
                     color={'rgb(132,119,218)'}
-                    // color={sendIconBg}
                     onClick={sendMessageHandler}
                     size={30}/>
             </HStack>

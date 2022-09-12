@@ -1,8 +1,7 @@
 import {HStack, Input, InputGroup, InputLeftElement,} from "@chakra-ui/react";
 import {ArrowBackIcon, Search2Icon} from "@chakra-ui/icons";
-import {useRef, useEffect, useContext} from "react";
+import React, {useContext, useEffect, useRef} from "react";
 import {ChatContext} from "../hooks/ChatProvider";
-import React from "react"
 
 const SearchBar = () => {
     const searchInputRef = useRef<any>(null);
@@ -39,7 +38,8 @@ const SearchBar = () => {
                     boxSizing={'border-box'}
                     alignContent={'center'}
                 >
-                    <InputLeftElement h={'100%'} pointerEvents='none' children={<Search2Icon color={!isSearch ? 'gray.500' : 'red'}/>}/>
+                    <InputLeftElement h={'100%'} pointerEvents='none'
+                                      children={<Search2Icon color={!isSearch ? 'gray.500' : 'red'}/>}/>
                     <Input
                         ref={searchInputRef}
                         alignItems={'center'}
@@ -47,7 +47,7 @@ const SearchBar = () => {
                         _hover={{border: isSearch ? '1px solid #EF9795' : '1px solid #BEBEBE'}}
                         border={isSearch ? '1px solid #EF9795' : '1px solid #707070'}
                         onClick={() => {
-                            if(!isSearch)
+                            if (!isSearch)
                                 toggleSearch();
                         }}
                         onChange={

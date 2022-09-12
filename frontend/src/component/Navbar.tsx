@@ -1,13 +1,17 @@
-import {Flex, Spacer, Tabs, TabList, Text, useColorMode, Tab, Show, Hide, useDisclosure, Box} from '@chakra-ui/react';
 import {
+    Box,
+    Button,
+    Flex,
     Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
     ModalBody,
     ModalCloseButton,
-    Button
+    ModalContent,
+    ModalHeader,
+    Show,
+    Spacer,
+    Text,
+    useColorMode,
+    useDisclosure
 } from '@chakra-ui/react';
 import {HamburgerIcon} from '@chakra-ui/icons';
 import React, {useState} from 'react';
@@ -55,7 +59,7 @@ export default function Navbar(props: props) {
                             // FIXME: i dont know the solution for this error below, i will fix if is harmful for the project if not don't care
                             // onClick={() => handleSizeClick(size)} key={size}>
                             onClick={() => handleSizeClick(size)}>
-                            <HamburgerIcon  />
+                            <HamburgerIcon/>
                         </Button>
                     </Show>
                     <Modal onClose={onClose} size={'full'} isOpen={isOpen}>

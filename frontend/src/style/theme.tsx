@@ -12,6 +12,10 @@ const colors = {
     black: '#475772',
     green: '#A2CE73',
     red:   '#EF9795',
+    lightGreen : 'rgb(242,254,225)',
+    darkGreen : 'rgb(117,179,102)',
+    lightBlack : 'rgb(33,33,33)',
+    customPurple : 'rgb(132,119,218)',
 }
 
 const config = {
