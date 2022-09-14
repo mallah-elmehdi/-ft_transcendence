@@ -35,9 +35,9 @@ const SideBar = () => {
     const {selectedChat} = useContext<any>(ChatContext);
     const {setSelectedChat,setChatDetails } = useContext<any>(ChatContext);
     useEffect(() => {
-        // setSelectedChat({chat: "F", id: "1"})
+        setSelectedChat({chat: "F", id: "1"})
         // setChatDetails(true);
-    }, [selectedChat]);
+    }, []);
 
 
 

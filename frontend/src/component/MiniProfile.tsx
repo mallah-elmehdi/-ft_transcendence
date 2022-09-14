@@ -33,15 +33,6 @@ function MiniProfile({name, src, facebook, discord, instagram}: Props) {
                 <FacebookButton id={facebook}/>
                 <DiscordButton id={discord}/>
                 <InstagramButton id={instagram}/>
-                <Text>
-                    <FaFacebook size={35}/>
-                </Text>
-                <Text>
-                    <FaInstagram size={35}/>
-                </Text>
-                <Text>
-                    <FaDiscord size={35}/>
-                </Text>
             </HStack>
             <Button
                 _hover={{bg: 'red'}}
@@ -51,7 +42,6 @@ function MiniProfile({name, src, facebook, discord, instagram}: Props) {
                 w={200}
                 h={35}
                 rounded={20}
-                // leftIcon={<FaShieldAlt color={'black'} size={20}/>}
                 colorScheme='gray' variant='solid'>
                 <HStack spacing={4} >
                     <Text fontSize={30} > 🏓 </Text>
