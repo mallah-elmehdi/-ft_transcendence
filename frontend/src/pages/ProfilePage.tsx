@@ -436,33 +436,33 @@ export  default function ProfilePage() {
                     </Tooltip>
                     <Divider border="1px" bg={'#2F3A53'} w={40} />
                     <HStack my={5} spacing={8} >
-                        <Tooltip label={"Click to Change"}>
-                            <Text>
-                                <FaFacebook size={35}/>
-                            </Text>
-                        </Tooltip>
-                        <Tooltip label={"Click to Change"}>
-                            <Text>
-                                <FaInstagram size={35}/>
-                            </Text>
-                        </Tooltip>
-                        <Tooltip label={"Click to Change"}>
-                            <Text>
-                                <FaDiscord size={35}/>
-                            </Text>
-                        </Tooltip>
+                        {/*<Tooltip label={"Click to Change"}>*/}
+                        {/*    <Text>*/}
+                        {/*        <FaFacebook size={35}/>*/}
+                        {/*    </Text>*/}
+                        {/*</Tooltip>*/}
+                        {/*<Tooltip label={"Click to Change"}>*/}
+                        {/*    <Text>*/}
+                        {/*        <FaInstagram size={35}/>*/}
+                        {/*    </Text>*/}
+                        {/*</Tooltip>*/}
+                        {/*<Tooltip label={"Click to Change"}>*/}
+                        {/*    <Text>*/}
+                        {/*        <FaDiscord size={35}/>*/}
+                        {/*    </Text>*/}
+                        {/*</Tooltip>*/}
                         {/* TODO: PLEASE DON'T DELETE ME . */}
                         {/* TODO: use this code for the mini profile in the chat page please . */}
-                        {/*<a*/}
-                        {/*    target={'_blank'} href={`https://www.facebook.com/${data.profile.facebook}`} >*/}
-                        {/*    <FaFacebook size={35}/>*/}
-                        {/*</a>*/}
-                        {/*<a target={'_blank'} href={`https://www.instagram.com/${data.profile.instagram}`} >*/}
-                        {/*    <FaInstagram size={35}/>*/}
-                        {/*</a>*/}
-                        {/*<a target={'_blank'} href={`https://www.discordapp.com/users/${data.profile.discord}`} >*/}
-                        {/*    <FaDiscord size={35}/>*/}
-                        {/*</a>*/}
+                        <a
+                            target={'_blank'} href={`https://www.facebook.com/${data.profile.facebook}`} >
+                            <FaFacebook size={35}/>
+                        </a>
+                        <a target={'_blank'} href={`https://www.instagram.com/${data.profile.instagram}`} >
+                            <FaInstagram size={35}/>
+                        </a>
+                        <a target={'_blank'} href={`https://www.discordapp.com/users/${data.profile.discord}`} >
+                            <FaDiscord size={35}/>
+                        </a>
                     </HStack>
                     <Button
                         _hover={{ bg: 'red' }}

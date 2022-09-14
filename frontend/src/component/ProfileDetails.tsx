@@ -14,7 +14,6 @@ function ProfileDetails() {
     else searchIndex = data.groups.findIndex((id: any) => selectedChat.id === id.id);
 
     useEffect(() => {
-        console.log('useEffect: Enter to ProfileDetails')
         const keyDownHandler = (event: any) => {
             if (event.key === 'Escape') {
                 event.preventDefault();

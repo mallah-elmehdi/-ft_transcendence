@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5cd2ea18-4c7a-48bc-97c3-f440052e3092" name="Changes" comment="working on UserBlock UI">
+      <change afterPath="$PROJECT_DIR$/src/component/DiscordButton.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/component/FacebookButton.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/component/InstagramButton.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/ChatHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/ChatHeader.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/MessagingBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/MessagingBox.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/MiniProfile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/MiniProfile.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/ProfileDetails.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/ProfileDetails.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/ChatProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/ChatProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ProfilePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProfilePage.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,6 +160,9 @@
       <workItem from="1663099065314" duration="1371000" />
       <workItem from="1663153138732" duration="75000" />
       <workItem from="1663153282183" duration="1051000" />
+      <workItem from="1663164951187" duration="104000" />
+      <workItem from="1663165106386" duration="260000" />
+      <workItem from="1663165913252" duration="1144000" />
     </task>
     <task id="LOCAL-00001" summary="implementing the routes">
       <created>1661291634634</created>

@@ -1,6 +1,9 @@
 import React from 'react';
 import {Avatar, Button, HStack, Text, VStack,} from "@chakra-ui/react";
 import {FaDiscord, FaFacebook, FaInstagram} from "react-icons/fa";
+import FacebookButton from "./FacebookButton";
+import InstagramButton from "./InstagramButton";
+import DiscordButton from "./DiscordButton";
 
 type Props = {
     name: string,
@@ -27,6 +30,9 @@ function MiniProfile({name, src, facebook, discord, instagram}: Props) {
             ></Avatar>
             <Text my={7} fontSize={25} fontWeight={'bold'}> {name} </Text>
             <HStack spacing={8}>
+                <FacebookButton id={facebook}/>
+                <DiscordButton id={discord}/>
+                <InstagramButton id={instagram}/>
                 <Text>
                     <FaFacebook size={35}/>
                 </Text>
