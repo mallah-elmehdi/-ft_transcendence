@@ -58,7 +58,6 @@ const ChatProvider = ({ children }: Props) => {
                 { id: '6', name: 'Group7' },
             ],
         }
-
     )
     const [typingMessage, setTypingMessage] = useState('');
     const [messages, setMessages] = useState([
@@ -95,9 +94,9 @@ const ChatProvider = ({ children }: Props) => {
     ]);
 
     const [chatDetails, setChatDetails] = useState(false)
-    // const toggleDetails = () => {
-    //     setChatDetails(!chatDetails)
-    // }
+    const toggleDetails = () => {
+        setChatDetails(!chatDetails)
+    }
     return (
         <ChatContext.Provider
             value={{
@@ -113,6 +112,7 @@ const ChatProvider = ({ children }: Props) => {
                 setMessages: setMessages,
                 setChatDetails: setChatDetails,
                 chatDetails: chatDetails,
+                toggleDetails: toggleDetails,
             }}
         >
             {children}

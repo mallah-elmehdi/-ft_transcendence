@@ -12,8 +12,7 @@ const BlockUser = () => {
             <MdOutlineDelete size={24} color="red" onClick={() => onOpen()} />
             <Modal
              onClose={onClose} size="md" isOpen={isOpen} isCentered>
-                {/* <ModalOverlay /> */}
-                <ModalContent w={'20em'} h={'10em'} >
+                <ModalContent w={'20em'} h={'10em'} bg={'black'} >
                     <ModalHeader>Block User</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>lkjlkjlkjlkj</ModalBody>
@@ -31,14 +30,14 @@ const BlockUser = () => {
 function ChatHeader() {
     const { data } = useContext<any>(ChatContext);
     const { selectedChat, setSelectedChat } = useContext<any>(ChatContext);
-    const { setChatDetails } = useContext<any>(ChatContext);
+    const { toggleDetails } = useContext<any>(ChatContext);
     let searchIndex;
 
     if (selectedChat.chat === 'F') searchIndex = data.friends.findIndex((id: any) => selectedChat.id === id.id);
     else searchIndex = data.groups.findIndex((id: any) => selectedChat.id === id.id);
     return (
         <HStack w={'100%'} mr={5}>
-            <HStack onClick={() => setChatDetails(true)} as={'button'} px={5} w={'100%'} m={0} h={''}>
+            <HStack onClick={() => toggleDetails() } as={'button'} px={5} w={'100%'} m={0} h={''}>
                 <ArrowBackIcon m={0} mr={25} p={0} h={30} fontSize={25} onClick={() => setSelectedChat(null)} />
                 <Avatar
                     name={selectedChat.chat === 'G' ? data.groups[searchIndex].name.toString() : data.friends[searchIndex].name.toString()}

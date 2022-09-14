@@ -40,7 +40,6 @@ function MessagingBox() {
                     h={'100%'} w={'100%'}
                     overflowY={'auto'}
                     px={5}
-                    // pos={'relative'}
                 >
                     <MessagesList/>
                 </VStack>

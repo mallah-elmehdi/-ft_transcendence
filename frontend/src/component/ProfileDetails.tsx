@@ -8,7 +8,7 @@ import MiniProfile from "./MiniProfile";
 function ProfileDetails() {
     const {data} = useContext<any>(ChatContext);
     const {selectedChat} = useContext<any>(ChatContext);
-    const {setChatDetails} = useContext<any>(ChatContext);
+    const {setChatDetails, toggleDetails} = useContext<any>(ChatContext);
     let searchIndex;
     if (selectedChat.chat === 'F') searchIndex = data.friends.findIndex((id: any) => selectedChat.id === id.id);
     else searchIndex = data.groups.findIndex((id: any) => selectedChat.id === id.id);
@@ -18,8 +18,7 @@ function ProfileDetails() {
         const keyDownHandler = (event: any) => {
             if (event.key === 'Escape') {
                 event.preventDefault();
-                console.log('Chat Details : Escape')
-                setChatDetails(false)
+                toggleDetails()
             }
         };
         document.addEventListener('keydown', keyDownHandler);
@@ -27,16 +26,12 @@ function ProfileDetails() {
             document.removeEventListener('keydown', keyDownHandler);
         };
     },);
-    console.log('>>>>>>>>> Enter to ProfileDetails <<<<<<<<<<<<<')
 
 
     return (
         <VStack h={'100%'} w={'100%'}>
             <HStack h={14} px={5} w={'100%'} m={0} spacing={8}>
-                <CloseIcon m={0} p={0} h={30} fontSize={15} onClick={() => {
-                    console.log('Chat Details : Icon')
-                    setChatDetails(false)
-                }}/>
+                <CloseIcon m={0} p={0} h={30} fontSize={15} onClick={() => toggleDetails()}/>
                 <Text fontSize={20}>Profile</Text>
             </HStack>
             <Flex
