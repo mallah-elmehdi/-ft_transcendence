@@ -3,7 +3,7 @@ import ChatHeader from "./ChatHeader"
 import MessagesList from "./MessagesList";
 import MessageInput from "./MessageInput";
 import {useColorModeValue, VStack} from "@chakra-ui/react";
-import {ChatContext} from "../hooks/ChatProvider";
+import {ChatContext} from "../State/ChatProvider";
 import FriendMenu from './FriendMenu';
 import GroupMenu from './GroupMenu';
 
@@ -15,7 +15,6 @@ function MessagingBox() {
 
     if (selectedChat.chat === 'F') searchIndex = data.friends.findIndex((id: any) => selectedChat.id === id.id);
     else searchIndex = data.groups.findIndex((id: any) => selectedChat.id === id.id);
-    // const {setSelectedChat} = useContext<any>(ChatContext);
     useEffect(() => {
         const keyDownHandler = (event: any) => {
             if (event.key === 'Escape') {

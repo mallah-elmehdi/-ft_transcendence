@@ -1,7 +1,7 @@
 import React from "react"
 import {Text, Flex, Show, Hide} from '@chakra-ui/react'
 import SideBar from "../component/SideBar"
-import ChatProvider from "../hooks/ChatProvider";
+import ChatProvider from "../State/ChatProvider";
 
 
 export default function ChatPage() {

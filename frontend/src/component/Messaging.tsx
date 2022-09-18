@@ -1,13 +1,19 @@
 import React, {useContext} from "react";
-import {ChatContext} from "../hooks/ChatProvider";
+import {ChatContext} from "../State/ChatProvider";
 import ProfileDetails from "./ProfileDetails";
 import MessagingBox from "./MessagingBox";
+import ChannelDetails from "./ChannelDetails";
 
 const Messaging = () => {
-    const {chatDetails} = useContext<any>(ChatContext)
+    const {chatDetails, selectedChat} = useContext<any>(ChatContext)
     return (
         <>
-            {!chatDetails ? <MessagingBox/> : <ProfileDetails/>}
+            {!chatDetails ?
+                <MessagingBox/> :
+                selectedChat.chat === 'F' ?
+                    <ProfileDetails/> :
+                    <ChannelDetails/>
+            }
         </>
     );
 };

@@ -8,6 +8,10 @@ type Props = {
 }
 
 const ChatProvider = ({ children }: Props) => {
+    const [newChannel, setNewChannel] = useState(false);
+    const toggleNewChannel = ()=>{
+        setNewChannel(!newChannel)
+    }
     const [isSearch, setSearch] = useState(false);
     const [selectedChat, setSelectedChat] = useState(null);
     const toggleOffSelectedChat = () =>{
@@ -124,6 +128,8 @@ const ChatProvider = ({ children }: Props) => {
                 chatDetails: chatDetails,
                 toggleDetails: toggleDetails,
                 toggleOffSelectedChat: toggleOffSelectedChat,
+                toggleNewChannel: toggleNewChannel,
+                newChannel: newChannel,
             }}
         >
             {children}

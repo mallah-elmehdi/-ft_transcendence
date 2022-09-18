@@ -15,8 +15,9 @@ import {
     VStack,
 } from "@chakra-ui/react";
 import {Avatar as ChakraAvatar} from "@chakra-ui/avatar";
-import {ChatContext} from "../hooks/ChatProvider"
+import {ChatContext} from "../State/ChatProvider"
 import {AddIcon} from "@chakra-ui/icons"
+import FloatingActionButton from "./FloatingActionButton";
 
 
 function Tabs() {
@@ -25,7 +26,6 @@ function Tabs() {
     const {data} = useContext<any>(ChatContext)
     return (
         <ChakraTabs
-            // isLazy={true}
             onChange={(index) => {
                 console.log(index);
             }}
@@ -85,7 +85,6 @@ function Tabs() {
                     m={0}
                     p={0}
                     overflow={'auto'}
-                    // position='relative'
                 >
                     <VStack pb={10} spacing={0} w={'100%'}>
                         {data.groups.length ? (
@@ -112,8 +111,8 @@ function Tabs() {
                             </Flex>
                         )}
                     </VStack>
-                    <IconButton bg={'green'} rounded={16} size={'lg'} position={'absolute'} right={8} bottom={8} aria-label="Search database" icon={<AddIcon />} />
                 </TabPanel>
+                <FloatingActionButton/>
             </TabPanels>
         </ChakraTabs>
     );

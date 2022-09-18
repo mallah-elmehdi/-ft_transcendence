@@ -41,13 +41,16 @@ import {InfoOutlineIcon} from "@chakra-ui/icons"
 import {SetStateAction, useEffect, useState} from "react";
 import axios from "axios";
 import React from "react"
+import FacebookButton from "../component/FacebookButton";
+import InstagramButton from "../component/InstagramButton";
+import DiscordButton from "../component/DiscordButton";
 
 // component
 
 
 function Avatar(props: { name: string | undefined; src: string | undefined; })
 {
-    var fileInput: HTMLInputElement | null;
+    let fileInput: any =  null;
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [hoverAvatar, setHoverAvatar] = useBoolean()
     const [selectedAvatar , setSelectedAvatar] = useState(null)
@@ -62,24 +65,25 @@ function Avatar(props: { name: string | undefined; src: string | undefined; })
         if (selectedAvatar != null)
         {
             // send data to backend
-            // const fd = new FormData();
-            // fd.append('avatarImage', selectedAvatar, selectedAvatar.name)
-            // const backEndLink = 'http://www.oac.uci.edu/indiv/franklin/cgi-bin/values';
-            // axios.post(backEndLink, fd, {
-            //     onUploadProgress: progressEvent => {
-            //         console.log('upload Progress: ' + Math.round(progressEvent.load / progressEvent.total * 100) + "%")
-            //     }
-            // })
-            //     .then(res => {
-            //         console.log('RESULT');
-            //         console.log(res);
-            //     })
-            //     .catch(err => {
-            //         console.log('--------------------ERROR--------------------')
-            //         console.log(err)
-            //
-            //         console.log('---------------------------------------------')
-            //     })
+            const fd = new FormData();
+            // @ts-ignore
+            fd.append('avatarImage', selectedAvatar, selectedAvatar.name)
+            const backEndLink = 'http://www.oac.uci.edu/indiv/franklin/cgi-bin/values';
+            axios.post(backEndLink, fd, {
+                onUploadProgress: progressEvent => {
+                    console.log('upload Progress: ' + Math.round(progressEvent.load / progressEvent.total * 100) + "%")
+                }
+            })
+                .then(res => {
+                    console.log('RESULT');
+                    console.log(res);
+                })
+                .catch(err => {
+                    console.log('--------------------ERROR--------------------')
+                    console.log(err)
+
+                    console.log('---------------------------------------------')
+                })
         }
         else
         {
@@ -453,16 +457,19 @@ export  default function ProfilePage() {
                         {/*</Tooltip>*/}
                         {/* TODO: PLEASE DON'T DELETE ME . */}
                         {/* TODO: use this code for the mini profile in the chat page please . */}
-                        <a
-                            target={'_blank'} href={`https://www.facebook.com/${data.profile.facebook}`} >
-                            <FaFacebook size={35}/>
-                        </a>
-                        <a target={'_blank'} href={`https://www.instagram.com/${data.profile.instagram}`} >
-                            <FaInstagram size={35}/>
-                        </a>
-                        <a target={'_blank'} href={`https://www.discordapp.com/users/${data.profile.discord}`} >
-                            <FaDiscord size={35}/>
-                        </a>
+                        <FacebookButton id={data.profile.facebook} />
+                        <InstagramButton id={data.profile.instagram} />
+                        <DiscordButton id={data.profile.discord} />
+                        {/*<a*/}
+                        {/*    target={'_blank'} href={`https://www.facebook.com/${data.profile.facebook}`} >*/}
+                        {/*    <FaFacebook size={35}/>*/}
+                        {/*</a>*/}
+                        {/*<a target={'_blank'} href={`https://www.instagram.com/${data.profile.instagram}`} >*/}
+                        {/*    <FaInstagram size={35}/>*/}
+                        {/*</a>*/}
+                        {/*<a target={'_blank'} href={`https://www.discordapp.com/users/${data.profile.discord}`} >*/}
+                        {/*    <FaDiscord size={35}/>*/}
+                        {/*</a>*/}
                     </HStack>
                     <Button
                         _hover={{ bg: 'red' }}

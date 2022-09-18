@@ -4,9 +4,8 @@ import {AnimatePresence} from 'framer-motion';
 import React, {useContext, useEffect} from 'react';
 import Tabs from './Tabs';
 import Messaging from "./Messaging";
-import {ChatContext} from "../hooks/ChatProvider";
-import {IconButton} from "@chakra-ui/react"
-import {AddIcon} from "@chakra-ui/icons"
+import {ChatContext} from "../State/ChatProvider";
+import NewChannel from "./NewChannel";
 
 const ChatTabs = () => {
     const {isSearch, toggleSearch} = useContext<any>(ChatContext);
@@ -35,12 +34,12 @@ const ChatTabs = () => {
 
 const SideBar = () => {
     const {selectedChat} = useContext<any>(ChatContext);
-    const {setSelectedChat,setChatDetails } = useContext<any>(ChatContext);
+    const {newChannel} = useContext<any>(ChatContext)
+    const {setSelectedChat, setChatDetails} = useContext<any>(ChatContext);
     useEffect(() => {
-        // setSelectedChat({chat: "F", id: "1"})
-        // setChatDetails(true);
+        setSelectedChat({chat: "G", id: "1"})
+        setChatDetails(true)
     }, []);
-
 
 
     return (
@@ -49,8 +48,11 @@ const SideBar = () => {
                   rounded="30px" direction={'column'} alignItems={'center'} p={5}
                   overflow={'auto'}
             >
-                {!selectedChat ? <ChatTabs/> : <Messaging/>}
-
+                {newChannel ?
+                    <NewChannel/> :
+                    !selectedChat ?
+                        <ChatTabs/> :
+                        <Messaging/>}
             </Flex>
         </>
     );

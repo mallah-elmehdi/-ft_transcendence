@@ -1,60 +1,74 @@
 import React from 'react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { Button, Text, IconButton, Menu, MenuButton, MenuList, MenuItem, MenuItemOption, MenuGroup, MenuOptionGroup, MenuDivider } from '@chakra-ui/react';
+import {BsThreeDotsVertical} from 'react-icons/bs';
 import {
-    Avatar,
-    Box,
-    HStack,
+    AlertDialog,
+    AlertDialogBody,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogContent,
+    AlertDialogOverlay,
+} from '@chakra-ui/react'
+
+import {
+    Button,
+    IconButton,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
     Modal,
-    ModalBody,
     ModalCloseButton,
     ModalContent,
     ModalFooter,
     ModalHeader,
-    Spacer,
-    useDisclosure
+    Text,
+    useDisclosure,
+    useColorModeValue,
 } from '@chakra-ui/react';
+import {MdDelete} from "react-icons/md"
 
 const FriendMenu = () => {
+    const value = useColorModeValue('white', 'lightBlack')
+    const {isOpen, onOpen, onClose} = useDisclosure();
+
     const blockUserHandler = () => {
-                            console.log('BLOCK USER')
+        console.log('BLOCK USER')
     }
 
-    const {isOpen, onOpen, onClose} = useDisclosure();
     return (
         <>
             <Menu>
-                <MenuButton as={IconButton} icon={<BsThreeDotsVertical />} variant="ghost"/>
+                <MenuButton as={IconButton} icon={<BsThreeDotsVertical/>} variant="ghost"/>
                 <MenuList>
-                    <MenuItem onClick={() => onOpen()}>
-                        <Text color={'red'}> Block User </Text>
+                    <MenuItem
+                        icon={<MdDelete size={20} color={'#FF5C5C'}/>}
+                        onClick={() => onOpen()}>
+                        <Text color={'customRed'}> Block User </Text>
                     </MenuItem>
                 </MenuList>
             </Menu>
             <Modal onClose={onClose} size="md" isOpen={isOpen} isCentered>
-                <ModalContent w={'20em'} h={'10em'} bg={'lightBlack'}>
+                <ModalContent w={'20em'} h={'10em'}
+                              bg={value}
+                >
                     <ModalHeader>Block User</ModalHeader>
-                    <ModalCloseButton />
+                    <ModalCloseButton/>
                     <ModalFooter pb={6}>
-                        <Button
-                            variant={'ghost'}
-                            colorScheme="pink"
-                            mr={3}
-                            onClick={() => {
-                                blockUserHandler();
-                            }}
-                        >
-                            BLOCK USER
-                        </Button>
                         <Button
                             variant={'ghost'}
                             colorScheme="purple"
                             mr={3}
-                            onClick={() => {
-                                onClose();
-                            }}
+                            onClick={onClose}
                         >
                             CANCEL
+                        </Button>
+                        <Button
+                            variant={'ghost'}
+                            color="customRed"
+                            mr={3}
+                            onClick={ blockUserHandler }
+                        >
+                            BLOCK USER
                         </Button>
                     </ModalFooter>
                 </ModalContent>

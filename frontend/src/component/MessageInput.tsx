@@ -1,7 +1,7 @@
 import React, {useContext, useEffect} from "react";
 import {HStack, Input, useColorModeValue} from "@chakra-ui/react";
 import {IoSend} from "react-icons/io5";
-import {ChatContext} from "../hooks/ChatProvider";
+import {ChatContext} from "../State/ChatProvider";
 
 const MessageInput = () => {
     const {typingMessage, setTypingMessage} = useContext<any>(ChatContext);

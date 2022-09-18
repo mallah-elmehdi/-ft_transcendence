@@ -2,10 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5cd2ea18-4c7a-48bc-97c3-f440052e3092" name="Changes" comment="working on UserBlock UI">
+      <change afterPath="$PROJECT_DIR$/src/component/ChangeAvatar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/component/ChannelDetails.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/component/FloatingActionButton.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/component/NewChannel.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/ChatHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/ChatHeader.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/MiniProfile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/MiniProfile.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/FriendMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/FriendMenu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/GroupMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/GroupMenu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/MessageInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/MessageInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/MessagesList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/MessagesList.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/Messaging.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Messaging.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/MessagingBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/MessagingBox.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/ProfileDetails.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/ProfileDetails.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/SearchBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/SearchBar.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/SideBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/SideBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/Tabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Tabs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/ChatProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/State/ChatProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ChatPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ChatPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ProfilePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ProfilePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/style/theme.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/theme.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +178,17 @@
       <workItem from="1663165913252" duration="2014000" />
       <workItem from="1663173108188" duration="96000" />
       <workItem from="1663174974462" duration="1906000" />
-      <workItem from="1663178227602" duration="1346000" />
+      <workItem from="1663178227602" duration="1499000" />
+      <workItem from="1663187909093" duration="314000" />
+      <workItem from="1663270961719" duration="451000" />
+      <workItem from="1663361077588" duration="153000" />
+      <workItem from="1663443928893" duration="587000" />
+      <workItem from="1663497783862" duration="277000" />
+      <workItem from="1663498085470" duration="5489000" />
+      <workItem from="1663513045612" duration="2154000" />
+      <workItem from="1663515909515" duration="4737000" />
+      <workItem from="1663528484217" duration="576000" />
+      <workItem from="1663529318773" duration="6511000" />
     </task>
     <task id="LOCAL-00001" summary="implementing the routes">
       <created>1661291634634</created>

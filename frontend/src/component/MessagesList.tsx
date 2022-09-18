@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useRef} from 'react';
 import Message from "./Message";
-import {ChatContext} from "../hooks/ChatProvider";
+import {ChatContext} from "../State/ChatProvider";
 import {Box} from "@chakra-ui/react"
 
 const AlwaysScrollToBottom = () => {

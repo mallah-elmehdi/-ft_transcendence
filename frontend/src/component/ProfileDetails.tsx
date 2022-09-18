@@ -1,6 +1,6 @@
 import React, {useContext, useEffect} from 'react';
 import {Flex, HStack, Text, VStack} from "@chakra-ui/react";
-import {ChatContext} from "../hooks/ChatProvider";
+import {ChatContext} from "../State/ChatProvider";
 import {CloseIcon} from "@chakra-ui/icons";
 import MiniProfile from "./MiniProfile";
 

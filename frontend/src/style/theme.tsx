@@ -16,6 +16,7 @@ const colors = {
     darkGreen : 'rgb(117,179,102)',
     lightBlack : 'rgb(33,33,33)',
     customPurple : 'rgb(132,119,218)',
+    customRed: '#FF5C5C',
 }
 
 const config = {
