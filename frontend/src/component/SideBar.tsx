@@ -5,6 +5,8 @@ import React, {useContext, useEffect} from 'react';
 import Tabs from './Tabs';
 import Messaging from "./Messaging";
 import {ChatContext} from "../hooks/ChatProvider";
+import {IconButton} from "@chakra-ui/react"
+import {AddIcon} from "@chakra-ui/icons"
 
 const ChatTabs = () => {
     const {isSearch, toggleSearch} = useContext<any>(ChatContext);
@@ -35,7 +37,7 @@ const SideBar = () => {
     const {selectedChat} = useContext<any>(ChatContext);
     const {setSelectedChat,setChatDetails } = useContext<any>(ChatContext);
     useEffect(() => {
-        setSelectedChat({chat: "F", id: "1"})
+        // setSelectedChat({chat: "F", id: "1"})
         // setChatDetails(true);
     }, []);
 

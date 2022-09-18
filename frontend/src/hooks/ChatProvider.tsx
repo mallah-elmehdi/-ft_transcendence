@@ -10,6 +10,9 @@ type Props = {
 const ChatProvider = ({ children }: Props) => {
     const [isSearch, setSearch] = useState(false);
     const [selectedChat, setSelectedChat] = useState(null);
+    const toggleOffSelectedChat = () =>{
+        setSelectedChat(null);
+    }
     const toggleSearch = () => {
         setSearch(!isSearch)
     }
@@ -53,6 +56,13 @@ const ChatProvider = ({ children }: Props) => {
                 { id: '2', name: 'Group2' },
                 { id: '3', name: 'Group3' },
                 { id: '4', name: 'Group4' },
+                { id: '5', name: 'Group5' },
+                { id: '5', name: 'Group5' },
+                { id: '5', name: 'Group5' },
+                { id: '5', name: 'Group5' },
+                { id: '5', name: 'Group5' },
+                { id: '5', name: 'Group5' },
+                { id: '5', name: 'Group5' },
                 { id: '5', name: 'Group5' },
                 { id: '5', name: 'Group6' },
                 { id: '6', name: 'Group7' },
@@ -113,6 +123,7 @@ const ChatProvider = ({ children }: Props) => {
                 setChatDetails: setChatDetails,
                 chatDetails: chatDetails,
                 toggleDetails: toggleDetails,
+                toggleOffSelectedChat: toggleOffSelectedChat,
             }}
         >
             {children}
