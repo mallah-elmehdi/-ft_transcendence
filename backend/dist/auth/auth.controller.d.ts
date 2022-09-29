@@ -14,6 +14,5 @@ export declare class AuthController {
         message: any;
     }>;
     signin(req: any): any;
-    refreshToken(): void;
     logout(): void;
 }

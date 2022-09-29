@@ -9,29 +9,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PrismaService = void 0;
+exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
-const client_1 = require("@prisma/client");
-let PrismaService = class PrismaService extends client_1.PrismaClient {
-    constructor() {
-        super({
-            datasources: {
-                db: {
-                    url: 'postgresql://pong:pong@localhost:5432/pongdb?schema=public',
+const prisma_service_1 = require("../prisma/prisma.service");
+let UsersService = class UsersService {
+    constructor(prisma) {
+        this.prisma = prisma;
+    }
+    async getUser(login) {
+        console.log('login', login);
+        try {
+            const found = await this.prisma.user.findUnique({
+                where: {
+                    user_login: login,
                 },
-            },
-        });
-    }
-    async onModuleInit() {
-        await this.$connect();
-    }
-    async onModuleDestroy() {
-        await this.$disconnect();
+            });
+            if (!found) {
+                return null;
+            }
+            return found;
+        }
+        catch (err) {
+            console.log('error in getUser', err);
+            return null;
+        }
     }
 };
-PrismaService = __decorate([
+UsersService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [])
-], PrismaService);
-exports.PrismaService = PrismaService;
-//# sourceMappingURL=prisma.service.js.map
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+], UsersService);
+exports.UsersService = UsersService;
+//# sourceMappingURL=users.service.js.map

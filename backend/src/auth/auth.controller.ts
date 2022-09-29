@@ -35,11 +35,11 @@ export class AuthController {
   @UseGuards(AuthGuard('42'))
   async FortyTwoAuthRedirect(@Req() req, @Res({ passthrough: true }) res, @Query('code') code) {
 
-		console.log('MY current user:   => ', req.user);
+		//console.log('MY current user:   => ', req.user);
 		this.AuthService.createAccount(req.user.username, req.user.avatar);
 		const accessToken = this.AuthService.signToken(req.user.username);
 		res.cookie('jwt', accessToken, { httpOnly: true });
-		return res.redirect('http://localhost:3000/index.html');
+		return res.redirect('http://localhost:3000/users/mougnou');
 	}
 	
 	//https://github.dev/Naveen512/nestjs-jwt-cookie-auth
@@ -69,12 +69,7 @@ export class AuthController {
       return {message: res};
 
 
-  }
-
-
-
-  @Get('users/:id')
-  
+  }  
 
 
   @Get('signin')
@@ -82,10 +77,7 @@ export class AuthController {
 
     return req.headers.cookie;
   }
-
-  @Post('/refresh')
-  refreshToken() {}
-
+  
   @Post('/logout')
   logout() {}
 }

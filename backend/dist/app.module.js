@@ -9,8 +9,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const axios_1 = require("@nestjs/axios");
-const home_controller_1 = require("./home/home.controller");
-const home_service_1 = require("./home/home.service");
+const users_controller_1 = require("./users/users.controller");
+const users_service_1 = require("./users/users.service");
 const config_1 = require("@nestjs/config");
 const auth_module_1 = require("./auth/auth.module");
 const chat_controller_1 = require("./chat/chat.controller");
@@ -23,8 +23,8 @@ AppModule = __decorate([
     (0, common_1.Module)({
         imports: [auth_module_1.AuthModule, axios_1.HttpModule, config_1.ConfigModule.forRoot(), prisma_module_1.PrismaModule,
             serve_static_1.ServeStaticModule.forRoot({ rootPath: (0, path_1.join)(__dirname, '..', 'public'), })],
-        controllers: [home_controller_1.HomeController, chat_controller_1.chatController],
-        providers: [home_service_1.HomeService],
+        controllers: [users_controller_1.UsersController, chat_controller_1.chatController],
+        providers: [users_service_1.UsersService],
     })
 ], AppModule);
 exports.AppModule = AppModule;

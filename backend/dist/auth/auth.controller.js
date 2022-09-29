@@ -27,11 +27,10 @@ let AuthController = class AuthController {
         return 'INSIDE 42';
     }
     async FortyTwoAuthRedirect(req, res, code) {
-        console.log('MY current user:   => ', req.user);
         this.AuthService.createAccount(req.user.username, req.user.avatar);
         const accessToken = this.AuthService.signToken(req.user.username);
         res.cookie('jwt', accessToken, { httpOnly: true });
-        return res.redirect('http://localhost:3000/index.html');
+        return res.redirect('http://localhost:3000/users/mougnou');
     }
     test(req) {
         const user = req.user;
@@ -49,7 +48,6 @@ let AuthController = class AuthController {
     signin(req) {
         return req.headers.cookie;
     }
-    refreshToken() { }
     logout() { }
 };
 __decorate([
@@ -98,12 +96,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "signin", null);
-__decorate([
-    (0, common_1.Post)('/refresh'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "refreshToken", null);
 __decorate([
     (0, common_1.Post)('/logout'),
     __metadata("design:type", Function),

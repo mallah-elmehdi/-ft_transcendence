@@ -26,7 +26,7 @@ export class accessJwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
   // add here a bool value to check if 2fa is enabled or not
   async validate(payload: any) {
-    console.log('IM IN VALIDATE!!', payload);
+    console.log('IM IN VALIDATE!!', payload); 
     return payload;
   }
 }

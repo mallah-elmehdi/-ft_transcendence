@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { HttpModule } from '@nestjs/axios';
-import { HomeController } from './home/home.controller';
-import { HomeService } from './home/home.service';
+import { UsersController } from './users/users.controller';
+import { UsersService } from './users/users.service';
 import {ConfigModule} from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { chatController } from './chat/chat.controller';
@@ -14,8 +14,8 @@ import { join } from 'path';
 @Module({
   imports: [AuthModule, HttpModule, ConfigModule.forRoot(), PrismaModule,
 	 ServeStaticModule.forRoot({rootPath: join(__dirname, '..','public'),})],
-  controllers: [HomeController, chatController],
-  providers: [HomeService],
+  controllers: [UsersController, chatController],
+  providers: [UsersService],
 })
 export class AppModule {}
 
