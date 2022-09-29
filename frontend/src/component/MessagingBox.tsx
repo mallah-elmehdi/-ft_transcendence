@@ -36,7 +36,7 @@ function MessagingBox() {
             <ChatHeader
                 avatarName={selectedChat.chat === 'G' ? data.groups[searchIndex].name.toString() : data.friends[searchIndex].name.toString()}
                 chatName={selectedChat.chat === 'G' ? data.groups[searchIndex].name.toString() : data.friends[searchIndex].name.toString()}
-                avatarSrc={selectedChat.chat === 'G' ? data.groups[searchIndex].name.toString() : data.friends[searchIndex].avatar}
+                avatarSrc={selectedChat.chat === 'G' ? data.groups[searchIndex].avatar : data.friends[searchIndex].avatar}
                 isGroup={false}
                 onClickCallBack={toggleDetails}
                 backArrowCallBack={toggleOffSelectedChat}

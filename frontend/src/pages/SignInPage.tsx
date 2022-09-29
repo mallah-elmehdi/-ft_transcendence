@@ -13,22 +13,24 @@ import React from "react"
 import axios from "axios";
 
 export default function SignInPage() {
-    const backEnd = 'http://10.11.10.5:3333/auth'
-    const backEnd2 = 'http://10.11.10.5:3333/auth/ynoam'
-    function submitHandler()
-    {
-        const fd = new FormData();
-        axios.post(backEnd, fd )
-            .then(res => {
-                console.log('RESULT');
-                console.log(res);
-            })
-            .catch(err => {
-                console.log('--------------------ERROR--------------------')
-                console.log(err)
-                console.log('---------------------------------------------')
-            })
-    }
+    // const backEnd = 'http://10.11.9.12:3333/auth'
+    const backEnd = 'http://10.11.9.10:3000/42'
+    // const backEnd2 = 'http://10.11.10.5:3333/auth/ynoam'
+    // function submitHandler()
+    // {
+    //     const fd = new FormData();
+    //     axios.post(backEnd, fd )
+    //         .then(res => {
+    //             console.log('RESULT');
+    //             console.log(res);
+    //         })
+    //         .catch(err => {
+    //             console.log('--------------------ERROR--------------------')
+    //             console.log(err)
+    //             console.log('---------------------------------------------')
+    //         })
+    // }
+
     return (
         <>
             <Flex
@@ -60,7 +62,7 @@ export default function SignInPage() {
                         method={'GET'}
                         action={backEnd}
                     >
-                    <Button
+                        <Button
                         // onClick={(e) => {
                         //     e.preventDefault()
                         //     const fd = new FormData();
@@ -88,13 +90,8 @@ export default function SignInPage() {
                         type={'submit'}
                         _hover={{bg: 'green'}}
                         _active={{}} // TIPS: on click keep the color green
-                        // _focus={{
-                        //     // boxShadow:
-                        //     //     '0 0 1px 2px rgba(88, 144, 255, .75), 0 1px 1px rgba(0, 0, 0, .15)',
-                        // }}
                         rounded='20px'
                         p={8} h={'50px'} mt={10}
-                        // w={{base:'200px',md:'300px'}}
                         w={'300px'}
                         bg={"green"}
                     >

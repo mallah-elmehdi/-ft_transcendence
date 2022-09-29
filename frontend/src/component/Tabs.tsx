@@ -102,6 +102,7 @@ function Tabs() {
                                     w={'100%'}
                                     key={index.toString()}
                                 >
+                                    <ChakraAvatar name={group.name.toString()} src={group.avatar}></ChakraAvatar>
                                     <Text>{group.name}</Text>
                                 </HStack>
                             ))

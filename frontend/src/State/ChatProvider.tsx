@@ -9,12 +9,12 @@ type Props = {
 
 const ChatProvider = ({ children }: Props) => {
     const [newChannel, setNewChannel] = useState(false);
-    const toggleNewChannel = ()=>{
+    const toggleNewChannel = () => {
         setNewChannel(!newChannel)
     }
     const [isSearch, setSearch] = useState(false);
     const [selectedChat, setSelectedChat] = useState(null);
-    const toggleOffSelectedChat = () =>{
+    const toggleOffSelectedChat = () => {
         setSelectedChat(null);
     }
     const toggleSearch = () => {
@@ -23,15 +23,15 @@ const ChatProvider = ({ children }: Props) => {
     const [data, setData] = useState(
         {
             friends: [
-                { id: '1',  name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
-                { id: '2',  name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
-                { id: '3',  name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
-                { id: '4',  name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
-                { id: '5',  name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
-                { id: '6',  name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
-                { id: '7',  name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
-                { id: '8',  name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
-                { id: '9',  name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
+                { id: '1', name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
+                { id: '2', name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
+                { id: '3', name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
+                { id: '4', name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
+                { id: '5', name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
+                { id: '6', name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
+                { id: '7', name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
+                { id: '8', name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
+                { id: '9', name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
                 { id: '10', name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
                 { id: '11', name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
                 { id: '12', name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
@@ -56,20 +56,20 @@ const ChatProvider = ({ children }: Props) => {
                 { id: '31', name: 'UserName', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
             ],
             groups: [
-                { id: '1', name: 'Group1' },
-                { id: '2', name: 'Group2' },
-                { id: '3', name: 'Group3' },
-                { id: '4', name: 'Group4' },
-                { id: '5', name: 'Group5' },
-                { id: '5', name: 'Group5' },
-                { id: '5', name: 'Group5' },
-                { id: '5', name: 'Group5' },
-                { id: '5', name: 'Group5' },
-                { id: '5', name: 'Group5' },
-                { id: '5', name: 'Group5' },
-                { id: '5', name: 'Group5' },
-                { id: '5', name: 'Group6' },
-                { id: '6', name: 'Group7' },
+                { id: '1', name: 'hhhGroup', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+                { id: '2', name: 'retardeds', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+                { id: '3', name: '1337', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+                { id: '4', name: 'test', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+                { id: '5', name: 'jotenhaten', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+                { id: '5', name: 'blabla', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+                { id: '5', name: 'group-n1', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+                { id: '5', name: 'pongers', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+                { id: '5', name: 'hh1hh', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+                { id: '5', name: 'Group5', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+                { id: '5', name: 'Group5', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+                { id: '5', name: 'Group5', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+                { id: '5', name: 'Group6', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+                { id: '6', name: 'Group7', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
             ],
         }
     )

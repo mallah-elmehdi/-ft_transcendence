@@ -7,8 +7,8 @@ import MiniProfile from "./MiniProfile";
 
 function ProfileDetails() {
     const {data} = useContext<any>(ChatContext);
-    const {selectedChat} = useContext<any>(ChatContext);
     const {setChatDetails, toggleDetails} = useContext<any>(ChatContext);
+    const {selectedChat} = useContext<any>(ChatContext);
     let searchIndex;
     if (selectedChat.chat === 'F') searchIndex = data.friends.findIndex((id: any) => selectedChat.id === id.id);
     else searchIndex = data.groups.findIndex((id: any) => selectedChat.id === id.id);

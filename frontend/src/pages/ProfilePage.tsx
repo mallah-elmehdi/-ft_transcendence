@@ -31,6 +31,7 @@ import {
     Alert,
     AlertIcon,
     SkeletonCircle,
+    AvatarBadge,
 
 } from "@chakra-ui/react";
 import {  } from '@chakra-ui/react'
@@ -44,12 +45,14 @@ import React from "react"
 import FacebookButton from "../component/FacebookButton";
 import InstagramButton from "../component/InstagramButton";
 import DiscordButton from "../component/DiscordButton";
+import io from "socket.io-client"
 
 // component
 
 
 function Avatar(props: { name: string | undefined; src: string | undefined; })
 {
+    var socket = io('http://10.11.9.12:3333', { auth: { login: 'ynoam' } });
     let fileInput: any =  null;
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [hoverAvatar, setHoverAvatar] = useBoolean()
@@ -106,6 +109,25 @@ function Avatar(props: { name: string | undefined; src: string | undefined; })
         }
     }
     // console.log(props)
+    const [isConnected, setIsConnected] = useState(false);
+    const [lastPong, setLastPong] = useState(null);
+    useEffect(() => {
+        console.log('useEFFECt')
+        socket.on('new_user', (user) => {
+            console.log(user)
+          setIsConnected(true);
+        });
+    
+        socket.on('user_offline', () => {
+          setIsConnected(false);
+        });
+    
+        return () => {
+          socket.off('connect');
+          socket.off('disconnect');
+        };
+      }, [isConnected]);
+    
     return (
         <>
             <ChakraAvatar
@@ -116,7 +138,7 @@ function Avatar(props: { name: string | undefined; src: string | undefined; })
                 onClick={onOpen}
                 // bg={'red'}
             >
-                <Flex
+                {/* <Flex
                     position={'absolute'}
                     w={'100%'}
                     h={'100%'}
@@ -128,7 +150,8 @@ function Avatar(props: { name: string | undefined; src: string | undefined; })
                     onMouseLeave={setHoverAvatar.toggle}
                 >
                     {hoverAvatar && <Text as={'button'} fontSize={13}>Change Avatar</Text>}
-                </Flex>
+                </Flex> */}
+                <AvatarBadge boxSize='0.8em' bg={isConnected ?'green' : 'red'}/>
             </ChakraAvatar>
             <Modal
                 isCentered
@@ -434,7 +457,10 @@ export  default function ProfilePage() {
                     alignItems={"center"}
                     my={'50px'}
                 >
-                    <Avatar name={data.profile.username} src={data.profile.avatar} />
+                    <Avatar
+                        name={data.profile.username}
+                        src={data.profile.avatar} 
+                    />
                     <Tooltip label={"Click to Change"}>
                         <Text my={7} fontSize={25} fontWeight={'bold'} > {data.profile.username} </Text>
                     </Tooltip>
