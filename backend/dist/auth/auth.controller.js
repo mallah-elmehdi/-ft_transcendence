@@ -45,10 +45,10 @@ let AuthController = class AuthController {
         var res = await this.AuthService.verify2fa(body.userToken, body.base32secret);
         return { message: res };
     }
-    signin(req) {
-        return req.headers.cookie;
+    logout(res) {
+        res.clearCookie('jwt');
+        return { message: 'Logged out' };
     }
-    logout() { }
 };
 __decorate([
     (0, common_1.Get)(),
@@ -90,16 +90,11 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "TwoFAcheck", null);
 __decorate([
-    (0, common_1.Get)('signin'),
-    __param(0, (0, common_1.Req)()),
+    (0, common_1.Post)('signout'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    __param(0, (0, common_1.Res)({ passthrough: true })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "signin", null);
-__decorate([
-    (0, common_1.Post)('/logout'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "logout", null);
 AuthController = __decorate([

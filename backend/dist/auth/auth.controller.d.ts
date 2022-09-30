@@ -13,6 +13,7 @@ export declare class AuthController {
     TwoFAcheck(body: TwoFactDto): Promise<{
         message: any;
     }>;
-    signin(req: any): any;
-    logout(): void;
+    logout(res: any): {
+        message: string;
+    };
 }

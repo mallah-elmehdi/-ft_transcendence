@@ -42,9 +42,6 @@ export class AuthController {
 		return res.redirect('http://localhost:3000/users/mougnou');
 	}
 	
-	//https://github.dev/Naveen512/nestjs-jwt-cookie-auth
-  //! Where should i store the JWT TOKen
-  //! Does Chrome automatically adds the token to headers upon a GET REQUEST?
 
   @Get('test')
   @UseGuards(AuthGuard('jwt')) //'jwt' is what we named our strategy in accessJwtStrategy.ts Guard used to get Payload JWT
@@ -55,31 +52,28 @@ export class AuthController {
   }
 
   @Get('2fa')
-  // @UseGuards(AuthGuard('jwt')) //'jwt' is what we named our strategy in accessJwtStrategy.ts Guard used to get Payload JWT
   async TwoFactor() {
     var result = await this.AuthService.generate2fa();
       return "<img src='" + result + "'/>";
    
   }
+
   @Post('2fa')
-  // @UseGuards(AuthGuard('jwt'))
   async TwoFAcheck( @Body() body : TwoFactDto,) {
     // after check push secrect to db
     var res = await this.AuthService.verify2fa(body.userToken, body.base32secret);
       return {message: res};
-
-
   }  
 
-
-  @Get('signin')
-  signin(@Req() req) {
-
-    return req.headers.cookie;
-  }
   
-  @Post('/logout')
-  logout() {}
+  @Post('signout')
+  @UseGuards(AuthGuard('jwt'))
+  logout(@Res({ passthrough: true }) res)
+  {
+    res.clearCookie('jwt');
+    return {message: 'Logged out'};
+    //return res.redirect('http://localhost:3000');
+  }
 }
 
 

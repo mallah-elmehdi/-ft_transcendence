@@ -1,6 +1,7 @@
 import { UsersService } from './users.service';
+import { Request } from 'express';
 export declare class UsersController {
     private readonly UsersService;
     constructor(UsersService: UsersService);
-    getUser(login: any): Promise<import(".prisma/client").User>;
+    getUser(req: Request): Promise<import(".prisma/client").User>;
 }
