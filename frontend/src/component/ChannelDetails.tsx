@@ -6,9 +6,10 @@ import { ChatContext } from "../State/ChatProvider";
 import { Image } from "@chakra-ui/react"
 import { RiPencilLine } from "react-icons/ri"
 import ChannelMemeber from './ChannelMemeber';
+import {AddIcon} from "@chakra-ui/icons"
 
 function ChannelDetails() {
-    const [isAdmin] = useState<any>(false);
+    const [isAdmin] = useState<any>(true);
 
     const { toggleDetails } = useContext<any>(ChatContext);
     const { data } = useContext<any>(ChatContext);
@@ -33,11 +34,7 @@ function ChannelDetails() {
         console.log('addMemeberHandler')
     }
 
-    const removeMemeberHandler = () => {
-        console.log('removeMemeberHandler')
-    }
-
-    const editRoom = () => {
+    const toggleChatSetting = () => {
         console.log('add Memeber')
     }
 
@@ -71,7 +68,7 @@ function ChannelDetails() {
                         rounded={'50em'}
                         bg={'none'}
                         as={Button}
-                        onClick={editRoom}
+                        onClick={toggleChatSetting}
                     >
                         <RiPencilLine fontSize={'1.2em'} />
                     </Box>
@@ -86,19 +83,23 @@ function ChannelDetails() {
                 <Text>Memebers</Text>
                 {data.friends.length ? (
                     data.friends.map((friend: any, index: any) => (
-                        <HStack
-                            as={'button'}
-                            p={5}
-                            alignItems={'center'}
-                            rounded={5}
-                            h={'4.5em'}
-                            w={'100%'}
-                            _hover={{ bg: value }}
-                            key={index.toString()}
-                        >
-                            <Avatar name={friend.name.toString()} src={friend.avatar.toString()}></Avatar>
-                            <Text>{friend.name}</Text>
-                        </HStack>
+                        <ChannelMemeber id={friend.id} name={friend.name.toString()} avatar={friend.avatar} key={index.toString()} isAdmin={isAdmin}/>
+                        // <HStack
+                        //     // onMouseMove={()=>{console.log('hover')}}
+                        //     onMouseEnter={()=>{console.log('Enter')}}
+                        //     onMouseLeave={()=>{console.log('Leave')}}
+                        //     as={'button'}
+                        //     p={5}
+                        //     alignItems={'center'}
+                        //     rounded={5}
+                        //     h={'4.5em'}
+                        //     w={'100%'}
+                        //     _hover={{ bg: value }}
+                        //     key={index.toString()}
+                        // >
+                        //     <Avatar name={friend.name.toString()} src={friend.avatar.toString()}></Avatar>
+                        //     <Text>{friend.name}</Text>
+                        // </HStack>
                     ))
                 ) : (
                     <Flex h={'100%'} justifyContent={'center'} alignItems={'center'}>
@@ -107,35 +108,20 @@ function ChannelDetails() {
                 )}
                 {
                     isAdmin &&
-                    <>
                     <Box
                         onClick={addMemeberHandler}
                         position={'absolute'} right={5} bottom={5} rounded={30}>
                         <IconButton
-                            fontSize={24}
+                            fontSize={16}
                             w={14}
                             h={14}
                             rounded={30}
                             // bg={'customPurple'}
                             bg={'green'}
                             variant={'ghost'}
-                            aria-label={'new channel'} icon={<AiOutlineUserAdd />}
+                            aria-label={'new channel'} icon={<AddIcon />}
                         />
                     </Box>
-                    <Box
-                        onClick={removeMemeberHandler}
-                        position={'absolute'} right={20} bottom={5} rounded={30}>
-                        <IconButton
-                            fontSize={24}
-                            w={14}
-                            h={14}
-                            rounded={30}
-                            bg={'red'}
-                            variant={'ghost'}
-                            aria-label={'new channel'} icon={<AiOutlineUserDelete />}
-                        />
-                    </Box>
-                    </>
                 }
             </VStack>
         </VStack>
