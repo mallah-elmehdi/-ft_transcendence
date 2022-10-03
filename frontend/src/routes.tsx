@@ -24,15 +24,7 @@ export const AppRoutes = () => (
     <ChakraProvider theme={theme}>
         <BrowserRouter>
             <Routes>
-                <Route element={<Wrapper />}>
-                    <Route path={pagesContent.signIn.url} element={<SignIn />} />
-                    <Route element={<UserWrapper />}>
-                        <Route path={pagesContent.home.url} element={<Home />} />
-                        <Route path={pagesContent.profile.url} element={<Profile />} />
-                        <Route path={pagesContent.chat.url} element={<Chat />} />
-                        <Route path={pagesContent.play.url} element={<Game />} />
-                    </Route>
-                </Route>
+            <Route path={pagesContent.play.url} element={<Game />} />
             </Routes>
         </BrowserRouter>
     </ChakraProvider>
