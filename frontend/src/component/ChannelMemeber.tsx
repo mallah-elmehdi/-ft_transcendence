@@ -1,36 +1,31 @@
 import React, { useState } from "react"
-import { ContextMenu } from 'chakra-ui-contextmenu';
-import { useColorModeValue, IconButton, Box, HStack, Avatar, Text, Button, ChakraProvider, Spacer } from '@chakra-ui/react';
-import { MenuList, MenuItem } from '@chakra-ui/menu';
+import { useColorModeValue, IconButton, HStack, Avatar, Text, Button, ChakraProvider, Spacer, InputGroup, InputRightAddon } from '@chakra-ui/react';
 import { AiOutlineUserAdd, AiOutlineUserDelete } from "react-icons/ai"
 import { BsClockHistory } from "react-icons/bs"
 
 type Props = {
-  key: string,
   name: string,
   avatar: string,
   isAdmin: boolean,
   id: string,
+  onMute: () => void,
+  setMember: (params: any)=> any;
 }
 
-function ChannelMemeber({ id, key, name, avatar, isAdmin }: Props) {
+function ChannelMemeber({ id, name, avatar, isAdmin, onMute, setMember }: Props) {
   const value = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
-  const [showIcon, setShowIcon] = useState<any>(false);
   const [hover, setHover] = useState<any>(false)
-  function toggleHover() {
+  function toggleIconsHover() {
     setHover(!hover)
   }
 
   const removeMemeberHandler = () => {
     console.log('removeMemeberHandler: ', id)
   }
-  const muteMemeberHandler = () => {
-    console.log('muteMemeberHandler: ', id)
-  }
   return (
     <HStack
-      onMouseEnter={toggleHover}
-      onMouseLeave={toggleHover}
+      onMouseEnter={toggleIconsHover}
+      onMouseLeave={toggleIconsHover}
       as={'button'}
       p={5}
       alignItems={'center'}
@@ -66,7 +61,17 @@ function ChannelMemeber({ id, key, name, avatar, isAdmin }: Props) {
               aria-label={'new channel'} icon={<AiOutlineUserDelete />}
             />
             <IconButton
-              onClick={muteMemeberHandler}
+              onClick={() => {
+                toggleIconsHover()
+                setMember(()=>{
+                  return {
+                    id: id,
+                    name: name,
+                  }
+                })
+                onMute()
+              }}
+              // onClick={onOpen}
               ml={14}
               fontSize={18}
               rounded={30}
@@ -74,7 +79,6 @@ function ChannelMemeber({ id, key, name, avatar, isAdmin }: Props) {
               variant={'ghost'}
               aria-label={'new channel'} icon={<BsClockHistory />}
             />
-
           </>
         )
       }

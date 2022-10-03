@@ -1,21 +1,52 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Box, Flex, IconButton, Text, HStack, VStack, Avatar, Spacer, useColorModeValue, Button, Menu } from "@chakra-ui/react";
+import { InputRightAddon, Box, useNumberInput, Input, InputGroup, Flex, IconButton, Text, HStack, VStack, Avatar, Spacer, useColorModeValue, Button, Menu } from "@chakra-ui/react";
 import { AiOutlineUserAdd, AiOutlineUserDelete } from "react-icons/ai"
 import { CloseIcon } from "@chakra-ui/icons";
 import { ChatContext } from "../State/ChatProvider";
 import { Image } from "@chakra-ui/react"
 import { RiPencilLine } from "react-icons/ri"
 import ChannelMemeber from './ChannelMemeber';
-import {AddIcon} from "@chakra-ui/icons"
+import { AddIcon } from "@chakra-ui/icons"
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure,
+} from '@chakra-ui/react'
+
+import {
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
+    NumberIncrementStepper,
+    NumberDecrementStepper,
+} from '@chakra-ui/react'
 
 function ChannelDetails() {
     const [isAdmin] = useState<any>(true);
+    const [minute, setMinute] = useState<any>(5);
 
     const { toggleDetails } = useContext<any>(ChatContext);
     const { data } = useContext<any>(ChatContext);
     const { selectedChat } = useContext<any>(ChatContext);
     let searchIndex = data.groups.findIndex((id: any) => selectedChat.id === id.id);
-    const value = useColorModeValue('blackAlpha.200', 'whiteAlpha.200')
+    const [member, setMember] = useState<any>(null);
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
+        useNumberInput({
+            step: 1,
+            defaultValue: minute,
+            min: 1,
+            max: 5000,
+        })
+
+    const inc = getIncrementButtonProps()
+    const dec = getDecrementButtonProps()
+    const input = getInputProps()
 
     useEffect(() => {
         const keyDownHandler = (event: any) => {
@@ -30,7 +61,7 @@ function ChannelDetails() {
         };
     },);
 
-    const addMemeberHandler = () => {
+    const toggleAddMemebers = () => {
         console.log('addMemeberHandler')
     }
 
@@ -38,18 +69,9 @@ function ChannelDetails() {
         console.log('add Memeber')
     }
 
-    const handleContextMenu = (event: any) => {
-        event.preventDefault();
-        console.log('right click')
+    const muteMemberHandler = (info: any) => {
+        console.log('Mute ', info.id, info.name, minute)
     }
-
-    // useEffect(() => {
-    //     document.addEventListener("contextmenu", handleContextMenu);
-    //     return () => {
-    //         document.removeEventListener("contextmenu", handleContextMenu);
-    //     };
-    // })
-    const [isOpen, setIsOpen] = useState(false);
     return (
         <VStack
             overflow={'auto'}
@@ -81,42 +103,29 @@ function ChannelDetails() {
                 w={'100%'} alignItems={'left'}>
                 <Image h='20em' src={data.groups[searchIndex].avatar} />
                 <Text>Memebers</Text>
-                {data.friends.length ? (
+                {
                     data.friends.map((friend: any, index: any) => (
-                        <ChannelMemeber id={friend.id} name={friend.name.toString()} avatar={friend.avatar} key={index.toString()} isAdmin={isAdmin}/>
-                        // <HStack
-                        //     // onMouseMove={()=>{console.log('hover')}}
-                        //     onMouseEnter={()=>{console.log('Enter')}}
-                        //     onMouseLeave={()=>{console.log('Leave')}}
-                        //     as={'button'}
-                        //     p={5}
-                        //     alignItems={'center'}
-                        //     rounded={5}
-                        //     h={'4.5em'}
-                        //     w={'100%'}
-                        //     _hover={{ bg: value }}
-                        //     key={index.toString()}
-                        // >
-                        //     <Avatar name={friend.name.toString()} src={friend.avatar.toString()}></Avatar>
-                        //     <Text>{friend.name}</Text>
-                        // </HStack>
+                        <ChannelMemeber
+                            id={friend.id}
+                            name={friend.name.toString()}
+                            avatar={friend.avatar}
+                            key={index.toString()}
+                            isAdmin={isAdmin}
+                            onMute={onOpen}
+                            setMember={setMember}
+                        />
                     ))
-                ) : (
-                    <Flex h={'100%'} justifyContent={'center'} alignItems={'center'}>
-                        <Text>No Memebers</Text>
-                    </Flex>
-                )}
+                }
                 {
                     isAdmin &&
                     <Box
-                        onClick={addMemeberHandler}
+                        onClick={toggleAddMemebers}
                         position={'absolute'} right={5} bottom={5} rounded={30}>
                         <IconButton
                             fontSize={16}
                             w={14}
                             h={14}
                             rounded={30}
-                            // bg={'customPurple'}
                             bg={'green'}
                             variant={'ghost'}
                             aria-label={'new channel'} icon={<AddIcon />}
@@ -124,6 +133,69 @@ function ChannelDetails() {
                     </Box>
                 }
             </VStack>
+            <Modal isOpen={isOpen} onClose={onClose} isCentered>
+                <ModalOverlay />
+                <ModalContent w={'20em'}>
+                    <ModalHeader>Mute User</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <Text mb={4}>
+                            Mute {member?.name} from the room?
+                        </Text>
+                        {/* <HStack w='14em'>
+                            <Button {...dec}>-</Button>
+                            <Input
+                                {...input}
+                                // value={minute}
+                                // onChange={(m) => setMinute(m.target.value)}
+                            />
+                            <Button {...inc}>+</Button>
+                        </HStack> */}
+                        <HStack
+                           justifyContent={'center'}
+                        >
+                            <NumberInput
+                                defaultValue={15}
+                                min={5}
+                                max={5000}
+                                maxW='100px'
+                                value={minute}
+                                onChange={setMinute}
+                                allowMouseWheel>
+                                <NumberInputField />
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </NumberInput>
+                            <Text>M</Text>
+                        </HStack>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button
+                            variant={'ghost'}
+                            color="red"
+                            mr={3}
+                            onClick={() => {
+                                muteMemberHandler(member)
+                                onClose()
+                            }}
+                        >
+                            MUTE
+                        </Button>
+                        <Button
+                            variant={'ghost'}
+                            colorScheme="purple"
+                            mr={3}
+                            onClick={() => {
+                                onClose()
+                            }}
+                        >
+                            CANCEL
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </VStack>
     );
 }
