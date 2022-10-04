@@ -41,7 +41,8 @@ export class AuthController {
 		res.cookie('jwt', accessToken, { httpOnly: true });
 		return res.redirect('http://localhost:3000/users/mougnou');
 	}
-	
+
+
 
   @Get('test')
   @UseGuards(AuthGuard('jwt')) //'jwt' is what we named our strategy in accessJwtStrategy.ts Guard used to get Payload JWT

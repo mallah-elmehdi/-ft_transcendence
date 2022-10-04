@@ -19,7 +19,7 @@ const customExtractor = (req: Request) => {
 export class accessJwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private prisma: PrismaService) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([customExtractor]),
+      jwtFromRequest: ExtractJwt.fromExtractors([customExtractor]), //This is where we use the customExtractor functiona
       secretOrKey: process.env.JWT_SECRET,
     });
   }

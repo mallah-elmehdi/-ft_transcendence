@@ -10,10 +10,12 @@ import { chatController } from './chat/chat.controller';
 import { PrismaModule } from './prisma/prisma.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [AuthModule, HttpModule, ConfigModule.forRoot(), PrismaModule,
-	 ServeStaticModule.forRoot({rootPath: join(__dirname, '..','public'),})],
+	 ServeStaticModule.forRoot({rootPath: join(__dirname, '..','public'),}),
+	 ChatModule],
   controllers: [UsersController, chatController],
   providers: [UsersService],
 })

@@ -42,7 +42,6 @@ model Friend {
   userId   Int
   friendId Int
   user User @relation(fields: [userId], references: [user_id])
-
 }
 
 model PendingFriends {
