@@ -6,44 +6,83 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-    useDisclosure,
     Button,
-    IconButton,
-    Box,
 } from '@chakra-ui/react'
-import { BsClockHistory } from "react-icons/bs"
+import {
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
+    NumberIncrementStepper,
+    NumberDecrementStepper,
+} from '@chakra-ui/react'
 
+import { Text, HStack } from "@chakra-ui/react"
+import React, { useState } from "react"
 
-export default function MuteMember() {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+type Props = {
+    isOpen: boolean,
+    onClose: () => void,
+    name: string,
+    memberId: string,
+    roomId: string,
+}
+
+export default function MuteMember({ isOpen, onClose, memberId, name, roomId }: Props) {
+    const [minute, setMinute] = useState<any>(5);
+    const muteMemberHandler = () => {
+        console.log(`Mute {name: ${name}, id: ${memberId}} for ${minute} from roomId: ${roomId}`)
+    }
     return (
-        <Box>
-            <IconButton
-                onClick={onOpen}
-                ml={14}
-                fontSize={18}
-                rounded={30}
-                color={'customPurple'}
-                variant={'ghost'}
-                aria-label={'new channel'} icon={<BsClockHistory />}
-            />
-
-            <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Modal Title</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                    </ModalBody>
-
-                    <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={onClose}>
-                            Close
-                        </Button>
-                        <Button variant='ghost'>Secondary Action</Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-        </Box>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+            <ModalOverlay />
+            <ModalContent w={'20em'}>
+                <ModalHeader>Mute User</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <Text mb={4} > Mute {name} from the room?  </Text>
+                    <HStack justifyContent={'center'} > <NumberInput
+                        defaultValue={5}
+                        min={5}
+                        max={5000}
+                        maxW='100px'
+                        value={minute}
+                        onChange={setMinute}
+                        allowMouseWheel>
+                        <NumberInputField />
+                        <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                        </NumberInputStepper>
+                    </NumberInput>
+                        <Text>M</Text>
+                    </HStack>
+                </ModalBody>
+                <ModalFooter>
+                    <Button
+                        variant={'ghost'}
+                        color="red"
+                        mr={3}
+                        onClick={() => {
+                            muteMemberHandler()
+                            setMinute(5)
+                            onClose()
+                        }}
+                    >
+                        MUTE
+                    </Button>
+                    <Button
+                        variant={'ghost'}
+                        colorScheme="purple"
+                        mr={3}
+                        onClick={() => {
+                            setMinute(5)
+                            onClose()
+                        }}
+                    >
+                        CANCEL
+                    </Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
     )
 }
