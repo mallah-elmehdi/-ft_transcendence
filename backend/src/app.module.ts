@@ -14,7 +14,6 @@ import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [AuthModule, HttpModule, ConfigModule.forRoot(), PrismaModule,
-	 ServeStaticModule.forRoot({rootPath: join(__dirname, '..','public'),}),
 	 ChatModule],
   controllers: [UsersController, chatController],
   providers: [UsersService],
@@ -24,3 +23,4 @@ export class AppModule {}
 
 //https://docs.nestjs.com/recipes/serve-static
 //https://stackoverflow.com/questions/63285055/nestjs-how-to-use-env-variables-in-main-app-module-file-for-database-connecti
+// ServeStaticModule.forRoot({rootPath: join(__dirname, '..','public'),})
