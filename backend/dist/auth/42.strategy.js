@@ -32,7 +32,6 @@ let FortyTwoStrategy = class FortyTwoStrategy extends (0, passport_1.PassportStr
             avatar: photos[0].value,
             accessToken,
         };
-        console.log(username, emails[0], displayName, photos[0].value);
         done(null, user);
     }
 };

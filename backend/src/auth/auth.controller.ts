@@ -26,12 +26,17 @@ export class AuthController {
   constructor(private readonly AuthService: AuthService, private JwtService : JwtService) {}
 
   @Get()
-  @UseGuards(AuthGuard('42'))
+  @UseGuards(AuthGuard('jwt'))
   async FortyTwoAuth(@Req() req) {
-    return 'INSIDE 42';
+    if (req.cookies.jwt) {
+      return req.cookies.jwt;
+    }
+    // console.log('MY current user:   => ', req.user);
+    return { message: 'You are logged in' };
   }
 
   @Get('redirect')
+  // @UseGuards(AuthGuard('jwt'))
   @UseGuards(AuthGuard('42'))
   async FortyTwoAuthRedirect(@Req() req, @Res({ passthrough: true }) res, @Query('code') code) {
 

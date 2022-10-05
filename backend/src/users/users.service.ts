@@ -15,9 +15,7 @@ export class UsersService {
           user_login: login,
         },
       }); 
-      //const found = await this.prisma.$queryRaw`SELECT * FROM User WHERE user_login = ${login}`
-
-      
+      console.log('found here: ', found);   
       if (!found) {
         return null;
       }

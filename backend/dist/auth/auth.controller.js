@@ -24,7 +24,10 @@ let AuthController = class AuthController {
         this.JwtService = JwtService;
     }
     async FortyTwoAuth(req) {
-        return 'INSIDE 42';
+        if (req.cookies.jwt) {
+            return req.cookies.jwt;
+        }
+        return { message: 'You are logged in' };
     }
     async FortyTwoAuthRedirect(req, res, code) {
         this.AuthService.createAccount(req.user.username, req.user.avatar);
@@ -53,7 +56,7 @@ let AuthController = class AuthController {
 };
 __decorate([
     (0, common_1.Get)(),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('42')),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

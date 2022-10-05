@@ -9,11 +9,10 @@ export declare class AuthService {
         user: any;
     };
     createAccount(id: string, avatar: string): Promise<void>;
-    generate2fa(id: any): Promise<string>;
+    generate2fa(id: string): Promise<string>;
     verify2fa(userToken: string, base32secret: string): Promise<any>;
     findUserId(login: string): Promise<import(".prisma/client").User>;
     signToken(userLogin: string): {
         access_token: string;
     };
-    logout(userLogin: string): Promise<void>;
 }

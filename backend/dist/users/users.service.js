@@ -24,6 +24,7 @@ let UsersService = class UsersService {
                     user_login: login,
                 },
             });
+            console.log('found here: ', found);
             if (!found) {
                 return null;
             }

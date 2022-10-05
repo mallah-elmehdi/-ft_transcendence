@@ -53,8 +53,6 @@ let AuthService = class AuthService {
         }
     }
     async generate2fa(id) {
-        const qrcode = require('qrcode');
-        var deasync = require('deasync');
         const getUser = await this.prisma.user.findUnique({
             where: {
                 user_login: id,
@@ -92,6 +90,7 @@ let AuthService = class AuthService {
     signToken(userLogin) {
         const payload = {
             userLogin: userLogin,
+            TwoFactorAuth: false
         };
         const accessToken = this.jwtService.sign(payload, {
             secret: process.env.JWT_SECRET,
@@ -100,8 +99,6 @@ let AuthService = class AuthService {
         return {
             access_token: accessToken,
         };
-    }
-    async logout(userLogin) {
     }
 };
 AuthService = __decorate([

@@ -23,11 +23,9 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
         username,
         email: emails[0].value,
         name: displayName,
-		avatar: photos[0].value,
+		    avatar: photos[0].value,
         accessToken,
     }
-   console.log(username, emails[0], displayName, photos[0].value)
-
     done(null, user);
   }
 }
