@@ -53,8 +53,6 @@ let AuthService = class AuthService {
         }
     }
     async generate2fa(id) {
-        const qrcode = require('qrcode');
-        var deasync = require('deasync');
         const getUser = await this.prisma.user.findUnique({
             where: {
                 user_login: id,

@@ -27,7 +27,7 @@ let ChatGateway = class ChatGateway {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     handleMessage(client, payload) {
-        return ('Hello World');
+        return { event: "msgToClient", data: payload };
     }
 };
 __decorate([
@@ -38,7 +38,7 @@ __decorate([
     (0, websockets_1.SubscribeMessage)('msgToServer'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, String]),
-    __metadata("design:returntype", String)
+    __metadata("design:returntype", void 0)
 ], ChatGateway.prototype, "handleMessage", null);
 ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)()
