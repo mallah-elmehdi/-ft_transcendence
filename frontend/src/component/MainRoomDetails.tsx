@@ -13,12 +13,11 @@ import MuteMember from './MuteMember';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 
 type Props = {
-    toggleNewMembers: () => void;
-    toggleSettings: () => void;
+    toggleNewMembers: () => void,
+    toggleSettings: () => void,
 }
 export default function MainRoomDetails({ toggleNewMembers, toggleSettings }: Props) {
     const [isAdmin] = useState<any>(true);
-
     const { toggleDetails } = useContext<any>(ChatContext);
     const { data } = useContext<any>(ChatContext);
     const { selectedChat } = useContext<any>(ChatContext);

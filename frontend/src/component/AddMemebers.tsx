@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Box, IconButton, Text, HStack, VStack, Spacer, Button, Tooltip, } from "@chakra-ui/react";
 import { ChatContext } from '../State/ChatProvider';
 import NewMember from './NewMember';
@@ -13,12 +13,17 @@ export default function AddMemebers({ toggleNewMembers, roomId }: Props) {
   const { data } = useContext<any>(ChatContext);
   const { members, friends, groups } = data;
   const membersId = members.findIndex((m: any) => m.id == roomId)
+  const [selectedFriends, setSelectedFriends] = useState<any>([]);
+
+  function addNewMembersHandler() {
+    console.log(roomId)
+    console.log(selectedFriends)
+  }
 
   function isMember(id: any) {
     return members[membersId]?.membs?.findIndex((m: any) => m.id == id) == -1 ? false : true;
 
   }
-  const checkedFriends: string[] = []
 
   useEffect(() => {
     const keyDownHandler = (event: any) => {
@@ -60,24 +65,28 @@ export default function AddMemebers({ toggleNewMembers, roomId }: Props) {
                 id={friend.id}
                 name={friend.name}
                 avatar={friend.avatar}
+                addMe={setSelectedFriends}
                 key={key.toString()}
               />
               : undefined
           ))
         }
       </VStack>
-      <Box
-        position={'absolute'}
-        right={4} bottom={4} rounded={30}
-        onClick={() => console.log('add selecrted MEmbers to room')}
-      >
-                    <Tooltip label='add Members' openDelay={500}>
-        <IconButton
-          fontSize={24} w={14} h={14} rounded={30} bg={'customPurple'} variant={'ghost'}
-          aria-label={'add Members'} icon={<ArrowForwardIcon />}
-        />
-                    </Tooltip>
-      </Box>
+      {
+        selectedFriends.length &&
+        <Box
+          position={'absolute'}
+          right={4} bottom={4} rounded={30}
+          onClick={addNewMembersHandler}
+        >
+          <Tooltip label='add Members' openDelay={500}>
+            <IconButton
+              fontSize={24} w={14} h={14} rounded={30} bg={'customPurple'} variant={'ghost'}
+              aria-label={'add Members'} icon={<ArrowForwardIcon />}
+            />
+          </Tooltip>
+        </Box>
+      }
     </VStack>
   )
 }
