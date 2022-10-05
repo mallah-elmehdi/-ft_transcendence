@@ -37,9 +37,10 @@ let AuthController = class AuthController {
         console.log(user['userLogin']);
         return 'TEST inSIDE HAHA ';
     }
-    async TwoFactor() {
-        var result = await this.AuthService.generate2fa();
-        return "<img src='" + result + "'/>";
+    async TwoFactor(req) {
+        const user = req.user;
+        var result = await this.AuthService.generate2fa(user['userLogin']);
+        return result;
     }
     async TwoFAcheck(body) {
         var res = await this.AuthService.verify2fa(body.userToken, body.base32secret);
@@ -78,8 +79,10 @@ __decorate([
 ], AuthController.prototype, "test", null);
 __decorate([
     (0, common_1.Get)('2fa'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "TwoFactor", null);
 __decorate([

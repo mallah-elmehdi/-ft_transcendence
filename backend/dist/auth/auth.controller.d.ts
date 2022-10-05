@@ -9,7 +9,7 @@ export declare class AuthController {
     FortyTwoAuth(req: any): Promise<string>;
     FortyTwoAuthRedirect(req: any, res: any, code: any): Promise<any>;
     test(req: Request): string;
-    TwoFactor(): Promise<string>;
+    TwoFactor(req: Request): Promise<string>;
     TwoFAcheck(body: TwoFactDto): Promise<{
         message: any;
     }>;

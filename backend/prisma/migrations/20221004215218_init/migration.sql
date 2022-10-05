@@ -8,7 +8,7 @@ CREATE TABLE "Account" (
     "games_won" INTEGER NOT NULL DEFAULT 0,
     "games_drawn" INTEGER NOT NULL DEFAULT 0,
     "games_played" INTEGER NOT NULL DEFAULT 0,
-    "two_authentication" TEXT NOT NULL DEFAULT '',
+    "two_authentication" TEXT,
     "instagram" TEXT NOT NULL DEFAULT '',
     "twitter" TEXT NOT NULL DEFAULT '',
     "facebook" TEXT NOT NULL DEFAULT '',

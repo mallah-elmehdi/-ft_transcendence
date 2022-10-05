@@ -51,11 +51,13 @@ export class AuthController {
     console.log(user['userLogin']);
     return 'TEST inSIDE HAHA ';
   }
-
+  
   @Get('2fa')
-  async TwoFactor() {
-    var result = await this.AuthService.generate2fa();
-      return "<img src='" + result + "'/>";
+  @UseGuards(AuthGuard('jwt')) //'jwt' is what we named our strategy in accessJwtStrategy.ts Guard used to get Payload JWT
+  async TwoFactor(@Req() req: Request) {
+    const user = req.user;
+    var result = await this.AuthService.generate2fa(user['userLogin']);
+      return result;
    
   }
 

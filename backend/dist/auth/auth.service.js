@@ -52,27 +52,32 @@ let AuthService = class AuthService {
             console.log('error ', err);
         }
     }
-    async generate2fa() {
+    async generate2fa(id) {
         const qrcode = require('qrcode');
         var deasync = require('deasync');
-        var code = '';
-        var secret = speakeasy.generateSecret({
-            name: 'ponGame',
-            length: 10
+        const getUser = await this.prisma.user.findUnique({
+            where: {
+                user_login: id,
+            },
         });
-        console.log(secret);
-        function syncFunc() {
-            var ret = null;
-            qrcode.toDataURL(secret.otpauth_url, function (err, data_url) {
-                ret = { err: err, result: data_url };
+        var { two_authentication } = getUser;
+        if (two_authentication === null) {
+            var secret = speakeasy.generateSecret({
+                name: 'ponGame',
+                length: 10
             });
-            while ((ret == null)) {
-                deasync.runLoopOnce();
-            }
-            return (ret.err || ret.result);
+            const update = await this.prisma.user.update({
+                where: {
+                    user_login: id,
+                },
+                data: {
+                    two_authentication: secret.otpauth_url,
+                },
+            });
+            two_authentication = secret.otpauth_url;
+            console.log('update :', update);
         }
-        var result = syncFunc();
-        return (result);
+        return (two_authentication);
     }
     async verify2fa(userToken, base32secret) {
         var verified = speakeasy.totp.verify({ secret: base32secret,

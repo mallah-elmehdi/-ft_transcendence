@@ -21,7 +21,7 @@ model User {
   games_won Int		@default(0)
   games_drawn Int	@default(0)
   games_played Int	@default(0)
-  two_authentication String 	@default("")
+  two_authentication String? 	  // 2FA
   instagram String		@default("")
   twitter String		@default("")
   facebook String		@default("")

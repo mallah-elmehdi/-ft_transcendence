@@ -80,38 +80,35 @@ export class AuthService {
 	//   return user;
 	// }
 	
-async generate2fa() 
+async generate2fa(id:string) 
 {
-	const qrcode = require('qrcode');
-	var deasync = require('deasync');
-
-	var code = ''
-	var secret = speakeasy.generateSecret({
-		 name: 'ponGame',
-		 length: 10
-		});
-		console.log(secret);
-		// you can also use write to write to QR code to a webpage
-		function syncFunc()
-		{
-				var ret = null;
-
-				qrcode.toDataURL(secret.otpauth_url, function (err, data_url) {
-					ret = {err : err, result : data_url}
-				});
-		 
-		
-				while((ret == null))
-				{
-						 deasync.runLoopOnce();
-				}
-				return (ret.err || ret.result);
-		}
-		
-			
-		var result = syncFunc();
-		return (result);
+	const getUser  = await this.prisma.user.findUnique({
+		where: {
+		  user_login: id,
+		},
+	  })
+	var {two_authentication } = getUser;
+	
+	if (two_authentication === null)
+	{
+		var secret = speakeasy.generateSecret({
+			 name: 'ponGame',
+			 length: 10
+			});
+		const update = await this.prisma.user.update({
+			where: {
+			  user_login: id,
+			},
+			data: {
+				two_authentication: secret.otpauth_url,
+			},
+		  })
+		  two_authentication = secret.otpauth_url;
+		  console.log('update :', update);
+	}
+		return (two_authentication);
 }
+
 
 async verify2fa(userToken : string, base32secret : string)
 {

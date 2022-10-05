@@ -5,7 +5,7 @@ import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 	app.use(cookieParser());
    const config = new DocumentBuilder()
      .setTitle('ft_Transcendence')
