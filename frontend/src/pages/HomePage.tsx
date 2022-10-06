@@ -19,8 +19,9 @@ export  default function HomePage() {
     useEffect(() => {
         console.log(info)
         if (info === null)
-            navigate("/login");
-    }, [info])
+            console.log(info)
+            //navigate("/login");
+    })
 
     return (
         <>
