@@ -82,7 +82,7 @@ export default function AddMemebers({ toggleNewMembers, roomId }: Props) {
           <Tooltip label='add Members' openDelay={500}>
             <IconButton
               fontSize={24} w={14} h={14} rounded={30} bg={'customPurple'} variant={'ghost'}
-              aria-label={'add Members'} icon={<ArrowForwardIcon />}
+              aria-label={'add Members'}color={'white'} icon={<ArrowForwardIcon />}
             />
           </Tooltip>
         </Box>

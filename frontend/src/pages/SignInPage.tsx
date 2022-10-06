@@ -7,32 +7,29 @@ import {
     Heading,
     useColorMode,
     Image,
+    Spacer
 } from "@chakra-ui/react";
 import Logo from "../component/logo";
 import React from "react"
 import axios from "axios";
+import { API } from "../constants"
+import ToggleMode from '../component/toggleMode';
 
 export default function SignInPage() {
-    // const backEnd = 'http://10.11.9.12:3333/auth'
-    const backEnd = 'http://10.11.9.10:3000/42'
-    // const backEnd2 = 'http://10.11.10.5:3333/auth/ynoam'
-    // function submitHandler()
-    // {
-    //     const fd = new FormData();
-    //     axios.post(backEnd, fd )
-    //         .then(res => {
-    //             console.log('RESULT');
-    //             console.log(res);
-    //         })
-    //         .catch(err => {
-    //             console.log('--------------------ERROR--------------------')
-    //             console.log(err)
-    //             console.log('---------------------------------------------')
-    //         })
-    // }
+    const backEnd = API + '42'
 
     return (
         <>
+            <Flex
+                mb={5}
+                px={10}
+                justifyContent={'right'}
+                alignItems={'center'}
+                overflow={'hideen'}
+            >
+                <Spacer />
+                <ToggleMode />
+            </Flex>
             <Flex
                 w={'100%'}
                 h={'100%'}
@@ -41,9 +38,9 @@ export default function SignInPage() {
                 justifyContent={"center"}
             >
                 <Flex
-                    _dark={{boxShadow: 'dark-lg'}} _light={{boxShadow: 'md'}}
+                    _dark={{ boxShadow: 'dark-lg' }} _light={{ boxShadow: 'md' }}
                     rounded='30px'
-                    w={{base: '700px', md: '500px'}}
+                    w={{ base: '700px', md: '500px' }}
                     h={"400px"}
                     direction={"column"}
                     justifyContent={"center"}
@@ -57,51 +54,27 @@ export default function SignInPage() {
                     >
                         Welcome To
                     </Heading>
-                    <Logo/>
+                    <Logo />
                     <form
                         method={'GET'}
                         action={backEnd}
                     >
                         <Button
-                        // onClick={(e) => {
-                        //     e.preventDefault()
-                        //     const fd = new FormData();
-                        //     axios.get(backEnd,fd)
-                        //         .then(function (response) {
-                        //             // console.log(response)
-                        //             console.log('lkjlkjlkjlkjjlkj')
-                        //             // if (response.data.redirect == '/') {
-                        //             //     {
-                        //             //         <Link to={'/'}/>
-                        //             //     }
-                        //             //     // window.location = "/"
-                        //             // }
-                        //             // else if (response.data.redirect == '/login') {
-                        //             //     window.location = "/login"
-                        //             // }
-                        //         })
-                        //         .catch(function (error) {
-                        //             // console.log(error)
-                        //             console.log('ERRRRRR')
-                        //             // window.location = "/login"
-                        //         })
-                        // }
-                        // }
-                        type={'submit'}
-                        _hover={{bg: 'green'}}
-                        _active={{}} // TIPS: on click keep the color green
-                        rounded='20px'
-                        p={8} h={'50px'} mt={10}
-                        w={'300px'}
-                        bg={"green"}
-                    >
-                        <Image w={10} mr={8} src={intra}></Image>
-                        <Text
-                            fontSize={30}
+                            type={'submit'}
+                            _hover={{ bg: 'green' }}
+                            _active={{}} // TIPS: on click keep the color green
+                            rounded='20px'
+                            p={8} h={'50px'} mt={10}
+                            w={'300px'}
+                            bg={"green"}
                         >
-                            Sign In
-                        </Text>
-                    </Button>
+                            <Image w={10} mr={8} src={intra}></Image>
+                            <Text
+                                fontSize={30}
+                            >
+                                Sign In
+                            </Text>
+                        </Button>
                     </form>
                 </Flex>
             </Flex>

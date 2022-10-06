@@ -8,9 +8,20 @@ import {
     // Image,
 } from "@chakra-ui/react";
 // im
-import React from "react"
+import React, { useEffect } from "react"
+import { useNavigate } from "react-router-dom";
+import userInfo from '../api/userInfo'
 
 export  default function HomePage() {
+    const info = userInfo()
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        console.log(info)
+        if (info === null)
+            navigate("/login");
+    }, [info])
+
     return (
         <>
             <Flex
@@ -22,7 +33,7 @@ export  default function HomePage() {
                 justifyContent={"center"}
                 bg={'green'}
             >
-                Home
+                {info}
             </Flex>
         </>
     )

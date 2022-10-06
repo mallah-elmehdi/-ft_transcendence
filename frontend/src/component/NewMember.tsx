@@ -27,10 +27,10 @@ export default function NewMember({ id, name, avatar, addMe }: Props) {
         }
         else {
             addMe((newMembers: any) => {
-                const searchIndex = newMembers.findIndex((id: any) => id.toString() == id.toString());
-                if (searchIndex == -1)
+                // const searchIndex = newMembers.findIndex((id: any) => id.toString() == id.toString());
+                // if (searchIndex == -1)
                 newMembers.push(id.toString());
-                console.log(newMembers)
+                // console.log(newMembers)
                 return [...newMembers];
             })
         }

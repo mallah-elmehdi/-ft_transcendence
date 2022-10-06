@@ -11,7 +11,7 @@ import ProfilePage from "./pages/ProfilePage";
 import PageNotFound from "./pages/PageNotFound";
 
 function App() {
-    const isSignIn = true;
+    // add user info in localStorage
     return (
         <ChakraProvider theme={theme} >
             <Center >
@@ -22,36 +22,16 @@ function App() {
                     maxW={'2000px'}
                 >
                     <BrowserRouter>
-                        <Navbar isSignIn={isSignIn} />
                         <Routes>
-                            {/*<Route path={'/login'}  element={isSignIn ? <Navigate to={'/home'}/> : <SignInPage />} />*/}
-                            {/*<Route path={'/'}       element={isSignIn ? <Navigate to={'/home'}/> : <SignInPage />} />*/}
-                            <Route path={'/login'}
-                                element={<SignInPage />}
-                            />
-                            <Route path={'/'}
-                                element={<HomePage />}
-                            />
-                            <Route path={'/home'}
-                                element={isSignIn ? <HomePage /> : <Navigate to={'/login'} />}
-                            />
-                            <Route path={'/play'}
-                                element={
-                                    isSignIn ?
-                                        <PlayPage />
-                                        :
-                                        <Navigate to={'/login'}
-                                        />}
-                            />
-                            <Route path={'/chat'}
-                                element={isSignIn ? <ChatPage /> : <Navigate to={'/login'} />}
-                            />
-                            <Route path={'/profile'}
-                                element={isSignIn ? <ProfilePage /> : <Navigate to={'/login'} />}
-                            />
-                            <Route path="*"
-                                element={isSignIn ? <PageNotFound /> : <Navigate to={'/login'} />}
-                            />
+                            <Route element={<Navbar />}>
+                                <Route path={'/'} element={<HomePage />} />
+                                <Route path={'/home'} element={<HomePage />} />
+                                <Route path={'/play'} element={<PlayPage />} />
+                                <Route path={'/chat'} element={<ChatPage />} />
+                                <Route path={'/profile'} element={<ProfilePage />} />
+                                <Route path="*" element={<PageNotFound />} />
+                            </Route>
+                            <Route path={'/login'} element={<SignInPage />} />
                         </Routes>
                     </BrowserRouter>
                 </Box>
