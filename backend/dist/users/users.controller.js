@@ -19,6 +19,7 @@ const passport_1 = require("@nestjs/passport");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
 const rxjs_1 = require("rxjs");
+const username_dto_1 = require("./DTO/username.dto");
 let UsersController = class UsersController {
     constructor(UsersService) {
         this.UsersService = UsersService;
@@ -32,6 +33,9 @@ let UsersController = class UsersController {
     UploadedFile(login, file) {
         console.log('file', file);
         return (0, rxjs_1.of)({ imagePath: file.path });
+    }
+    async setUsername(login, req, usernameDto) {
+        return await this.UsersService.setUsername(login, req.body.username);
     }
 };
 __decorate([
@@ -68,6 +72,15 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", rxjs_1.Observable)
 ], UsersController.prototype, "UploadedFile", null);
+__decorate([
+    (0, common_1.Post)('username/:login'),
+    __param(0, (0, common_1.Param)('login')),
+    __param(1, (0, common_1.Req)()),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object, username_dto_1.usernameDto]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "setUsername", null);
 UsersController = __decorate([
     (0, common_1.Controller)('user'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),

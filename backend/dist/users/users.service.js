@@ -35,6 +35,16 @@ let UsersService = class UsersService {
             return null;
         }
     }
+    async setUsername(login, username) {
+        return await this.prisma.user.update({
+            where: {
+                user_login: login,
+            },
+            data: {
+                user_name: username,
+            },
+        });
+    }
 };
 UsersService = __decorate([
     (0, common_1.Injectable)(),

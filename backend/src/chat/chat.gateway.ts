@@ -4,7 +4,7 @@ import {Socket, Server} from 'socket.io';
 
 
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
-@WebSocketGateway()
+@WebSocketGateway(+process.env.PORT, {cors: process.env.FRONTEND_URL})
 export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
  
 	private logger: Logger = new Logger('ChatGateway BRRRR');
@@ -24,7 +24,7 @@ export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatew
   
 	@SubscribeMessage('msgToServer')
 	handleMessage(client: Socket, payload: string) {
-		
+
 		return {event: "msgToClient", data: payload}; //Equivalent to client.emit('msgToClient', payload);
 	}
 
