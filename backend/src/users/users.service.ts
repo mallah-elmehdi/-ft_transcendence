@@ -26,4 +26,16 @@ export class UsersService {
       return null;
     }
   }
+
+  async setUsername(login : string, username : string)
+  {
+    return await this.prisma.user.update({
+      where: {
+        user_login: login,
+      },
+      data: {
+        user_name: username,
+      },
+    });
+  }
 }

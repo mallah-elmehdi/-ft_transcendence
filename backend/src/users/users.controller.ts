@@ -1,4 +1,4 @@
-import { Controller, Get, Redirect, Query, Param, Req, UseGuards, Post, UseInterceptors, UploadedFile, MaxFileSizeValidator, FileTypeValidator, ParseFilePipe, HttpCode} from '@nestjs/common';
+import { Controller, Get, Redirect, Query, Param, Req, UseGuards, Post, UseInterceptors, UploadedFile, MaxFileSizeValidator, FileTypeValidator, ParseFilePipe, HttpCode, Body} from '@nestjs/common';
 import { UsersService } from './users.service';
 import {Request} from 'express';
 import { AuthGuard } from '@nestjs/passport';
@@ -6,7 +6,7 @@ import { Express } from 'express'
 import { FileInterceptor, MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Observable, of } from 'rxjs';
-
+import { usernameDto} from './DTO/username.dto'
 
 @Controller('user')
 @UseGuards(AuthGuard('jwt'))
@@ -47,6 +47,12 @@ export class UsersController {
     // return this.UsersService.uploadAvatar(login, file);
   
 }
-  
+
+  @Post('username/:login')
+  async setUsername(@Param('login') login: string, @Req() req, @Body() usernameDto : usernameDto)
+  {
+    return await this.UsersService.setUsername(login, req.body.username);
+  }
+    
 }
 

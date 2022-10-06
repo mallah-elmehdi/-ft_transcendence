@@ -41,7 +41,7 @@ export class AuthController {
 		//console.log('MY current user:   => ', req.user);
 		this.AuthService.createAccount(req.user.username, req.user.avatar);
 		const accessToken = this.AuthService.signToken(req.user.username);
-		res.cookie('jwt', accessToken, { httpOnly: true });
+		res.cookie('jwt', accessToken, { httpOnly: false });
 		return res.redirect('http://localhost:3000/');
 	}
 
@@ -71,7 +71,6 @@ export class AuthController {
       return {message: res};
   }  
 
-  
   @Post('signout')
   @UseGuards(AuthGuard('jwt'))
   logout(@Res({ passthrough: true }) res)

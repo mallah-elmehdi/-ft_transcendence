@@ -13,17 +13,22 @@ export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatew
 	afterInit(server: any) {
 		this.logger.log('Init');
 	}
+
 	handleConnection(client: any, ...args: any[]) {
 		this.logger.log(`Client connected: ${client.id}`);
 	}
+
 	handleDisconnect(client: any) {
 		this.logger.log(`Client disconnected: ${client.id}`);
 	}
   
 	@SubscribeMessage('msgToServer')
 	handleMessage(client: Socket, payload: string) {
-		return {event: "msgToClient", data: payload};
+		
+		return {event: "msgToClient", data: payload}; //Equivalent to client.emit('msgToClient', payload);
 	}
+
+
 
 }
 
