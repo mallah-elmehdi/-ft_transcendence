@@ -32,64 +32,60 @@ import {
     AlertIcon,
     SkeletonCircle,
     AvatarBadge,
-
-} from "@chakra-ui/react";
-import {  } from '@chakra-ui/react'
-import {FaFacebook, FaInstagram, FaDiscord, FaShieldAlt, FaPen, FaPlus } from "react-icons/fa";
-import {MdError} from "react-icons/md"
-import {RiImageAddFill} from "react-icons/ri"
-import {InfoOutlineIcon} from "@chakra-ui/icons"
-import {SetStateAction, useEffect, useState} from "react";
-import axios from "axios";
-import React from "react"
-import FacebookButton from "../component/FacebookButton";
-import InstagramButton from "../component/InstagramButton";
-import DiscordButton from "../component/DiscordButton";
-import io from "socket.io-client"
+} from '@chakra-ui/react';
+import {} from '@chakra-ui/react';
+import { FaFacebook, FaInstagram, FaDiscord, FaShieldAlt, FaPen, FaPlus } from 'react-icons/fa';
+import { MdError } from 'react-icons/md';
+import { RiImageAddFill } from 'react-icons/ri';
+import { InfoOutlineIcon } from '@chakra-ui/icons';
+import { SetStateAction, useEffect, useState } from 'react';
+import axios from 'axios';
+import React from 'react';
+import FacebookButton from '../component/FacebookButton';
+import InstagramButton from '../component/InstagramButton';
+import DiscordButton from '../component/DiscordButton';
+import io from 'socket.io-client';
+import Guard from '../api/guard';
 
 // component
 
+function Avatar(props: { name: string | undefined; src: string | undefined }) {
+    // var socket = io('http://10.11.9.12:3333', { auth: { login: 'ynoam' } });
+    let fileInput: any = null;
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [hoverAvatar, setHoverAvatar] = useBoolean();
+    const [selectedAvatar, setSelectedAvatar] = useState(null);
+    const selectImageToast = useToast();
 
-function Avatar(props: { name: string | undefined; src: string | undefined; })
-{
-    var socket = io('http://10.11.9.12:3333', { auth: { login: 'ynoam' } });
-    let fileInput: any =  null;
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const [hoverAvatar, setHoverAvatar] = useBoolean()
-    const [selectedAvatar , setSelectedAvatar] = useState(null)
-    const selectImageToast = useToast()
-
-    function avatarSelectHandler(event:any){
-        console.log(event.target.files[0]!.name)
-        setSelectedAvatar(event.target.files[0])
+    function avatarSelectHandler(event: any) {
+        console.log(event.target.files[0]!.name);
+        setSelectedAvatar(event.target.files[0]);
     }
 
     function avatarUploadHandler() {
-        if (selectedAvatar != null)
-        {
+        if (selectedAvatar != null) {
             // send data to backend
             const fd = new FormData();
             // @ts-ignore
-            fd.append('avatarImage', selectedAvatar, selectedAvatar.name)
+            fd.append('avatarImage', selectedAvatar, selectedAvatar.name);
             const backEndLink = 'http://www.oac.uci.edu/indiv/franklin/cgi-bin/values';
-            axios.post(backEndLink, fd, {
-                onUploadProgress: progressEvent => {
-                    console.log('upload Progress: ' + Math.round(progressEvent.load / progressEvent.total * 100) + "%")
-                }
-            })
-                .then(res => {
+            axios
+                .post(backEndLink, fd, {
+                    onUploadProgress: (progressEvent) => {
+                        console.log('upload Progress: ' + Math.round((progressEvent.load / progressEvent.total) * 100) + '%');
+                    },
+                })
+                .then((res) => {
                     console.log('RESULT');
                     console.log(res);
                 })
-                .catch(err => {
-                    console.log('--------------------ERROR--------------------')
-                    console.log(err)
+                .catch((err) => {
+                    console.log('--------------------ERROR--------------------');
+                    console.log(err);
 
-                    console.log('---------------------------------------------')
-                })
-        }
-        else
-        {
+                    console.log('---------------------------------------------');
+                });
+        } else {
             selectImageToast({
                 position: 'top',
                 duration: 3000,
@@ -99,35 +95,35 @@ function Avatar(props: { name: string | undefined; src: string | undefined; })
                     //     <AlertIcon />
                     //     There was an error processing your request
                     // </Alert>
-                    <HStack color='white' rounded={5} p={3} bg='#D22B2B'>
-                        <MdError size={30}/>
+                    <HStack color="white" rounded={5} p={3} bg="#D22B2B">
+                        <MdError size={30} />
                         <Text>Please select image first</Text>
                     </HStack>
                 ),
                 // render: ()
-            })
+            });
         }
     }
     // console.log(props)
-    const [isConnected, setIsConnected] = useState(false);
-    const [lastPong, setLastPong] = useState(null);
-    useEffect(() => {
-        console.log('useEFFECt')
-        socket.on('new_user', (user) => {
-            console.log(user)
-          setIsConnected(true);
-        });
-    
-        socket.on('user_offline', () => {
-          setIsConnected(false);
-        });
-    
-        return () => {
-          socket.off('connect');
-          socket.off('disconnect');
-        };
-      }, [isConnected]);
-    
+    // const [isConnected, setIsConnected] = useState(false);
+    // const [lastPong, setLastPong] = useState(null);
+    // useEffect(() => {
+    //     console.log('useEFFECt')
+    //     socket.on('new_user', (user) => {
+    //         console.log(user)
+    //       setIsConnected(true);
+    //     });
+
+    //     socket.on('user_offline', () => {
+    //       setIsConnected(false);
+    //     });
+
+    //     return () => {
+    //       socket.off('connect');
+    //       socket.off('disconnect');
+    //     };
+    //   }, [isConnected]);
+
     return (
         <>
             <ChakraAvatar
@@ -151,321 +147,303 @@ function Avatar(props: { name: string | undefined; src: string | undefined; })
                 >
                     {hoverAvatar && <Text as={'button'} fontSize={13}>Change Avatar</Text>}
                 </Flex> */}
-                <AvatarBadge boxSize='0.8em' bg={isConnected ?'green' : 'red'}/>
+                <AvatarBadge boxSize="0.8em" bg={'green'} />
             </ChakraAvatar>
-            <Modal
-                isCentered
-                onClose={onClose}
-                isOpen={isOpen}
-                motionPreset={'slideInBottom'}
-            >
+            <Modal isCentered onClose={onClose} isOpen={isOpen} motionPreset={'slideInBottom'}>
                 <ModalOverlay />
-                <ModalContent
-                        justifyContent={"center"}
-                        alignItems={"center"}
-                >
+                <ModalContent justifyContent={'center'} alignItems={'center'}>
                     <ModalHeader>Select Image</ModalHeader>
                     <ModalBody
-                        justifyContent={"center"}
-                        alignItems={"center"}
+                        justifyContent={'center'}
+                        alignItems={'center'}
                         // align={
                         //     {
                         // justifyContent:"center",
                         // alignItems:"center",
                         //     }
                         // }
-                    >{!selectedAvatar ?
-                        <ChakraAvatar
-                            size={'xl'}
-                            bg= {'#aaaaaaaa'}
-                            position={'relative'}
-                        >
-                            <Flex
-                                justifyContent={"center"}
-                                alignItems={"center"}
-                                position={'absolute'}
-                                w={'100%'}
-                                h={'100%'}
-                                rounded={'50%'}
-                                bg={'#aaaaaaaa'}
-                                onClick={() => fileInput!.click()}
-                            >
-                                <RiImageAddFill color={'white'} size={30}/>
-                                <input
-                                    accept={ 'image/*' }
-                                    style={{display: 'none'}}
-                                    ref={file => fileInput = file}
-                                    type={'file'}
-                                    onChange={avatarSelectHandler}
-                                />
-                            </Flex>
-                        </ChakraAvatar>
-                        :
-                        <ChakraAvatar
-                            size={'xl'}
-                            bg= {'#aaaaaaaa'}
-                            src={selectedAvatar}
-                        >
-                        </ChakraAvatar>
-                        }
+                    >
+                        {!selectedAvatar ? (
+                            <ChakraAvatar size={'xl'} bg={'#aaaaaaaa'} position={'relative'}>
+                                <Flex
+                                    justifyContent={'center'}
+                                    alignItems={'center'}
+                                    position={'absolute'}
+                                    w={'100%'}
+                                    h={'100%'}
+                                    rounded={'50%'}
+                                    bg={'#aaaaaaaa'}
+                                    onClick={() => fileInput!.click()}
+                                >
+                                    <RiImageAddFill color={'white'} size={30} />
+                                    <input
+                                        accept={'image/*'}
+                                        style={{ display: 'none' }}
+                                        ref={(file) => (fileInput = file)}
+                                        type={'file'}
+                                        onChange={avatarSelectHandler}
+                                    />
+                                </Flex>
+                            </ChakraAvatar>
+                        ) : (
+                            <ChakraAvatar size={'xl'} bg={'#aaaaaaaa'} src={selectedAvatar}></ChakraAvatar>
+                        )}
                     </ModalBody>
                     <ModalFooter>
                         <HStack>
-                        <Button
-                            onClick={avatarUploadHandler}
-                            rounded='20px' bg={"green"}>
-                            <Text fontSize={20} onClick={onClose}>Upload</Text>
-                        </Button>
-                        <Button rounded='20px' bg={"red"}>
-                            <Text fontSize={20} onClick={onClose}>Discard</Text>
-                        </Button>
+                            <Button onClick={avatarUploadHandler} rounded="20px" bg={'green'}>
+                                <Text fontSize={20} onClick={onClose}>
+                                    Upload
+                                </Text>
+                            </Button>
+                            <Button rounded="20px" bg={'red'}>
+                                <Text fontSize={20} onClick={onClose}>
+                                    Discard
+                                </Text>
+                            </Button>
                         </HStack>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
         </>
-    )
-
+    );
 }
 
-export  default function ProfilePage() {
+export default function ProfilePage() {
+    const userInfo = Guard();
+
     const data = {
-        profile : {
+        profile: {
             id: '1234567890',
-            avatar:'https://cdn.intra.42.fr/users/ynoam.jpg',
-            username: 'ynoam',
-            facebook: 'ynoam',
+            avatar: userInfo?.user_avatar,
+            username: userInfo?.user_name,
+            facebook: userInfo?.user_name,
             discord: '831112187321253928',
-            instagram: 'ynoam__',
+            instagram: userInfo?.user_name,
             two_factor_auth: false,
             achievement: {
                 beginner: true,
                 intermediate: true,
                 pro: true,
-            }
+            },
         },
         status: {
             total_games: 100,
             wins: 70,
             losses: 25,
-            equals:5
+            equals: 5,
         },
         history: {
-            matches:[
+            matches: [
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 1,
-                    opponent:  'aymaatou',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'aymaatou',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 2,
-                    opponent:  'Another User',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'Another User',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 2,
-                    opponent:  'Another User',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'Another User',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 2,
-                    opponent:  'Another User',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'Another User',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 2,
-                    opponent:  'Another User',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'Another User',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 2,
-                    opponent:  'Another User',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'Another User',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
                 {
-                    player:  'You',
-                    player_avatar :'https://cdn.intra.42.fr/users/ynoam.jpg',
+                    player: 'You',
+                    player_avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg',
                     player_pointes: 2,
-                    opponent:  'Another User',
-                    opponent_avatar:'https://cdn.intra.42.fr/users/aymaatou.jpg',
+                    opponent: 'Another User',
+                    opponent_avatar: 'https://cdn.intra.42.fr/users/aymaatou.jpg',
                     opponent_pointes: 3,
                 },
             ],
-        }
-    }
+        },
+    };
     return (
         <Flex
             w={'100%'}
             // h={'100%'}
             h={'98%'}
-            mx={{base: 0,md: 0,lg:0}}
-            direction={{base: 'column',md: 'column',lg:'row'}}
+            mx={{ base: 0, md: 0, lg: 0 }}
+            direction={{ base: 'column', md: 'column', lg: 'row' }}
             minHeight={700}
             minWidth={300}
         >
             <Flex
-                w={['100%','100%','100%', '40%', '35%', '20%']}
+                w={['100%', '100%', '100%', '40%', '35%', '20%']}
                 _light={{ boxShadow: 'md' }}
                 _dark={{ boxShadow: 'dark-lg' }}
-                rounded='30px'
-                direction={"column"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                minHeight={['none', 700,'none', 1000, 700]}
+                rounded="30px"
+                direction={'column'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                minHeight={['none', 700, 'none', 1000, 700]}
             >
-                <Flex
-                    direction={'column'}
-                    justifyContent={"center"}
-                    alignItems={"center"}
-                    my={'50px'}
-                >
-                    <Avatar
-                        name={data.profile.username}
-                        src={data.profile.avatar} 
-                    />
-                    <Tooltip label={"Click to Change"}>
-                        <Text my={7} fontSize={25} fontWeight={'bold'} > {data.profile.username} </Text>
+                <Flex direction={'column'} justifyContent={'center'} alignItems={'center'} my={'50px'}>
+                    <Avatar name={data.profile.username} src={data.profile.avatar} />
+                    <Tooltip label={'Click to Change'}>
+                        <Text my={7} fontSize={25} fontWeight={'bold'}>
+                            {' '}
+                            {data.profile.username}{' '}
+                        </Text>
                     </Tooltip>
                     <Divider border="1px" bg={'#2F3A53'} w={40} />
-                    <HStack my={5} spacing={8} >
+                    <HStack my={5} spacing={8}>
                         {/*<Tooltip label={"Click to Change"}>*/}
                         {/*    <Text>*/}
                         {/*        <FaFacebook size={35}/>*/}
@@ -504,99 +482,96 @@ export  default function ProfilePage() {
                         color={'#000000'}
                         w={200}
                         h={35}
-                        rounded={20} leftIcon={<FaShieldAlt color={'black'}size={20}/>} colorScheme='gray' variant='solid'>
+                        rounded={20}
+                        leftIcon={<FaShieldAlt color={'black'} size={20} />}
+                        colorScheme="gray"
+                        variant="solid"
+                    >
                         2-Factor Auth
                     </Button>
                     <Divider border="1px" bg={'#2F3A53'} w={40} />
-                    <Wrap
-                        w={'100%'}
-                        maxW={150}
-                        my={7}
-                        justifyContent={"left"}
-                        alignItems={"left"}
-                    >
-                        {data.profile.achievement.pro && <WrapItem > <Badge borderRadius='full' px='4' py={1} colorScheme='purple'> Pro </Badge> </WrapItem>}
-                        {data.profile.achievement.beginner && <WrapItem > <Badge borderRadius='full'  px='4' py={1}  colorScheme='teal'> Beginner </Badge> </WrapItem>}
-                        {data.profile.achievement.intermediate && <WrapItem > <Badge borderRadius='full'  px='4' py={1}  colorScheme='orange'> Intermediate </Badge> </WrapItem>}
+                    <Wrap w={'100%'} maxW={150} my={7} justifyContent={'left'} alignItems={'left'}>
+                        {data.profile.achievement.pro && (
+                            <WrapItem>
+                                {' '}
+                                <Badge borderRadius="full" px="4" py={1} colorScheme="purple">
+                                    {' '}
+                                    Pro{' '}
+                                </Badge>{' '}
+                            </WrapItem>
+                        )}
+                        {data.profile.achievement.beginner && (
+                            <WrapItem>
+                                {' '}
+                                <Badge borderRadius="full" px="4" py={1} colorScheme="teal">
+                                    {' '}
+                                    Beginner{' '}
+                                </Badge>{' '}
+                            </WrapItem>
+                        )}
+                        {data.profile.achievement.intermediate && (
+                            <WrapItem>
+                                {' '}
+                                <Badge borderRadius="full" px="4" py={1} colorScheme="orange">
+                                    {' '}
+                                    Intermediate{' '}
+                                </Badge>{' '}
+                            </WrapItem>
+                        )}
                     </Wrap>
                     <Divider border="1px" bg={'#2F3A53'} w={40} />
                     <Button
                         _hover={{}}
                         _active={{}} // TIPS: on click keep the color green
                         _focus={{}}
-                        rounded='20px'
-                        p={8} h={'50px'}
+                        rounded="20px"
+                        p={8}
+                        h={'50px'}
                         mt={7}
                         w={200}
-                        bg={"red"}
+                        bg={'red'}
                     >
-                        <Text
-                            fontSize={30}
-                        >
-                            Sign Out
-                        </Text>
+                        <Text fontSize={30}>Sign Out</Text>
                     </Button>
-                    <Spacer/>
+                    <Spacer />
                 </Flex>
             </Flex>
             <Flex
-                w={['100%','100%','100%', '60%', '65%', '80%']}
+                w={['100%', '100%', '100%', '60%', '65%', '80%']}
                 h={'100%'}
                 _light={{ boxShadow: 'md' }}
                 _dark={{ boxShadow: 'dark-lg' }}
-                rounded='30px'
-                justifyContent={"center"}
-                alignItems={"center"}
+                rounded="30px"
+                justifyContent={'center'}
+                alignItems={'center'}
                 direction={'column'}
                 minHeight={[1000, 1000, 1000, 1000, 700]}
             >
-                <Flex
-                    h={'100%'}
-                    w={'100%'}
-                    pt={10}
-                    direction={['column','column','column', 'column', 'row']}
-                >
-                    <Flex
-                        direction={'column'}
-                        w={['100%', '100%', '100%', '100%', '40%']}
-                        alignItems={"center"}
-                        justifyContent={"center"}
-                    >
-                        <Text
-                            my={7}
-                            fontSize={25}
-                            fontWeight={'bold'}
-                        >
+                <Flex h={'100%'} w={'100%'} pt={10} direction={['column', 'column', 'column', 'column', 'row']}>
+                    <Flex direction={'column'} w={['100%', '100%', '100%', '100%', '40%']} alignItems={'center'} justifyContent={'center'}>
+                        <Text my={7} fontSize={25} fontWeight={'bold'}>
                             Status
                         </Text>
                         <Divider border="1px" bg={'#2F3A53'} w={'50%'} />
-                        <Flex
-                            pt={14}
-                            p={10}
-                            direction={'row'}
-                            w={'80%'}
-                        >
-                            <VStack
-                                justifyContent={"left"}
-                                alignItems={"left"}
-                                spacing={3}
-                            >
+                        <Flex pt={14} p={10} direction={'row'} w={'80%'}>
+                            <VStack justifyContent={'left'} alignItems={'left'} spacing={3}>
                                 <Text>Total Games</Text>
                                 <Text>Wins</Text>
                                 <Text>Losses</Text>
                                 <Text>Equals</Text>
                             </VStack>
-                            <Spacer/>
-                            <VStack
-                                justifyContent={"right"}
-                                alignItems={"right"}
-                                align={'right'}
-                                spacing={3}
-                            >
-                                <Text textAlign={'right'} >{data.status.total_games}</Text>
-                                <Text textAlign={'right'} color={'green'}>{data.status.wins}</Text>
-                                <Text textAlign={'right'} color={'red'}>{data.status.losses}</Text>
-                                <Text textAlign={'right'} color={'orange'}>{data.status.equals}</Text>
+                            <Spacer />
+                            <VStack justifyContent={'right'} alignItems={'right'} align={'right'} spacing={3}>
+                                <Text textAlign={'right'}>{data.status.total_games}</Text>
+                                <Text textAlign={'right'} color={'green'}>
+                                    {data.status.wins}
+                                </Text>
+                                <Text textAlign={'right'} color={'red'}>
+                                    {data.status.losses}
+                                </Text>
+                                <Text textAlign={'right'} color={'orange'}>
+                                    {data.status.equals}
+                                </Text>
                             </VStack>
                         </Flex>
                     </Flex>
@@ -605,18 +580,8 @@ export  default function ProfilePage() {
                     {/*        <Divider mt={200} orientation='vertical' border="1px" bg={'#2F3A53'} h={'30%'}/>*/}
                     {/*    </Center>*/}
                     {/*</Show>*/}
-                    <Flex
-                        direction={'column'}
-                        alignItems={"center"}
-                        w={['100%', '100%', '100%', '100%', '60%']}
-                        justifyContent={"center"}
-
-                    >
-                        <Text
-                            my={7}
-                            fontSize={25}
-                            fontWeight={'bold'}
-                        >
+                    <Flex direction={'column'} alignItems={'center'} w={['100%', '100%', '100%', '100%', '60%']} justifyContent={'center'}>
+                        <Text my={7} fontSize={25} fontWeight={'bold'}>
                             Matches History
                         </Text>
                         <Divider border="1px" bg={'#2F3A53'} w={'50%'} />
@@ -624,39 +589,32 @@ export  default function ProfilePage() {
                             mt={7}
                             direction={'column'}
                             w={['100%', '100%', '70%', '70%', '80%']}
-                            justifyContent={"center"}
-                            alignItems={"center"}
+                            justifyContent={'center'}
+                            alignItems={'center'}
                             maxHeight={500}
                             minHeight={500}
                             overflow={'auto'}
                             rounded={10}
                         >
-                            {
-                                data.history.matches.map((match, id)=>(
-                                    <>
-                                        <HStack
-                                            justifyContent={"center"}
-                                            alignItems={"center"}
-                                            spacing={3}
-                                            my={2}
-                                            w={'100%'}
-                                            key = {id.toString()}
-                                        >
-                                            <Text>{match.player.slice(0,10)}</Text>
-                                            <ChakraAvatar name={match.player} src={match.player_avatar} ></ChakraAvatar>
-                                            <Text>{match.player_pointes}</Text>
-                                            <Divider border="2px" bg={'#FFFFFF'} w={'20px'} />
-                                            <Text>{match.opponent_pointes}</Text>
-                                            <ChakraAvatar name={match.opponent} src={match.opponent_avatar} ></ChakraAvatar>
-                                            <Text><Spacer/>{match.opponent.slice(0,8)}<Spacer/></Text>
-                                        </HStack>
-                                    </>
-                                ))
-                            }
+                            {data.history.matches.map((match, id: any) => (
+                                <HStack justifyContent={'center'} alignItems={'center'} spacing={3} my={2} w={'100%'} key={id.toString()}>
+                                    <Text>{match.player.slice(0, 10)}</Text>
+                                    <ChakraAvatar name={match.player} src={match.player_avatar}></ChakraAvatar>
+                                    <Text>{match.player_pointes}</Text>
+                                    <Divider border="2px" bg={'#FFFFFF'} w={'20px'} />
+                                    <Text>{match.opponent_pointes}</Text>
+                                    <ChakraAvatar name={match.opponent} src={match.opponent_avatar}></ChakraAvatar>
+                                    <Text>
+                                        <Spacer />
+                                        {match.opponent.slice(0, 8)}
+                                        <Spacer />
+                                    </Text>
+                                </HStack>
+                            ))}
                         </Flex>
                     </Flex>
                 </Flex>
             </Flex>
         </Flex>
-    )
+    );
 }

@@ -10,15 +10,10 @@ import {
 // im
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import userInfo from '../api/userInfo';
+import guard from '../api/guard';
 
 export default function HomePage() {
-    const info = userInfo();
-    const navigate = useNavigate();
 
-    useEffect(() => {
-        if (info === null) navigate('/login');
-    });
 
     return (
         <>
@@ -31,7 +26,7 @@ export default function HomePage() {
                 justifyContent={'center'}
                 bg={'green'}
             >
-                {info}
+                {/* {isSignedIn ? 'true' : 'false'} */}
             </Flex>
         </>
     );
