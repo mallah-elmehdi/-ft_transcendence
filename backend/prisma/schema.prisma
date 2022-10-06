@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Schema needs updating for relationships
+
+model User {
+  user_id        Int        @default(autoincrement()) @id
+  user_login    String   @unique
+  user_name     String   @unique
+  user_avatar      String @unique
+  games_lost Int	@default(0)
+  games_won Int		@default(0)
+  games_drawn Int	@default(0)
+  games_played Int	@default(0)
+  two_authentication String? 	  // 2FA
+  instagram String		@default("")
+  twitter String		@default("")
+  facebook String		@default("")
+  discord String		@default("")
+  online Boolean		@default(false)
+  
+  friends Friend[]
+  pending_friends PendingFriends[]
+  match_history match_history[]
+  
+  created_at DateTime @default(now())
+
+  @@map("Account") //assign a different name to a model and not a particular field.
+}
+
+model Friend {
+  id       Int @id @default(autoincrement())
+  userId   Int
+  friendId Int
+  user User @relation(fields: [userId], references: [user_id])
+}
+
+model PendingFriends {
+  pending_friendship_id Int @default(autoincrement()) @id
+  userId Int @default(0)
+  friend_id Int @default(0)
+  user User @relation(fields: [userId], references: [user_id])
+  // @@map("PendingFriendship")
+}
+
+model match_history {
+  match_id Int @default(autoincrement()) @id
+  userId Int @default(0)
+  opponent_id Int @default(0)
+  user_score Int @default(0)
+  opponent_score Int @default(0)
+  created_at DateTime @default(now())
+  user User @relation(fields: [userId], references: [user_id])
+  
+  // @@map("MatchHistory")
+}
+
+model Chats {
+  chat_id Int @default(autoincrement()) @id
+  user_id Int @default(0)
+  opponent_id Int @default(0)
+  i_delivered Boolean @default(false)
+  message String @default("")
+  created_at DateTime @default(now())
+  
+  @@map("Chat")
+}
