@@ -6,7 +6,9 @@ export declare class AuthController {
     private readonly AuthService;
     private JwtService;
     constructor(AuthService: AuthService, JwtService: JwtService);
-    FortyTwoAuth(req: any): Promise<any>;
+    FortyTwoAuth(req: any): Promise<{
+        message: string;
+    }>;
     FortyTwoAuthRedirect(req: any, res: any, code: any): Promise<any>;
     test(req: Request): string;
     TwoFactor(req: Request): Promise<string>;

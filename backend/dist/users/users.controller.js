@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
+const passport_1 = require("@nestjs/passport");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
 const rxjs_1 = require("rxjs");
@@ -35,6 +36,7 @@ let UsersController = class UsersController {
 };
 __decorate([
     (0, common_1.Get)('me'),
+    (0, common_1.HttpCode)(200),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -68,6 +70,7 @@ __decorate([
 ], UsersController.prototype, "UploadedFile", null);
 UsersController = __decorate([
     (0, common_1.Controller)('user'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __metadata("design:paramtypes", [users_service_1.UsersService])
 ], UsersController);
 exports.UsersController = UsersController;

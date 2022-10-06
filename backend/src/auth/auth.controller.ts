@@ -26,11 +26,9 @@ export class AuthController {
   constructor(private readonly AuthService: AuthService, private JwtService : JwtService) {}
 
   @Get()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('42'))
   async FortyTwoAuth(@Req() req) {
-    if (req.cookies.jwt) {
-      return req.cookies.jwt;
-    }
+
     // console.log('MY current user:   => ', req.user);
     return { message: 'You are logged in' };
   }
@@ -44,7 +42,7 @@ export class AuthController {
 		this.AuthService.createAccount(req.user.username, req.user.avatar);
 		const accessToken = this.AuthService.signToken(req.user.username);
 		res.cookie('jwt', accessToken, { httpOnly: true });
-		return res.redirect('http://10.11.9.7:3000');
+		return res.redirect('http://localhost:3000/');
 	}
 
 
@@ -54,7 +52,7 @@ export class AuthController {
   test(@Req() req: Request) {
     const user = req.user;
     console.log(user['userLogin']);
-    return 'TEST inSIDE HAHA ';
+    return 'TEST inSIDE HAHA  ';
   }
   
   @Get('2fa')

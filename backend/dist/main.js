@@ -5,11 +5,12 @@ const app_module_1 = require("./app.module");
 const swagger_1 = require("@nestjs/swagger");
 const cookieParser = require("cookie-parser");
 async function bootstrap() {
-    const app = await core_1.NestFactory.create(app_module_1.AppModule, { cors: true });
-    app.enableCors({ origin: true,
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-        credentials: true, });
+    const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.use(cookieParser());
+    app.enableCors({
+        origin: 'http://localhost:3000',
+        credentials: true,
+    });
     const config = new swagger_1.DocumentBuilder()
         .setTitle('ft_Transcendence')
         .setDescription('Transcendence Routes')
@@ -17,7 +18,7 @@ async function bootstrap() {
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('api', app, document);
-    await app.listen(3000, process.env.HOST);
+    await app.listen(3005, process.env.HOST);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

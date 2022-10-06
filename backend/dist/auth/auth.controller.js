@@ -24,21 +24,18 @@ let AuthController = class AuthController {
         this.JwtService = JwtService;
     }
     async FortyTwoAuth(req) {
-        if (req.cookies.jwt) {
-            return req.cookies.jwt;
-        }
         return { message: 'You are logged in' };
     }
     async FortyTwoAuthRedirect(req, res, code) {
         this.AuthService.createAccount(req.user.username, req.user.avatar);
         const accessToken = this.AuthService.signToken(req.user.username);
         res.cookie('jwt', accessToken, { httpOnly: true });
-        return res.redirect('http://10.11.9.7:3000');
+        return res.redirect('http://localhost:3000/');
     }
     test(req) {
         const user = req.user;
         console.log(user['userLogin']);
-        return 'TEST inSIDE HAHA ';
+        return 'TEST inSIDE HAHA  ';
     }
     async TwoFactor(req) {
         const user = req.user;
@@ -56,7 +53,7 @@ let AuthController = class AuthController {
 };
 __decorate([
     (0, common_1.Get)(),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('42')),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
