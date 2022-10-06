@@ -30,9 +30,9 @@ export const AppRoutes = () => (
                         <Route path={pagesContent.home.url} element={<Home />} />
                         <Route path={pagesContent.profile.url} element={<Profile />} />
                         <Route path={pagesContent.chat.url} element={<Chat />} />
-                        <Route path={pagesContent.play.url} element={<Game />} />
                     </Route>
                 </Route>
+                <Route path={pagesContent.play.url} element={<Game />} />
             </Routes>
         </BrowserRouter>
     </ChakraProvider>

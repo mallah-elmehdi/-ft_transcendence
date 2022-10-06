@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Avatar, Text, VStack } from '@chakra-ui/react';
+import { Avatar, Text, VStack, Box } from '@chakra-ui/react';
+import AvatarBG from '../assets/images/avatar_background.png';
 
 // TYPE
 type Props = {
@@ -10,11 +11,11 @@ type Props = {
 
 export const GameAvatar = ({ name, username, photo }: Props) => {
     return (
-        <VStack alignItems="center">
-            <Text textTransform="capitalize" fontSize="2xl">
+        <VStack alignItems="center" spacing={0}>
+            <Avatar name={name} size="lg" src={photo} />
+            <Text textTransform="capitalize" color="white" fontSize="4xl" lineHeight={1}>
                 {username}
             </Text>
-            <Avatar name={name} src={photo} size="lg" />
         </VStack>
     );
 };
