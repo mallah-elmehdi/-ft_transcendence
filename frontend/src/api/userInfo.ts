@@ -6,7 +6,8 @@ function userInfo() {
     const backEnd = API + 'user/me'
     const [info, setInfo] = useState<any>(null)
 
-    axios.get(backEnd)
+    axios.defaults.withCredentials = true;
+    axios.get(backEnd , { withCredentials: true }, )
         .then(function (response) {
             setInfo(response)
             console.log("res", response);
@@ -16,7 +17,10 @@ function userInfo() {
             setInfo(null)
             console.log("err", error);
         })
+        console.log("info === >", info);
     return (info)
 }
+
+
 
 export default userInfo;
