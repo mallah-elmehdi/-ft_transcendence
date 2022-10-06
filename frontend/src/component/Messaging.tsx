@@ -2,7 +2,7 @@ import React, {useContext} from "react";
 import {ChatContext} from "../State/ChatProvider";
 import ProfileDetails from "./ProfileDetails";
 import MessagingBox from "./MessagingBox";
-import ChannelDetails from "./ChannelDetails";
+import RoomDetails from "./RoomDetails";
 
 const Messaging = () => {
     const {chatDetails, selectedChat} = useContext<any>(ChatContext)
@@ -12,7 +12,7 @@ const Messaging = () => {
                 <MessagingBox/> :
                 selectedChat.chat === 'F' ?
                     <ProfileDetails/> :
-                    <ChannelDetails/>
+                    <RoomDetails/>
             }
         </>
     );

@@ -15,7 +15,7 @@ export default function ChatPage() {
                 direction={'row'}
             >
                 <SideBar/>
-                <Hide below={'md'}>
+                {/* <Hide below={'md'}>
                     <Flex
                         w={'75%'}
                         h={'100%'}
@@ -37,7 +37,7 @@ export default function ChatPage() {
                             <Text>No Chat Selected </Text>
                         </Flex>
                     </Flex>
-                </Hide>
+                </Hide> */}
             </Flex>
         </ChatProvider>
     )
