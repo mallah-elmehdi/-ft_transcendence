@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react"
-import { useColorModeValue, IconButton, HStack, Avatar, Text, } from '@chakra-ui/react';
+import { useColorModeValue,Button, IconButton, HStack, Avatar, Text, } from '@chakra-ui/react';
 import { AiOutlineUserAdd, AiOutlineUserDelete } from "react-icons/ai"
 import { BsClockHistory } from "react-icons/bs"
 import { CheckIcon } from "@chakra-ui/icons"
@@ -20,8 +20,6 @@ type Props = {
 function ChannelMemeber({ id, name, avatar, isAdmin, onMute, onBlock, setMember, isFriend }: Props) {
   const value = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
   const [hover, setHover] = useState<any>(false)
-  // const {data} = useContext<any>(ChatContext)
-  // const {friends} = data;
 
   const sendFriendReq = () => {
     console.log('send Fiend Req to user id : ', id)
@@ -32,7 +30,7 @@ function ChannelMemeber({ id, name, avatar, isAdmin, onMute, onBlock, setMember,
     <HStack
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      as={'button'}
+      // as={Button}
       p={5}
       alignItems={'center'}
       rounded={5}

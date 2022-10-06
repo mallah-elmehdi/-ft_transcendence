@@ -16,7 +16,7 @@ import { API } from "../constants"
 import ToggleMode from '../component/toggleMode';
 
 export default function SignInPage() {
-    const backEnd = API + '42'
+    const backEnd = API + '42/redirect'
 
     return (
         <>

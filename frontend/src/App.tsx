@@ -11,7 +11,6 @@ import ProfilePage from "./pages/ProfilePage";
 import PageNotFound from "./pages/PageNotFound";
 
 function App() {
-    // add user info in localStorage
     return (
         <ChakraProvider theme={theme} >
             <Center >
@@ -24,7 +23,7 @@ function App() {
                     <BrowserRouter>
                         <Routes>
                             <Route element={<Navbar />}>
-                                <Route path={'/'} element={<HomePage />} />
+                                <Route index element={<HomePage />} />
                                 <Route path={'/home'} element={<HomePage />} />
                                 <Route path={'/play'} element={<PlayPage />} />
                                 <Route path={'/chat'} element={<ChatPage />} />

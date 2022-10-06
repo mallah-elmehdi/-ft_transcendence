@@ -15,9 +15,9 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 type Props = {
     toggleNewMembers: () => void,
     toggleSettings: () => void,
+    isAdmin: boolean,
 }
-export default function MainRoomDetails({ toggleNewMembers, toggleSettings }: Props) {
-    const [isAdmin] = useState<any>(true);
+export default function MainRoomDetails({ toggleNewMembers, toggleSettings, isAdmin }: Props) {
     const { toggleDetails } = useContext<any>(ChatContext);
     const { data } = useContext<any>(ChatContext);
     const { selectedChat } = useContext<any>(ChatContext);
