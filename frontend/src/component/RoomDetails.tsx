@@ -6,6 +6,7 @@ import { ChatContext } from "../State/ChatProvider";
 
 function RoomDetails() {
     const [isAdmin, setIsAdmin] = useState<any>(true);
+    const [isOwner, setIsOwner] = useState<any>(true);
 
     const [newMembers, setNewMembers] = useState<any>(false)
     const { selectedChat } = useContext<any>(ChatContext);
@@ -23,22 +24,13 @@ function RoomDetails() {
 
     return (
         <>
-            {
-                settings ?
-                    <RoomSettings
-                        toggleSettings={toggleSettings}
-                    /> :
-                    newMembers ?
-                        <AddMemebers
-                            toggleNewMembers={toggleNewMembers}
-                            roomId={data.groups[searchIndex].id}
-                        />
-                        : <MainRoomDetails
-                            toggleNewMembers={toggleNewMembers}
-                            toggleSettings={toggleSettings}
-                            isAdmin={isAdmin}
-                        />
-            }
+            {settings ? (
+                <RoomSettings toggleSettings={toggleSettings} roomId={data.groups[searchIndex].id} />
+            ) : newMembers ? (
+                <AddMemebers toggleNewMembers={toggleNewMembers} roomId={data.groups[searchIndex].id} />
+            ) : (
+                <MainRoomDetails toggleNewMembers={toggleNewMembers} toggleSettings={toggleSettings} isAdmin={isAdmin} isOwner={isOwner} />
+            )}
         </>
     );
 }
