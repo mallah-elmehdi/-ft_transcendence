@@ -1,12 +1,13 @@
 import { UsersService } from './users.service';
 import { Request } from 'express';
-import { Observable } from 'rxjs';
 import { usernameDto } from './DTO/username.dto';
+import { CloudinaryService } from './clodinary/clodinary.service';
 export declare class UsersController {
     private readonly UsersService;
-    constructor(UsersService: UsersService);
+    private cloudinary;
+    constructor(UsersService: UsersService, cloudinary: CloudinaryService);
     getMe(req: Request): Promise<import(".prisma/client").User>;
     getUser(login: string): Promise<import(".prisma/client").User>;
-    UploadedFile(login: string, file: any): Observable<Object>;
+    uploadImageToCloudinary(file: any): Promise<import("cloudinary").UploadApiResponse | import("cloudinary").UploadApiErrorResponse>;
     setUsername(login: string, req: any, usernameDto: usernameDto): Promise<import(".prisma/client").User>;
 }

@@ -11,9 +11,10 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ChatModule } from './chat/chat.module';
+import { CloudinaryModule } from './users/clodinary/cloudinar.module';
 
 @Module({
-  imports: [AuthModule, HttpModule, ConfigModule.forRoot(), PrismaModule,
+  imports: [CloudinaryModule, AuthModule, HttpModule, ConfigModule.forRoot(), PrismaModule,
 	 ChatModule],
   controllers: [UsersController, chatController],
   providers: [UsersService],

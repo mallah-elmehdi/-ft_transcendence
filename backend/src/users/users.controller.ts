@@ -1,4 +1,4 @@
-import { Controller, Get, Redirect, Query, Param, Req, UseGuards, Post, UseInterceptors, UploadedFile, MaxFileSizeValidator, FileTypeValidator, ParseFilePipe, HttpCode, Body} from '@nestjs/common';
+import { Controller, Get, Redirect, Query, Param, Req, UseGuards, Post, UseInterceptors, UploadedFile, MaxFileSizeValidator, FileTypeValidator, ParseFilePipe, HttpCode, Body, Module, BadRequestException} from '@nestjs/common';
 import { UsersService } from './users.service';
 import {Request} from 'express';
 import { AuthGuard } from '@nestjs/passport';
@@ -7,12 +7,14 @@ import { FileInterceptor, MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Observable, of } from 'rxjs';
 import { usernameDto} from './DTO/username.dto'
+import { CloudinaryService } from './clodinary/clodinary.service';
+
 
 @Controller('user')
-@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
 export class UsersController {
 
-  constructor(private readonly UsersService: UsersService) {}
+  constructor(private readonly UsersService: UsersService, private cloudinary: CloudinaryService) {}
 
   @Get('me')
   @HttpCode(200)
@@ -25,26 +27,38 @@ export class UsersController {
   {
     return await this.UsersService.getUser(login);
   }
+  // async uploadImageToCloudinary(file: Express.Multer.File) 
   @Post(':login/avatar')
-  @UseInterceptors(FileInterceptor('avatar',  {
-    storage : diskStorage({ 
-      destination: './avatars',
-      filename: (req, file, cb) => {
-        const filename : string = req.params.login;
-        // console.log('filename', req.params.login);
-        const extension : string = '.' + file.originalname.split('.').pop();
-        // console.log('extension', `${filename}${extension}`);
-        console.log('file', file);
-        cb(null, `${filename}${extension}`)
-      }
-      })
-    }))
-  UploadedFile( @Param('login') login:string, @UploadedFile() file): Observable<Object> {
+  @UseInterceptors(FileInterceptor('avatar'))
+  async uploadImageToCloudinary(@UploadedFile() file) 
+  {
+    return await this.cloudinary.uploadImage(file).catch((err) => {
+      throw new BadRequestException(err);
+    });
+    ;
+    // .catch(() => {
+    //   throw new BadRequestException('Invalid file type.');
+    // }
+    // );
+//   @UseInterceptors(FileInterceptor('avatar',  {
+//     storage : diskStorage({ 
+//       destination: './avatars',
+//       filename: (req, file, cb) => {
+//         const filename : string = req.params.login;
+//         // console.log('filename', req.params.login);
+//         const extension : string = '.' + file.originalname.split('.').pop();
+//         // console.log('extension', `${filename}${extension}`);
+//         console.log('file', file);
+//         cb(null, `${filename}${extension}`)
+//       }
+//       })
+//     }))
+//   UploadedFile( @Param('login') login:string, @UploadedFile() file): Observable<Object> {
 
-    console.log('file', file);
-    // return file;
-    return of({ imagePath : file.path });
-    // return this.UsersService.uploadAvatar(login, file);
+//     console.log('file', file);
+//     // return file;
+//     return of({ imagePath : file.path });
+//     // return this.UsersService.uploadAvatar(login, file);
   
 }
 

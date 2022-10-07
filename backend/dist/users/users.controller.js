@@ -15,14 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
-const passport_1 = require("@nestjs/passport");
 const platform_express_1 = require("@nestjs/platform-express");
-const multer_1 = require("multer");
-const rxjs_1 = require("rxjs");
 const username_dto_1 = require("./DTO/username.dto");
+const clodinary_service_1 = require("./clodinary/clodinary.service");
 let UsersController = class UsersController {
-    constructor(UsersService) {
+    constructor(UsersService, cloudinary) {
         this.UsersService = UsersService;
+        this.cloudinary = cloudinary;
     }
     async getMe(req) {
         return await this.UsersService.getUser(req.user['userLogin']);
@@ -30,9 +29,11 @@ let UsersController = class UsersController {
     async getUser(login) {
         return await this.UsersService.getUser(login);
     }
-    UploadedFile(login, file) {
-        console.log('file', file);
-        return (0, rxjs_1.of)({ imagePath: file.path });
+    async uploadImageToCloudinary(file) {
+        return await this.cloudinary.uploadImage(file).catch((err) => {
+            throw new common_1.BadRequestException(err);
+        });
+        ;
     }
     async setUsername(login, req, usernameDto) {
         return await this.UsersService.setUsername(login, req.body.username);
@@ -55,23 +56,12 @@ __decorate([
 ], UsersController.prototype, "getUser", null);
 __decorate([
     (0, common_1.Post)(':login/avatar'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar', {
-        storage: (0, multer_1.diskStorage)({
-            destination: './avatars',
-            filename: (req, file, cb) => {
-                const filename = req.params.login;
-                const extension = '.' + file.originalname.split('.').pop();
-                console.log('file', file);
-                cb(null, `${filename}${extension}`);
-            }
-        })
-    })),
-    __param(0, (0, common_1.Param)('login')),
-    __param(1, (0, common_1.UploadedFile)()),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar')),
+    __param(0, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
-    __metadata("design:returntype", rxjs_1.Observable)
-], UsersController.prototype, "UploadedFile", null);
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "uploadImageToCloudinary", null);
 __decorate([
     (0, common_1.Post)('username/:login'),
     __param(0, (0, common_1.Param)('login')),
@@ -83,8 +73,7 @@ __decorate([
 ], UsersController.prototype, "setUsername", null);
 UsersController = __decorate([
     (0, common_1.Controller)('user'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
-    __metadata("design:paramtypes", [users_service_1.UsersService])
+    __metadata("design:paramtypes", [users_service_1.UsersService, clodinary_service_1.CloudinaryService])
 ], UsersController);
 exports.UsersController = UsersController;
 //# sourceMappingURL=users.controller.js.map
