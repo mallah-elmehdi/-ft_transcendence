@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useColorModeValue, Box, FormControl, FormLabel, HStack, Input, VStack, Text, Spacer, useDisclosure } from '@chakra-ui/react';
 import { MdDelete } from 'react-icons/md';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button } from '@chakra-ui/react';
+import { ChatContext } from '../State/ChatProvider';
 
 export default function DeleteRoom() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const value = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
+    const { setSelectedChat, setChatDetails } = useContext<any>(ChatContext);
+
+    const deleteRoom = () => {
+        console.log('DELETE ROOM');
+        onClose();
+        setSelectedChat(null);
+    };
 
     return (
-        <HStack as={'button'} _hover={{ bg: value }} w={'100%'} p={5} alignItems={'center'} onClick={onOpen}>
+        <HStack as={'button'} rounded={6} _hover={{ bg: value }} w={'100%'} p={4} alignItems={'center'} onClick={onOpen}>
             <MdDelete size={26} color={'#FF5C5C'} />
             <Text px={5} fontWeight={'bold'} color={'#FF5C5C'}>
                 Delete Room
@@ -26,10 +34,7 @@ export default function DeleteRoom() {
                             variant={'ghost'}
                             color="red"
                             mr={3}
-                            onClick={() => {
-                                console.log('DELETE ROOM')
-                                onClose();
-                            }}
+                            onClick={deleteRoom}
                         >
                             DELETE ROOM
                         </Button>

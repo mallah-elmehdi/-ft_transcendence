@@ -18,16 +18,7 @@ function ChangeAvatar({ callBack }: Props) {
     return (
         <Box>
             <Box w={120} h={120} position={'relative'} bg={'customPurple'} rounded={'50%'}>
-                <Avatar
-                    icon={<RiImageAddFill color={'white'} size={30} />}
-                    w={'100%'}
-                    h={'100%'}
-                    size={'xl'}
-                    position={'absolute'}
-                    src={img}
-                    bg={'customPurple'}
-                    onClick={() => file!.click()}
-                ></Avatar>
+                <Avatar icon={<RiImageAddFill color={'white'} size={30} />} w={'100%'} h={'100%'} size={'xl'} position={'absolute'} src={img} bg={'customPurple'} onClick={() => file!.click()} />
                 <input accept={'image/*'} style={{ display: 'none' }} ref={(f) => (file = f)} type={'file'} onChange={onImageChange} />
             </Box>
         </Box>
