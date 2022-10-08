@@ -45,7 +45,7 @@ import FacebookButton from '../component/FacebookButton';
 import InstagramButton from '../component/InstagramButton';
 import DiscordButton from '../component/DiscordButton';
 import io from 'socket.io-client';
-import Guard from '../api/guard';
+import Guard from '../api/userInfo';
 import { ProfileAvatar } from '../component/ProfileAvatar';
 import { Line } from '../component/Line';
 

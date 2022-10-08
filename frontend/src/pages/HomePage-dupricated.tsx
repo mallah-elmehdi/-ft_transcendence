@@ -10,7 +10,7 @@ import {
 // im
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import guard from '../api/guard';
+import guard from '../api/userInfo';
 
 export default function HomePage() {
 

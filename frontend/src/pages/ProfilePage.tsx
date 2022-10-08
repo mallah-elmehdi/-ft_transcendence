@@ -31,8 +31,8 @@ import { usePageTitle } from '../hooks/usePageTitle';
 // CONSTANTS
 import { pagesContent } from '../constants';
 
-// API
-import Guard from '../api/guard';
+// Context
+import { GlobalContext } from '../App';
 
 const ProfilePage = () => {
     // page title
@@ -55,26 +55,32 @@ const ProfilePage = () => {
     const [isSmallScreen] = useMediaQuery(`(min-width: ${theme.breakpoints.xl})`);
 
     // get the data
-    const userInfo = Guard();
+    const info = React.useContext(GlobalContext)?.userInfo[0];
 
     return (
         <Grid h="100%" templateColumns="repeat(12, 1fr)" gap={6}>
             <GridItem colSpan={profileInfo}>
                 <Card w="100%" position="relative">
                     <>
-                        <EditProfile avatar={userInfo?.user_avatar} login={userInfo?.user_name} />
+                        <EditProfile
+                            avatar={info?.user_avatar}
+                            login={info?.user_name}
+                            facebook={info?.facebook}
+                            discord={info?.discord}
+                            instagram={info?.instagram}
+                        />
                         <Stack spacing={5} alignItems="center">
                             <ProfileAvatar
-                                name={userInfo?.user_name}
-                                login={userInfo?.user_login}
-                                avatar={userInfo?.user_avatar}
-                                isOnline={userInfo?.online}
+                                name={info?.user_name}
+                                login={info?.user_login}
+                                avatar={info?.user_avatar}
+                                isOnline={info?.online}
                             />
 
                             <Line maxW="10rem" />
 
                             <HStack spacing={5} justifyContent="center">
-                                <ChakraLink isExternal href={'https://www.facebook.com/' + userInfo?.facebook}>
+                                <ChakraLink isExternal href={'https://www.facebook.com/' + info?.facebook}>
                                     <IconButton
                                         size="lg"
                                         aria-label="Facebook"
@@ -84,7 +90,7 @@ const ProfilePage = () => {
                                         icon={<FaFacebook />}
                                     />
                                 </ChakraLink>
-                                <ChakraLink isExternal href={'https://www.discord.com/' + userInfo?.discord}>
+                                <ChakraLink isExternal href={'https://www.discord.com/' + info?.discord}>
                                     <IconButton
                                         size="lg"
                                         aria-label="Discord"
@@ -94,7 +100,7 @@ const ProfilePage = () => {
                                         icon={<FaDiscord />}
                                     />
                                 </ChakraLink>
-                                <ChakraLink isExternal href={'https://www.instagram.com/' + userInfo?.instagram}>
+                                <ChakraLink isExternal href={'https://www.instagram.com/' + info?.instagram}>
                                     <IconButton
                                         size="lg"
                                         aria-label="Instagram"
@@ -120,9 +126,7 @@ const ProfilePage = () => {
                                 2-Factor Auth
                             </Button>
                             <Line maxW="10rem" />
-                            <StatusProfile
-                                rate={userInfo?.games_played === 0 ? 0 : Math.round((userInfo?.games_won / userInfo?.games_played) * 100)}
-                            />
+                            <StatusProfile rate={info?.games_played === 0 ? 0 : Math.round((info?.games_won / info?.games_played) * 100)} />
                             <Line maxW="10rem" />
                             <Button
                                 bg="red"
@@ -152,10 +156,10 @@ const ProfilePage = () => {
                             <Heading fontSize="2xl">Status</Heading>
                             <Line maxW="7rem" />
                             <StatusTable
-                                played={userInfo?.games_played}
-                                wins={userInfo?.games_won}
-                                losses={userInfo?.games_lost}
-                                draws={userInfo?.games_drawn}
+                                played={info?.games_played}
+                                wins={info?.games_won}
+                                losses={info?.games_lost}
+                                draws={info?.games_drawn}
                             />
                         </Stack>
 
@@ -163,7 +167,7 @@ const ProfilePage = () => {
                             <Heading fontSize="2xl">Matches History</Heading>
                             <Line maxW="7rem" />
                             <Stack maxH="25rem" overflow="auto" w="100%" alignItems="center">
-                                <MatchesHistory history={[]} login={userInfo?.user_login} avatar={userInfo?.user_avatar} />
+                                <MatchesHistory history={[]} login={info?.user_login} avatar={info?.user_avatar} />
                             </Stack>
                         </Stack>
                     </Stack>

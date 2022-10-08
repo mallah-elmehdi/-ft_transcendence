@@ -13,27 +13,40 @@ import PageNotFound from './pages/PageNotFound';
 
 // CONSTANTS
 import { pagesContent } from './constants';
+import UserInfo from './api/userInfo';
+import { Loading } from './component/Loading';
+
+// // context
+export const GlobalContext = React.createContext<any>(undefined);
 
 function App() {
+    // get the data
+    const [info, setInfo] = UserInfo();
+    const [loader, setLoader] = React.useState(false);
+
     return (
-        <ChakraProvider theme={theme}>
-            <Center>
-                <Box p={[0, 10, 10, 10]} h={'99vh'} w={['100%', '100%', '100%', '100%', '100%', '95%']} maxW={'2000px'}>
-                    <BrowserRouter>
-                        <Routes>
-                            <Route element={<Navbar />}>
-                                <Route path={pagesContent.home.url} element={<HomePage />} />
-                                <Route path={pagesContent.play.url} element={<PlayPage />} />
-                                <Route path={pagesContent.chat.url} element={<ChatPage />} />
-                                <Route path={pagesContent.profile.url} element={<ProfilePage />} />
-                            </Route>
-                            <Route path="*" element={<PageNotFound />} />
-                            <Route path={pagesContent.login.url} element={<SignInPage />} />
-                        </Routes>
-                    </BrowserRouter>
-                </Box>
-            </Center>
-        </ChakraProvider>
+        <GlobalContext.Provider value={{ userInfo: [info, setInfo], setLoader: setLoader }}>
+            <ChakraProvider theme={theme}>
+                <Center>
+                    {loader && <Loading />}
+
+                    <Box p={[0, 10, 10, 10]} h={'99vh'} w={['100%', '100%', '100%', '100%', '100%', '95%']} maxW={'2000px'}>
+                        <BrowserRouter>
+                            <Routes>
+                                <Route element={<Navbar />}>
+                                    <Route path={pagesContent.home.url} element={<HomePage />} />
+                                    <Route path={pagesContent.play.url} element={<PlayPage />} />
+                                    <Route path={pagesContent.chat.url} element={<ChatPage />} />
+                                    <Route path={pagesContent.profile.url} element={<ProfilePage />} />
+                                </Route>
+                                <Route path="*" element={<PageNotFound />} />
+                                <Route path={pagesContent.login.url} element={<SignInPage />} />
+                            </Routes>
+                        </BrowserRouter>
+                    </Box>
+                </Center>
+            </ChakraProvider>
+        </GlobalContext.Provider>
     );
 }
 

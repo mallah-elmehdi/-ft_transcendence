@@ -1,4 +1,4 @@
-export const API = 'http://localhost:3005/'
+export const API = 'http://localhost:3001/'
 
 export const pagesContent = {
     home: {

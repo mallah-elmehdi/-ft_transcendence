@@ -20,7 +20,7 @@ import ToggleMode from './toggleMode';
 import Logo from './logo';
 
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import Guard from '../api/guard';
+import Guard from '../api/userInfo';
 
 export default function Navbar() {
     // const { colorMode, toggleColorMode } = useColorMode();
