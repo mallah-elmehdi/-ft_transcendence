@@ -1,14 +1,23 @@
-<html>
+<!doctype html>
+<html class="no-js" lang="">
 
 <head>
 	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Maro</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-<h1>Maro Kayd7aak glk
-</h1>
+	<div>
+		<ul id="messages"></ul>
+	</div>
 
+	<div>
+		<input id="message" type="text" />
+		<button onclick="newMessage()">Submit</button>
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+	<script src="./chat-socket.js"></script>
 </body>
+
 </html>
