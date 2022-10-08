@@ -7,11 +7,14 @@ import SignInPage from './pages/SignInPage';
 import HomePage from './pages/HomePage';
 import PlayPage from './pages/PlayPage';
 import ChatPage from './pages/ChatPage';
+// import ProfilePage from './pages/ProfilePage-dup';
 import ProfilePage from './pages/ProfilePage';
 import PageNotFound from './pages/PageNotFound';
 
+// CONSTANTS
+import { pagesContent } from './constants';
+
 function App() {
-    // add user info in localStorage
     return (
         <ChakraProvider theme={theme}>
             <Center>
@@ -19,14 +22,13 @@ function App() {
                     <BrowserRouter>
                         <Routes>
                             <Route element={<Navbar />}>
-                                <Route path={'/'} element={<HomePage />} />
-                                <Route path={'/home'} element={<HomePage />} />
-                                <Route path={'/play'} element={<PlayPage />} />
-                                <Route path={'/chat'} element={<ChatPage />} />
-                                <Route path={'/profile'} element={<ProfilePage />} />
+                                <Route path={pagesContent.home.url} element={<HomePage />} />
+                                <Route path={pagesContent.play.url} element={<PlayPage />} />
+                                <Route path={pagesContent.chat.url} element={<ChatPage />} />
+                                <Route path={pagesContent.profile.url} element={<ProfilePage />} />
                             </Route>
                             <Route path="*" element={<PageNotFound />} />
-                            <Route path={'/login'} element={<SignInPage />} />
+                            <Route path={pagesContent.login.url} element={<SignInPage />} />
                         </Routes>
                     </BrowserRouter>
                 </Box>

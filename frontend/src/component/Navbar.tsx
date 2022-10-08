@@ -36,7 +36,7 @@ export default function Navbar() {
 
 
     return (
-        <>
+        <Box p={5}>
             <Flex mb={5} px={10} justifyContent={'right'} alignItems={'center'} overflow={'hideen'}>
                 <Show above="md">
                     <Link to={'/home'}>
@@ -114,6 +114,6 @@ export default function Navbar() {
                 <ToggleMode />
             </Flex>
             <Outlet  />
-        </>
+        </Box>
     );
 }
