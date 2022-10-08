@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Center, ChakraProvider } from "@chakra-ui/react";
 import theme from "./style/theme";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./component/Navbar";
 import SignInPage from "./pages/SignInPage";
 import HomePage from "./pages/HomePage";
