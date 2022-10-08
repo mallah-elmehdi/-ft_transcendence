@@ -6,7 +6,7 @@ import { Express } from 'express'
 import { FileInterceptor, MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Observable, of } from 'rxjs';
-import { usernameDto} from './DTO/username.dto'
+import { usernameDto, userDataDto} from './DTO/username.dto'
 import { CloudinaryService } from './clodinary/clodinary.service';
 
 
@@ -27,8 +27,9 @@ export class UsersController {
   {
     return await this.UsersService.getUser(login);
   }
-  // async uploadImageToCloudinary(file: Express.Multer.File) 
+  
   @Post(':login/avatar')
+  @HttpCode(201)
   @UseInterceptors(FileInterceptor('avatar'))
   async uploadImageToCloudinary(@UploadedFile() file) 
   {
@@ -37,35 +38,56 @@ export class UsersController {
     });
     ;
     // .catch(() => {
-    //   throw new BadRequestException('Invalid file type.');
-    // }
-    // );
-//   @UseInterceptors(FileInterceptor('avatar',  {
-//     storage : diskStorage({ 
-//       destination: './avatars',
-//       filename: (req, file, cb) => {
-//         const filename : string = req.params.login;
-//         // console.log('filename', req.params.login);
-//         const extension : string = '.' + file.originalname.split('.').pop();
-//         // console.log('extension', `${filename}${extension}`);
-//         console.log('file', file);
-//         cb(null, `${filename}${extension}`)
-//       }
-//       })
-//     }))
-//   UploadedFile( @Param('login') login:string, @UploadedFile() file): Observable<Object> {
-
-//     console.log('file', file);
+      //   throw new BadRequestException('Invalid file type.');
+      // }
+      // );
+      //   @UseInterceptors(FileInterceptor('avatar',  {
+        //     storage : diskStorage({ 
+          //       destination: './avatars',
+          //       filename: (req, file, cb) => {
+            //         const filename : string = req.params.login;
+            //         // console.log('filename', req.params.login);
+            //         const extension : string = '.' + file.originalname.split('.').pop();
+            //         // console.log('extension', `${filename}${extension}`);
+            //         console.log('file', file);
+            //         cb(null, `${filename}${extension}`)
+            //       }
+            //       })
+            //     }))
+            //   UploadedFile( @Param('login') login:string, @UploadedFile() file): Observable<Object> {
+              
+              //     console.log('file', file);
 //     // return file;
 //     return of({ imagePath : file.path });
 //     // return this.UsersService.uploadAvatar(login, file);
-  
+
 }
 
   @Post('username/:login')
+  @HttpCode(201)
   async setUsername(@Param('login') login: string, @Req() req, @Body() usernameDto : usernameDto)
   {
     return await this.UsersService.setUsername(login, req.body.username);
+  }
+  @Post('update/:login')
+  @HttpCode(201)
+  @UseInterceptors(FileInterceptor('avatar'))
+  async setData(@Param('login') login: string, @Req() req, @UploadedFile() file, @Body() userDataDto : userDataDto)
+  {
+    // if (file)
+    //   console.log("file exceet")
+    // else
+    // console.log("file not")
+    if (file)
+      {
+        const cloud =  await this.cloudinary.uploadImage(file)
+        if (cloud)
+        {
+          userDataDto.user_avatar = cloud['url']
+        }
+      }
+      
+    return await this.UsersService.updateUserData(login, userDataDto);
   }
     
 }

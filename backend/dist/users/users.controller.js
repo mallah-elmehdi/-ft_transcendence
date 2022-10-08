@@ -38,6 +38,15 @@ let UsersController = class UsersController {
     async setUsername(login, req, usernameDto) {
         return await this.UsersService.setUsername(login, req.body.username);
     }
+    async setData(login, req, file, userDataDto) {
+        if (file) {
+            const cloud = await this.cloudinary.uploadImage(file);
+            if (cloud) {
+                userDataDto.user_avatar = cloud['url'];
+            }
+        }
+        return await this.UsersService.updateUserData(login, userDataDto);
+    }
 };
 __decorate([
     (0, common_1.Get)('me'),
@@ -56,6 +65,7 @@ __decorate([
 ], UsersController.prototype, "getUser", null);
 __decorate([
     (0, common_1.Post)(':login/avatar'),
+    (0, common_1.HttpCode)(201),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar')),
     __param(0, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
@@ -64,6 +74,7 @@ __decorate([
 ], UsersController.prototype, "uploadImageToCloudinary", null);
 __decorate([
     (0, common_1.Post)('username/:login'),
+    (0, common_1.HttpCode)(201),
     __param(0, (0, common_1.Param)('login')),
     __param(1, (0, common_1.Req)()),
     __param(2, (0, common_1.Body)()),
@@ -71,6 +82,18 @@ __decorate([
     __metadata("design:paramtypes", [String, Object, username_dto_1.usernameDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "setUsername", null);
+__decorate([
+    (0, common_1.Post)('update/:login'),
+    (0, common_1.HttpCode)(201),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar')),
+    __param(0, (0, common_1.Param)('login')),
+    __param(1, (0, common_1.Req)()),
+    __param(2, (0, common_1.UploadedFile)()),
+    __param(3, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object, Object, username_dto_1.userDataDto]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "setData", null);
 UsersController = __decorate([
     (0, common_1.Controller)('user'),
     __metadata("design:paramtypes", [users_service_1.UsersService, clodinary_service_1.CloudinaryService])

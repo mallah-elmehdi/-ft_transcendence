@@ -1,4 +1,5 @@
  import {IsString, Max, Min, Length} from 'class-validator'
+import { Multer } from 'multer';
 
  export class usernameDto {
 
@@ -6,3 +7,15 @@
  	@IsString()
  	username: string;
  }
+ export class userDataDto {
+	@IsString()
+	user_avatar? : string;
+	@IsString()
+	user_name?: string;
+	@IsString()
+	facebook?: string;
+	@IsString()
+	discord?: string;
+	@IsString()
+ 	instagram?: string;
+ }	
