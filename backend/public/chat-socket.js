@@ -1,4 +1,3 @@
-const socket = io("http://localhost:3005")
 
 const message = document.getElementById("message");
 const messages = document.getElementById("messages");
@@ -6,11 +5,12 @@ const messages = document.getElementById("messages");
  
 const newMessage = () => 
 {
-	socket.emit('message', {data: message.value});
+	console.log('msg value ', message.value)
+	socket.emit('msgToServer', {data: message.value});
 }
 
 
-socket.on('msgToServer',({data}) => {
+socket.on('msgToClient',({data}) => {
 	handleNewMessage(data);
 })
 
