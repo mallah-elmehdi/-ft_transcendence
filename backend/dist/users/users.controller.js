@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
+const passport_1 = require("@nestjs/passport");
 const platform_express_1 = require("@nestjs/platform-express");
 const username_dto_1 = require("./DTO/username.dto");
 const clodinary_service_1 = require("./clodinary/clodinary.service");
@@ -96,6 +97,7 @@ __decorate([
 ], UsersController.prototype, "setData", null);
 UsersController = __decorate([
     (0, common_1.Controller)('user'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __metadata("design:paramtypes", [users_service_1.UsersService, clodinary_service_1.CloudinaryService])
 ], UsersController);
 exports.UsersController = UsersController;
