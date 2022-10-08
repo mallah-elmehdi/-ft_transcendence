@@ -35,11 +35,6 @@ const ChatTabs = () => {
 const SideBar = () => {
     const { selectedChat } = useContext<any>(ChatContext);
     const { newChannel } = useContext<any>(ChatContext);
-    const { setSelectedChat, setChatDetails } = useContext<any>(ChatContext);
-    useEffect(() => {
-        setSelectedChat({ chat: 'G', id: '1' });
-        setChatDetails(true);
-    }, []);
 
     return (
         <>
@@ -51,7 +46,8 @@ const SideBar = () => {
                 direction={'column'}
                 alignItems={'center'}
                 p={5}
-                overflow={'auto'}
+                // overflow={'auto'}
+                // h='100%'
             >
                 {newChannel ? <NewChannel /> : !selectedChat ? <ChatTabs /> : <Messaging />}
             </Flex>

@@ -37,7 +37,7 @@ function NewChannel() {
             </HStack>
             <VStack w={'100%'} h={'100%'} px={5}>
                 <Box my={50}>
-                    <ChangeAvatar callBack={setImage}/>
+                    <ChangeAvatar callBack={setImage} tooltip={'add room avatar'}/>
                 </Box>
                 <FormControl>
                     <FormLabel>Room name</FormLabel>
