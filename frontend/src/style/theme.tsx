@@ -20,6 +20,7 @@ const colors = {
 }
 
 const config = {
+    initialColorMode : 'dark'
 }
 
 const Card = {
