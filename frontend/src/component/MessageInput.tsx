@@ -2,20 +2,18 @@ import React, { useContext, useEffect } from "react";
 import { HStack, Input, useColorModeValue } from "@chakra-ui/react";
 import { IoSend } from "react-icons/io5";
 import { ChatContext } from "../State/ChatProvider";
-import { API } from "../constants";
-import io from "socket.io-client";
 
 const MessageInput = () => {
   const { typingMessage, setTypingMessage } = useContext<any>(ChatContext);
   const msgInputBg = useColorModeValue("white", "rgb(33,33,33)");
   const { setMessages } = useContext<any>(ChatContext);
-  //   const {  socket } = useContext<any>(ChatContext);
+    const {  socket } = useContext<any>(ChatContext);
   // const socket = io(API + "dm", { withCredentials: true, });
 
   function sendMessageHandler() {
     if (typingMessage.trim()) {
       console.log({ isSender: true, content: typingMessage });
-        // socket.emit("msgToServer", { isSender: true, content: typingMessage });
+        socket.emit("msgToServer", { isSender: true, content: typingMessage });
 
       //   setMessages((messages: any) => {
       //     return [...messages, { isSender: true, content: typingMessage }];
@@ -25,7 +23,7 @@ const MessageInput = () => {
   }
 
   useEffect(() => {
-    // socket.on("msgToClient", data => {
+    // socket.on("msgToClient", (data:any) => {
     //     console.log('msgToClient', data);
     // } )
     const keyDownHandler = (event: any) => {

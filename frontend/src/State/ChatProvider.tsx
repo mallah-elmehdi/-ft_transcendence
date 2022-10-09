@@ -1,6 +1,6 @@
 import React, { useState, createContext } from 'react';
 import { API } from "../constants";
-import io from "socket.io-client";
+import socketIOClient from "socket.io-client";
 
 // @ts-ignore
 export const ChatContext = createContext();
@@ -10,7 +10,7 @@ type Props = {
 }
 
 const ChatProvider = ({ children }: Props) => {
-//   const socket = io(API + "dm");
+  const socket = socketIOClient(API +"dm");
     const [newChannel, setNewChannel] = useState(false);
     const toggleNewChannel = () => {
         setNewChannel(!newChannel)
@@ -85,7 +85,7 @@ const ChatProvider = ({ children }: Props) => {
                 toggleOffSelectedChat: toggleOffSelectedChat,
                 toggleNewChannel: toggleNewChannel,
                 newChannel: newChannel,
-                // socket: socket,
+                socket: socket,
             }}
         >
             {children}
