@@ -6,7 +6,6 @@ import Messaging from "../component/Messaging";
 import WideMessaging from "../component/WideMessaging";
 
 export default function ChatPage() {
-//   const { selectedChat } = useContext<any>(ChatContext);
   return (
     <ChatProvider>
       <Flex
@@ -15,33 +14,9 @@ export default function ChatPage() {
         mx={{ base: 0, md: 0, lg: 0 }}
         pb={10}
         direction={"row"}
+        justifyContent={'center'}
       >
         <SideBar />
-        <Hide below={"md"}>
-          <Flex
-            w={"100%"}
-            h={"100%"}
-            _light={{ boxShadow: "md" }}
-            _dark={{ boxShadow: "dark-lg" }}
-            rounded="30px"
-            justifyContent={"center"}
-            alignItems={"center"}
-            direction={"column"}
-          >
-            <Flex
-              h={"100%"}
-              w={"100%"}
-              pt={10}
-              direction={["column", "column", "column", "column", "row"]}
-              alignItems={"center"}
-              justifyContent={"center"}
-            >
-                <WideMessaging/>
-
-              {/* {selectedChat ? <Messaging /> : <Text>No Chat Selected </Text>} */}
-            </Flex>
-          </Flex>
-        </Hide>
       </Flex>
     </ChatProvider>
   );
