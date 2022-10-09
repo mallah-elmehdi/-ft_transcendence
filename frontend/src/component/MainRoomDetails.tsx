@@ -47,7 +47,7 @@ export default function MainRoomDetails({ toggleNewMembers, toggleSettings, isAd
     });
 
     return (
-        <VStack overflow={'auto'} position={'relative'} h={'100%'}>
+        <VStack overflow={'auto'} w='100%' position={'relative'} h={'100%'}>
             <HStack overflow={'visible'} px={5} w={'100%'} m={1} spacing={8}>
                 <Box as={'button'}>
                     <ArrowBackIcon m={0} p={0} h={30} fontSize={25} onClick={toggleDetails} />

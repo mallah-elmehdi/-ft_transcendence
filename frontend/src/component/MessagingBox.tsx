@@ -29,7 +29,6 @@ function MessagingBox() {
         };
     }, []);
 
-    console.log('Enter MessagingBox')
     const chatBg = useColorModeValue('red', 'green')
     return (
         <VStack h={'100%'} w={'100%'} overflow={'auto'}>

@@ -16,8 +16,7 @@ export default function AddMemebers({ toggleNewMembers, roomId }: Props) {
   const [selectedFriends, setSelectedFriends] = useState<any>([]);
 
   function addNewMembersHandler() {
-    console.log(roomId)
-    console.log(selectedFriends)
+    console.log(roomId, selectedFriends)
   }
 
   function isMember(id: any) {

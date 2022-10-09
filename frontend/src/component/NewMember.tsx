@@ -12,7 +12,7 @@ export default function NewMember({ id, name, avatar, addMe }: Props) {
     const value = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
     const [isChecked, setIsChecked] = useState<any>(false)
     const addFriendHandler = () => {
-        console.log('addFriendHandler', isChecked)
+        // console.log('addFriendHandler', isChecked)
 
         setIsChecked(!isChecked)
         if (isChecked) {

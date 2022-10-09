@@ -12,7 +12,7 @@ function RoomDetails() {
     const { selectedChat } = useContext<any>(ChatContext);
     const { data } = useContext<any>(ChatContext);
     let searchIndex = data.groups.findIndex((id: any) => selectedChat.id === id.id);
-    const [settings, setSettings] = useState<any>(true)
+    const [settings, setSettings] = useState<any>(false)
 
     const toggleNewMembers = () => {
         setNewMembers(!newMembers)
