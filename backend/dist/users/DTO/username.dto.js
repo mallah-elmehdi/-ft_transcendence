@@ -21,5 +21,25 @@ __decorate([
 exports.usernameDto = usernameDto;
 class userDataDto {
 }
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], userDataDto.prototype, "user_avatar", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], userDataDto.prototype, "user_name", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], userDataDto.prototype, "facebook", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], userDataDto.prototype, "discord", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], userDataDto.prototype, "instagram", void 0);
 exports.userDataDto = userDataDto;
 //# sourceMappingURL=username.dto.js.map

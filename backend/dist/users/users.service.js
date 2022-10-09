@@ -24,7 +24,6 @@ let UsersService = class UsersService {
                     user_login: login,
                 },
             });
-            console.log('found here: ', found);
             if (!found) {
                 return null;
             }
@@ -52,6 +51,16 @@ let UsersService = class UsersService {
             },
             data: userDataDto,
         });
+    }
+    async GetMatchHistory(login) {
+        const history = await this.prisma.user.findMany({
+            where: {
+                user_login: login,
+            },
+            include: { match_history: true, },
+        });
+        console.log("here is aymaatou history :", history);
+        return history;
     }
 };
 UsersService = __decorate([

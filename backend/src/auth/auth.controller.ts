@@ -59,8 +59,7 @@ export class AuthController {
   async TwoFactor(@Req() req: Request) {
     const user = req.user;
     var result = await this.AuthService.generate2fa(user['userLogin']);
-      return result;
-   
+      return result;  
   }
 
   @Post('2fa')
@@ -78,7 +77,3 @@ export class AuthController {
     return {message: 'Logged out'};
   }
 }
-
-
-
-

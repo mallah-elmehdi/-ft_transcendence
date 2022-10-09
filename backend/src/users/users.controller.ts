@@ -11,7 +11,7 @@ import { CloudinaryService } from './clodinary/clodinary.service';
 
 
 @Controller('user')
-@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
 export class UsersController {
 
   constructor(private readonly UsersService: UsersService, private cloudinary: CloudinaryService) {}
@@ -22,8 +22,16 @@ export class UsersController {
   {
     return await this.UsersService.getUser(req.user['userLogin']);
   }
-  @Get(':login')
-  async getUser(@Param('login') login:string)
+  @Get("match")
+  @HttpCode(200)
+  async getMachHistory()
+  {
+    // console.log("HHHHHHHHHHH")
+    return await this.UsersService.GetMatchHistory("aymaatou");
+    // console.log(value)
+  }
+  @Get(':id')
+  async getUser(@Param('id') login:number)
   {
     return await this.UsersService.getUser(login);
   }
@@ -74,10 +82,6 @@ export class UsersController {
   @UseInterceptors(FileInterceptor('avatar'))
   async setData(@Param('login') login: string, @Req() req, @UploadedFile() file, @Body() userDataDto : userDataDto)
   {
-    // if (file)
-    //   console.log("file exceet")
-    // else
-    // console.log("file not")
     if (file)
       {
         const cloud =  await this.cloudinary.uploadImage(file)
@@ -89,6 +93,6 @@ export class UsersController {
       
     return await this.UsersService.updateUserData(login, userDataDto);
   }
-    
+
 }
 

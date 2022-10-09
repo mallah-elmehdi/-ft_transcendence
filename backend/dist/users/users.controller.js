@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
-const passport_1 = require("@nestjs/passport");
 const platform_express_1 = require("@nestjs/platform-express");
 const username_dto_1 = require("./DTO/username.dto");
 const clodinary_service_1 = require("./clodinary/clodinary.service");
@@ -27,8 +26,8 @@ let UsersController = class UsersController {
     async getMe(req) {
         return await this.UsersService.getUser(req.user['userLogin']);
     }
-    async getUser(login) {
-        return await this.UsersService.getUser(login);
+    async getMachHistory() {
+        return await this.UsersService.GetMatchHistory("aymaatou");
     }
     async uploadImageToCloudinary(file) {
         return await this.cloudinary.uploadImage(file).catch((err) => {
@@ -58,12 +57,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getMe", null);
 __decorate([
-    (0, common_1.Get)(':login'),
-    __param(0, (0, common_1.Param)('login')),
+    (0, common_1.Get)("match"),
+    (0, common_1.HttpCode)(200),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], UsersController.prototype, "getUser", null);
+], UsersController.prototype, "getMachHistory", null);
 __decorate([
     (0, common_1.Post)(':login/avatar'),
     (0, common_1.HttpCode)(201),
@@ -97,7 +96,6 @@ __decorate([
 ], UsersController.prototype, "setData", null);
 UsersController = __decorate([
     (0, common_1.Controller)('user'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __metadata("design:paramtypes", [users_service_1.UsersService, clodinary_service_1.CloudinaryService])
 ], UsersController);
 exports.UsersController = UsersController;

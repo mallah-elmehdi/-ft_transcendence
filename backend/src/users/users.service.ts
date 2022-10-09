@@ -5,18 +5,18 @@ import { userDataDto} from './DTO/username.dto'
 @Injectable()
 export class UsersService {
 
-    constructor(private readonly prisma : PrismaService, userDataDto) {}
+    constructor(private readonly prisma : PrismaService) {}
 
-  async getUser(login : string)
+  async getUser(login : number)
   {
       console.log('login', login);
        try {
       const found = await this.prisma.user.findUnique({
         where: {
-          user_login: login,
+          user_id: login,
         },
       }); 
-      console.log('found here: ', found);   
+      // console.log('found here: ', found);   
       if (!found) {
         return null;
       }
@@ -47,5 +47,19 @@ export class UsersService {
       },
       data: userDataDto,
     });
+  }
+  async GetMatchHistory(login: string)
+  {
+    const history = await this.prisma.user.findMany({
+      where: {
+        user_login: login,
+        // include: {
+        //   categories: true,
+        // },
+      },
+        include: { match_history: true,},
+    });
+    console.log("here is aymaatou history :", history) 
+    return history
   }
 }
