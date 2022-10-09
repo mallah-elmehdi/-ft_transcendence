@@ -1,0 +1,67 @@
+import { Box, chakra, Flex, Icon, ScaleFade } from '@chakra-ui/react';
+import React from 'react';
+import { BsLightningFill } from 'react-icons/bs';
+import { IoMdCheckmarkCircle } from 'react-icons/io';
+import { GlobalContext } from '../State/GlobalProvider';
+
+interface Props {
+    message: string;
+    type: string;
+}
+
+export const AlertCompo = ({ message, type }: Props) => {
+    // context
+    const { setNotif } = React.useContext<any>(GlobalContext);
+
+    // clear the notif tate
+    React.useEffect(() => {
+        const timer = setTimeout(() => {
+            setNotif({
+                exist: false,
+                type: '',
+                message: '',
+            });
+        }, 3000);
+        return () => clearTimeout(timer);
+    }, []);
+
+    return (
+        <Box zIndex={1000000} position="fixed" top="0.3rem" right="50%" transform="translate(50%,0)">
+            <ScaleFade initialScale={0.9} in={true}>
+                <Flex
+                    maxW="sm"
+                    w="full"
+                    mx="auto"
+                    bg="white"
+                    _dark={{
+                        bg: 'gray.800',
+                    }}
+                    shadow="md"
+                    rounded="lg"
+                    overflow="hidden"
+                >
+                    <Flex justifyContent="center" alignItems="center" w={12} bg={type === 'Error' ? 'red' : 'green'}>
+                        <Icon as={type === 'Error' ? BsLightningFill : IoMdCheckmarkCircle} color="white" boxSize={6} />
+                    </Flex>
+
+                    <Box mx={-3} py={2} px={4}>
+                        <Box mx={3}>
+                            <chakra.span color={type === 'Error' ? 'red' : 'green'} fontWeight="bold">
+                                {type}
+                            </chakra.span>
+                            <chakra.p
+                                color="gray.600"
+                                _dark={{
+                                    color: 'gray.200',
+                                }}
+                                fontSize="sm"
+                            >
+                                {message}
+                            </chakra.p>
+                        </Box>
+                    </Box>
+                </Flex>
+            </ScaleFade>
+        </Box>
+    );
+};

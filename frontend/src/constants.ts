@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 export const API = 'http://10.11.10.3:3001/'
+=======
+export const API = 'http://localhost:3001/';
+>>>>>>> df148dbddf614080e464746f61cc0fe49fcf821c
 
 export const pagesContent = {
     home: {
@@ -22,3 +26,18 @@ export const pagesContent = {
         title: 'PonGame | Play',
     },
 };
+
+export const tabs = [
+    {
+        url: '/',
+        title: 'Home',
+    },
+    {
+        url: '/profile',
+        title: 'Profile',
+    },
+    {
+        url: '/chat',
+        title: 'Chat',
+    },
+];

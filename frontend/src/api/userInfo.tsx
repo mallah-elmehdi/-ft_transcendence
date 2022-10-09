@@ -1,24 +1,33 @@
 import axios from 'axios';
 import React from 'react';
-import { API } from '../constants';
+import { useNavigate } from 'react-router-dom';
+import { API, pagesContent } from '../constants';
+import { GlobalContext } from '../State/GlobalProvider';
 
 const UserInfo = () => {
     // general
     const backEnd = API + 'user/me';
-    const [info, setInfo] = React.useState<any>(null);
+    const { setUserInfo, setLoader } = React.useContext<any>(GlobalContext);
 
-    // CORS
-    axios.defaults.withCredentials = true;
-
+    const navigate = useNavigate();
     // api call
     React.useEffect(() => {
+        // setloader
+        setLoader(true);
+        // CORS
+        axios.defaults.withCredentials = true;
         axios
             .get(backEnd)
-            .then((response) => setInfo(response.data))
-            .catch((error) => setInfo(null));
-    }, [backEnd]);
-
-    return [info, setInfo];
+            .then((response) => {
+                setUserInfo(response?.data);
+                window.localStorage.setItem('isSignedIn', 'true');
+            })
+            .catch((error) => {
+                navigate(pagesContent.login.url);
+                window.localStorage.setItem('isSignedIn', 'false');
+            })
+            .finally(() => setLoader(false));
+    }, []);
 };
 
 export default UserInfo;
