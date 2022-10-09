@@ -53,6 +53,22 @@ let UsersService = class UsersService {
             data: userDataDto,
         });
     }
+    async setUserState(login, state) {
+        console.log(`${login} userState: ${state}`);
+        try {
+            const userOnline = await this.prisma.user.update({
+                where: {
+                    user_login: login
+                },
+                data: {
+                    online: state
+                }
+            });
+        }
+        catch (err) {
+            console.log('error in setUserState ', err);
+        }
+    }
 };
 UsersService = __decorate([
     (0, common_1.Injectable)(),

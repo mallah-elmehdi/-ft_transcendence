@@ -4,7 +4,7 @@ export declare class ChatGateway implements OnGatewayInit, OnGatewayConnection, 
     private logger;
     server: Server;
     afterInit(server: any): void;
-    handleConnection(client: any, ...args: any[]): void;
+    handleConnection(client: Socket, ...args: any[]): void;
     handleDisconnect(client: any): void;
-    handleMessage(client: Socket, payload: any): void;
+    handleMessage(client: Socket, payload: string): void;
 }

@@ -1,4 +1,4 @@
-
+var socket = io('http://10.11.10.3:3001/dm');
 const message = document.getElementById("message");
 const messages = document.getElementById("messages");
 
@@ -11,18 +11,5 @@ const newMessage = () =>
 
 
 socket.on('msgToClient',({data}) => {
-	handleNewMessage(data);
+	console.log(data);
 })
-
-
-const buildNewMessage = (msg) =>
-{
-	const li = document.createElement('li');
-	li.appendChild(document.createTextNode(msg));
-	return li;
-}
-
-const handleNewMessage = (msg) =>
-{
-	messages.appendChild(buildNewMessage(msg));
-}
