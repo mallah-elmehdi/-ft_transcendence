@@ -44,7 +44,7 @@ __decorate([
 ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ namespace: 'dm', cors: {
             origin: process.env.CLIENT_URL,
-            methods: ['GET', 'POST'],
+            methods: ['POST', 'GET'],
             credentials: true
         } })
 ], ChatGateway);

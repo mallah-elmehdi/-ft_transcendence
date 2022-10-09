@@ -50,7 +50,13 @@ let UsersService = class UsersService {
             where: {
                 user_login: login,
             },
-            data: userDataDto,
+            data: {
+                user_avatar: userDataDto.user_avatar,
+                user_name: userDataDto.user_name,
+                facebook: userDataDto.facebook,
+                discord: userDataDto.discord,
+                instagram: userDataDto.instagram,
+            },
         });
     }
     async setUserState(login, state) {

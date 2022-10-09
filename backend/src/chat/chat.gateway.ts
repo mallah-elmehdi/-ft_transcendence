@@ -7,7 +7,7 @@ import {Socket, Server} from 'socket.io';
 
 @WebSocketGateway({namespace:'dm', cors: {
 	origin: process.env.CLIENT_URL,
-	methods: ['GET', 'POST'],
+	methods: ['POST', 'GET'],
 	credentials: true
 }})
 export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect { 
@@ -53,6 +53,4 @@ export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatew
 //@SubscribeMessage('connection') = listen to an event named connection
  //socket.on = receive
  //socket.emit = send
- //socket.broadcast.emit = send to everyone except the sender
- //socket.broadcast.to(room).emit = send to everyone in a room except the sender
  //socket.to(room).emit = send to everyone in a room including the sender
