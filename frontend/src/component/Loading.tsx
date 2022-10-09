@@ -4,8 +4,9 @@ import { Box, Spinner } from '@chakra-ui/react';
 export const Loading = () => {
     return (
         <Box
+            _light={{ bg: 'white' }}
+            _dark={{ bg: 'gray.900' }}
             sx={{
-                backdropFilter: 'blur(0.125rem)',
                 w: '100vw',
                 h: '100vh',
                 zIndex: 10000,

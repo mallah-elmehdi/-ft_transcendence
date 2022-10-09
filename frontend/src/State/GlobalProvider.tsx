@@ -10,6 +10,7 @@ type Props = {
 const GlobalContextProvider = ({ children }: Props) => {
     // get the data
     const [userInfo, setUserInfo] = React.useState(null);
+    const [userMatchHistory, setUserMatchHistory] = React.useState(null);
     const [loader, setLoader] = React.useState(false);
     const [notif, setNotif] = React.useState({
         exist: false,
@@ -26,6 +27,8 @@ const GlobalContextProvider = ({ children }: Props) => {
                 setLoader,
                 notif,
                 setNotif,
+                userMatchHistory,
+                setUserMatchHistory,
             }}
         >
             {children}

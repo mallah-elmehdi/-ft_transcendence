@@ -4,15 +4,15 @@ import { API } from '../constants';
 
 const SignOut = (setLoader: (value: boolean) => void, setUserInfo: (value: any) => void, setNotif: any) => {
     // general
-    const backEnd = API + 'user/signout';
+    const backEnd = API + '42/signout';
 
-    // show loader
-    setLoader(true);
+    // // show loader
+    // setLoader(true);
 
     // api call
     axios.defaults.withCredentials = true;
     axios
-        .get(backEnd)
+        .post(backEnd)
         .then((response) => {
             setUserInfo(null);
             window.localStorage.setItem('isSignedIn', 'false');
@@ -24,7 +24,7 @@ const SignOut = (setLoader: (value: boolean) => void, setUserInfo: (value: any) 
                 message: error.message,
             })
         )
-        .finally(() => setLoader(false));
+        // .finally(() => setLoader(false));
 };
 
 export default SignOut;

@@ -23,7 +23,7 @@ const UpdatePtofile = (
     const backEnd = API + 'user/update/' + login;
 
     // show loader
-    setLoader(true);
+    // setLoader(true);
 
     // api call
     axios.defaults.withCredentials = true;
@@ -55,7 +55,7 @@ const UpdatePtofile = (
             })
         )
         .finally(() => {
-            setLoader(false);
+            // setLoader(false);
             onClose();
         });
 };
