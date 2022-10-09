@@ -5,7 +5,7 @@ import {Socket, Server} from 'socket.io';
 
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
 @WebSocketGateway({namespace:'dm', cors: {
-	origin: process.env.FRONTEND_URL,
+	origin: 'http://localhost:3000',
 }})
 export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect { 
  
@@ -26,13 +26,19 @@ export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatew
 		this.logger.log(`Client disconnected: ${client.id}`);
 	}
   
-	@SubscribeMessage('msgToServer') // Equivalent to socket.on('msgToServer')
-	handleMessage(client: Socket, payload: string) {
-		console.log(`Message from ${client.id}: ${payload}`);
-		this.server.emit('msgToClient', 'Hey Client');
+	@SubscribeMessage('msgToServer') // Equivalent to socket.on('msgToServer') listening to any 'msgToServer' event
+	handleMessage(client: Socket, payload) {
+		const payloadJson = JSON.parse(payload);
+
+		
+		console.log(`Message from ${client.id}: ${payloadJson} or ${payload}`);
+		client.emit('msgToClient', payloadJson);
 	}
 
+
 }
+
+//!https://wanago.io/2021/01/25/api-nestjs-chat-websockets/
 
 //? https://javascript.info/websocket
 //? https://docs.nestjs.com/fundamentals/lifecycle-events

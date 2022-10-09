@@ -46,7 +46,6 @@ export class AuthController {
 	}
 
 
-
   @Get('test')
   @UseGuards(AuthGuard('jwt')) //'jwt' is what we named our strategy in accessJwtStrategy.ts Guard used to get Payload JWT
   test(@Req() req: Request) {

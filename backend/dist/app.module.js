@@ -17,6 +17,7 @@ const chat_controller_1 = require("./chat/chat.controller");
 const prisma_module_1 = require("./prisma/prisma.module");
 const chat_module_1 = require("./chat/chat.module");
 const cloudinar_module_1 = require("./users/clodinary/cloudinar.module");
+const users_gateway_1 = require("./users/users.gateway");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -24,7 +25,7 @@ AppModule = __decorate([
         imports: [cloudinar_module_1.CloudinaryModule, auth_module_1.AuthModule, axios_1.HttpModule, config_1.ConfigModule.forRoot(), prisma_module_1.PrismaModule,
             chat_module_1.ChatModule],
         controllers: [users_controller_1.UsersController, chat_controller_1.chatController],
-        providers: [users_service_1.UsersService],
+        providers: [users_service_1.UsersService, users_gateway_1.UsersGateway],
     })
 ], AppModule);
 exports.AppModule = AppModule;

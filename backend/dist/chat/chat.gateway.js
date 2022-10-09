@@ -27,8 +27,9 @@ let ChatGateway = class ChatGateway {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     handleMessage(client, payload) {
-        console.log(`Message from ${client.id}: ${payload}`);
-        this.server.emit('msgToClient', 'Hey Client');
+        const payloadJson = JSON.parse(payload);
+        console.log(`Message from ${client.id}: ${payloadJson} or ${payload}`);
+        client.emit('msgToClient', payloadJson);
     }
 };
 __decorate([
@@ -38,12 +39,12 @@ __decorate([
 __decorate([
     (0, websockets_1.SubscribeMessage)('msgToServer'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
     __metadata("design:returntype", void 0)
 ], ChatGateway.prototype, "handleMessage", null);
 ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ namespace: 'dm', cors: {
-            origin: process.env.FRONTEND_URL,
+            origin: 'http://localhost:3000',
         } })
 ], ChatGateway);
 exports.ChatGateway = ChatGateway;

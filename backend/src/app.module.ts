@@ -12,12 +12,13 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ChatModule } from './chat/chat.module';
 import { CloudinaryModule } from './users/clodinary/cloudinar.module';
+import { UsersGateway } from './users/users.gateway';
 
 @Module({
   imports: [CloudinaryModule, AuthModule, HttpModule, ConfigModule.forRoot(), PrismaModule,
 	 ChatModule],
   controllers: [UsersController, chatController],
-  providers: [UsersService],
+  providers: [UsersService, UsersGateway],
 })
 export class AppModule {}
 
