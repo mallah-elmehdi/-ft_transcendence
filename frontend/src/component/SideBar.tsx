@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, useMediaQuery } from '@chakra-ui/react';
 import React, { useContext, useEffect } from 'react';
 import Messaging from './Messaging';
 import { ChatContext } from '../State/ChatProvider';
@@ -13,7 +13,7 @@ const SideBar = () => {
     return (
         <>
             <Flex
-                w={['100%', '100%', '25%', '25%', '25%']}
+                w={['100%', '100%', '45%', '45%', '45%']}
                 _light={{ boxShadow: 'md' }}
                 _dark={{ boxShadow: 'dark-lg' }}
                 rounded="30px"
