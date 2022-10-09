@@ -16,7 +16,6 @@ const SignOut = (setLoader: (value: boolean) => void, setUserInfo: (value: any) 
         .then((response) => {
             setUserInfo(null);
             window.localStorage.setItem('isSignedIn', 'false');
-            setRet(true);
         })
         .catch((error) =>
             setNotif({
