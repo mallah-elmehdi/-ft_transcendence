@@ -10,9 +10,6 @@ export const StatusProfile = ({ rate }: Props) => {
     const [color, setColor] = useState('teal');
     const [status, setStatus] = useState('Beginner');
 
-    console.log(rate);
-    
-
     useEffect(() => {
         if (rate >= 90) {
             setColor('purple');

@@ -8,37 +8,30 @@ import { Line } from '../component/Line';
 import { LiveMatch } from '../component/LiveMatch';
 
 // HOOKS
-// import { usePageTitle } from '../hooks/usePageTitle';
+import { usePageTitle } from '../hooks/usePageTitle';
 
 // CONSTANTS
-// import { pagesContent } from '../constants';
+import { pagesContent } from '../constants';
+
+// API
+import UserInfo from '../api/userInfo';
+import { GlobalContext } from '../State/GlobalProvider';
+import { Loading } from '../component/Loading';
 
 const HomePage = () => {
     // page title
-    // usePageTitle(pagesContent.profile.title);
-
-    // screen sizes
-    const theme = useTheme();
+    usePageTitle(pagesContent.profile.title);
 
     // breakpoint
-    const profileInfo = useBreakpointValue({
-        xl: 4,
-        base: 12,
-    });
-    const statusInfo = useBreakpointValue({
-        xl: 8,
-        base: 12,
-    });
+    const profileInfo = useBreakpointValue({ xl: 4, base: 12 });
+    const statusInfo = useBreakpointValue({ xl: 8, base: 12 });
+    const marginBottom = useBreakpointValue({ md: 0, base: 10 });
 
-    const gap = useBreakpointValue({
-        md: 10,
-        base: 0,
-    });
+    // get the data
+    const { loader } = React.useContext<any>(GlobalContext);
 
-    const marginBottom = useBreakpointValue({
-        md: 0,
-        base: 10,
-    });
+    // const get the user info;
+    UserInfo();
 
     // garbage value [FOR TEST]<----------------------------------------
     const matchs = [
@@ -115,80 +108,82 @@ const HomePage = () => {
             link: '/',
         },
     ];
-
     // garbage value [FOR TEST]<----------------------------------------
 
     return (
-        <Card w="100%" h="100%">
-            <Grid h="100%" templateColumns="repeat(12, 1fr)" gap={gap}>
-                <GridItem colSpan={profileInfo} mb={marginBottom}>
-                    <Stack spacing={5} alignItems="center">
-                        <Stack spacing={2} alignItems="center" w="100%">
-                            <Heading>Play</Heading>
-                            <Line maxW="13rem" />
+        <>
+            {loader && <Loading />}
+            <Card w="100%" h="100%">
+                <Grid h="100%" templateColumns="repeat(12, 1fr)" gap={16}>
+                    <GridItem colSpan={profileInfo} mb={marginBottom} my="auto">
+                        <Stack spacing={5} alignItems="center">
+                            <Stack spacing={2} alignItems="center" w="100%">
+                                <Heading fontSize="xl">Play</Heading>
+                                <Line maxW="7rem" />
+                            </Stack>
+                            <Button
+                                variant="solid"
+                                bg="green"
+                                color="blackAlpha.900"
+                                borderRadius="2xl"
+                                fontSize="xl"
+                                size="xl"
+                                py={2}
+                                px={5}
+                                fontWeight="light"
+                                _focus={{
+                                    bg: 'green',
+                                }}
+                                _hover={{
+                                    bg: 'green',
+                                }}
+                            >
+                                Join Queues
+                            </Button>
+                            <Button
+                                variant="solid"
+                                bg="green"
+                                color="blackAlpha.900"
+                                borderRadius="2xl"
+                                fontSize="xl"
+                                size="xl"
+                                py={2}
+                                px={5}
+                                fontWeight="light"
+                                _focus={{
+                                    bg: 'green',
+                                }}
+                                _hover={{
+                                    bg: 'green',
+                                }}
+                            >
+                                Play with Friend
+                            </Button>
                         </Stack>
-                        <Button
-                            variant="solid"
-                            bg="green"
-                            color="black"
-                            borderRadius="2xl"
-                            fontSize="xl"
-                            size="xl"
-                            py={2}
-                            px={5}
-                            fontWeight="light"
-                            _focus={{
-                                bg: 'green',
-                            }}
-                            _hover={{
-                                bg: 'green',
-                            }}
-                        >
-                            Join Queues
-                        </Button>
-                        <Button
-                            variant="solid"
-                            bg="green"
-                            color="black"
-                            borderRadius="2xl"
-                            fontSize="xl"
-                            size="xl"
-                            py={2}
-                            px={5}
-                            fontWeight="light"
-                            _focus={{
-                                bg: 'green',
-                            }}
-                            _hover={{
-                                bg: 'green',
-                            }}
-                        >
-                            Play with Friend
-                        </Button>
-                    </Stack>
-                </GridItem>
+                    </GridItem>
 
-                <GridItem colSpan={statusInfo}>
-                    <Stack spacing={5} alignItems="center">
-                        <Stack spacing={2} alignItems="center" w="100%">
-                            <Heading>Live Matches</Heading>
-                            <Line maxW="18rem" />
+                    <GridItem colSpan={statusInfo} h="100%" overflow="auto">
+                        <Stack spacing={5} alignItems="center">
+                            <Stack spacing={2} alignItems="center" w="100%">
+                                <Heading fontSize="xl">Live Matches</Heading>
+                                <Line maxW="7rem" />
+                            </Stack>
+                            <Stack p={2}>
+                                <List spacing={5}>
+                                    {matchs.map((item, index) => {
+                                        return (
+                                            <ListItem key={index}>
+                                                <LiveMatch match={item} />
+                                            </ListItem>
+                                        );
+                                    })}
+                                </List>
+                            </Stack>
                         </Stack>
-                        <Stack p={2} maxH="50rem" overflow="auto" sx={{ ...theme.sidebar }}>
-                            <List spacing={5}>
-                                {matchs.map((item, index) => {
-                                    return (
-                                        <ListItem key={index}>
-                                            <LiveMatch match={item} />
-                                        </ListItem>
-                                    );
-                                })}
-                            </List>
-                        </Stack>
-                    </Stack>
-                </GridItem>
-            </Grid>
-        </Card>
+                    </GridItem>
+                </Grid>
+            </Card>
+        </>
     );
 };
 

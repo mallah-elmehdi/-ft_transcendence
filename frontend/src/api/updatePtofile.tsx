@@ -4,8 +4,8 @@ import { API } from '../constants';
 
 // types
 type Data = {
-    avatar: FormData;
-    user_login: string;
+    avatar: FormData | null;
+    user_name: string;
     facebook: string;
     discord: string;
     instagram: string;
@@ -13,10 +13,11 @@ type Data = {
 
 const UpdatePtofile = (
     login: string,
-
     data: Data,
     setLoader: (value: boolean) => void,
-    setInfo: (value: any) => void
+    setUserInfo: (value: any) => void,
+    onClose: () => void,
+    setNotif: any
 ) => {
     // general
     const backEnd = API + 'user/update/' + login;
@@ -27,14 +28,35 @@ const UpdatePtofile = (
     // api call
     axios.defaults.withCredentials = true;
     axios
-        .post(backEnd, data)
+        .post(
+            backEnd,
+            data.avatar
+                ? data
+                : {
+                      user_name: data.user_name,
+                      facebook: data.facebook,
+                      discord: data.discord,
+                      instagram: data.instagram,
+                  }
+        )
         .then((response) => {
-            setInfo(response.data);
-            setLoader(false);
+            setUserInfo(response.data);
+            setNotif({
+                exist: true,
+                type: 'Success',
+                message: 'Profile updated successfuly',
+            });
         })
-        .catch((error) => {
-            // setInfo(null);
+        .catch((error) =>
+            setNotif({
+                exist: true,
+                type: 'Error',
+                message: error.message,
+            })
+        )
+        .finally(() => {
             setLoader(false);
+            onClose();
         });
 };
 

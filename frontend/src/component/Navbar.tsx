@@ -1,3 +1,4 @@
+import { HamburgerIcon } from '@chakra-ui/icons';
 import {
     Box,
     Button,
@@ -10,48 +11,37 @@ import {
     Show,
     Spacer,
     Text,
-    // useColorMode,
     useDisclosure,
 } from '@chakra-ui/react';
-import { HamburgerIcon } from '@chakra-ui/icons';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import ToggleMode from './toggleMode';
 import Logo from './logo';
+import ToggleMode from './toggleMode';
 
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import Guard from '../api/userInfo';
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import { pagesContent, tabs } from '../constants';
 
 export default function Navbar() {
     // const { colorMode, toggleColorMode } = useColorMode();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [size, setSize] = useState<String>('md');
+    const [size, setSize] = React.useState<String>('md');
 
     const handleSizeClick = (newSize: String) => {
         setSize(newSize);
         onOpen();
     };
-    const tabs = ['Home', 'Chat', 'Profile'];
     const location = useLocation();
 
-
     return (
-        <Box p={5}>
+        <>
             <Flex mb={5} px={10} justifyContent={'right'} alignItems={'center'} overflow={'hideen'}>
                 <Show above="md">
-                    <Link to={'/home'}>
+                    <Link to={pagesContent.home.url}>
                         <Logo />
                     </Link>
                 </Show>
                 <Show below="md">
-                    <Button
-                        // _active={{bg:'red'}} // TIPS: on click keep the color green
-                        // _focus={{}}
-                        _hover={{ bg: 'green' }}
-                        // FIXME: i dont know the solution for this error below, i will fix if is harmful for the project if not don't care
-                        // onClick={() => handleSizeClick(size)} key={size}>
-                        onClick={() => handleSizeClick(size)}
-                    >
+                    <Button _hover={{ bg: 'green' }} onClick={() => handleSizeClick(size)}>
                         <HamburgerIcon />
                     </Button>
                 </Show>
@@ -69,14 +59,14 @@ export default function Navbar() {
                             <Flex justifyContent={'center'} alignItems={'center'} w={'100%'} h={'100%'}>
                                 <Flex justifyContent={'center'} alignItems={'center'} display={'row'}>
                                     {tabs.map((tab, i) => (
-                                        <Link to={'/' + tab.toLowerCase()} key={i.toString()}>
+                                        <Link to={tab.url} key={i.toString()}>
                                             <Text
                                                 onClick={onClose}
                                                 fontSize={'30px'}
                                                 p={'10px'}
-                                                color={location.pathname === '/' + tab.toLowerCase() ? 'red' : 'none'}
+                                                color={location.pathname === tab.url ? 'red' : 'none'}
                                             >
-                                                {tab}
+                                                {tab.title}
                                             </Text>
                                         </Link>
                                     ))}
@@ -97,13 +87,13 @@ export default function Navbar() {
                             px={'20px'}
                         >
                             {tabs.map((tab, i) => (
-                                <Link to={'/' + tab.toLowerCase()} key={i.toString()}>
+                                <Link to={tab.url} key={i.toString()}>
                                     <Text
                                         px={['10px', '20px', '20px', '30px']}
                                         fontSize={'30px'}
-                                        color={location.pathname === '/' + tab.toLowerCase() ? 'red' : 'none'}
+                                        color={location.pathname === tab.url ? 'red' : 'none'}
                                     >
-                                        {tab}
+                                        {tab.title}
                                     </Text>
                                 </Link>
                             ))}
@@ -113,7 +103,8 @@ export default function Navbar() {
                 <Spacer />
                 <ToggleMode />
             </Flex>
-            <Outlet  />
-        </Box>
+
+            <Outlet />
+        </>
     );
 }
