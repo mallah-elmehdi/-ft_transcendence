@@ -50,25 +50,19 @@ CREATE TABLE "match_history" (
 );
 
 -- CreateTable
-CREATE TABLE "Chat" (
+CREATE TABLE "Chats" (
     "chat_id" SERIAL NOT NULL,
-    "user_id" INTEGER NOT NULL DEFAULT 0,
+    "userId" INTEGER NOT NULL DEFAULT 0,
     "opponent_id" INTEGER NOT NULL DEFAULT 0,
     "i_delivered" BOOLEAN NOT NULL DEFAULT false,
     "message" TEXT NOT NULL DEFAULT '',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "Chat_pkey" PRIMARY KEY ("chat_id")
+    CONSTRAINT "Chats_pkey" PRIMARY KEY ("chat_id")
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Account_user_login_key" ON "Account"("user_login");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Account_user_name_key" ON "Account"("user_name");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Account_user_avatar_key" ON "Account"("user_avatar");
 
 -- AddForeignKey
 ALTER TABLE "Friend" ADD CONSTRAINT "Friend_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Account"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -78,3 +72,6 @@ ALTER TABLE "PendingFriends" ADD CONSTRAINT "PendingFriends_userId_fkey" FOREIGN
 
 -- AddForeignKey
 ALTER TABLE "match_history" ADD CONSTRAINT "match_history_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Account"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Chats" ADD CONSTRAINT "Chats_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Account"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;

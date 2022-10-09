@@ -9,19 +9,18 @@ async function bootstrap() {
   // app.enableCors({origin: true,
   //           methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   //           credentials: true,});
-	app.use(cookieParser());
+  app.use(cookieParser());
   app.enableCors({
     origin: process.env.FRONTEND_URL,
     credentials: true,
-  })
-   const config = new DocumentBuilder()
-     .setTitle('ft_Transcendence')
-     .setDescription('Transcendence Routes')
-     .setVersion('1.0')
-     .build();
-   const document = SwaggerModule.createDocument(app, config);
-   SwaggerModule.setup('api', app, document);
+  });
+  const config = new DocumentBuilder()
+    .setTitle('ft_Transcendence')
+    .setDescription('Transcendence Routes')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
   await app.listen(process.env.PORT, process.env.HOST);
-  
 }
 bootstrap();

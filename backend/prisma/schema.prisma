@@ -15,8 +15,8 @@ datasource db {
 model User {
   user_id        Int        @default(autoincrement()) @id
   user_login    String   @unique
-  user_name     String   @unique
-  user_avatar      String @unique
+  user_name     String   
+  user_avatar      String 
   games_lost Int	@default(0)
   games_won Int		@default(0)
   games_drawn Int	@default(0)
@@ -27,10 +27,11 @@ model User {
   facebook String		@default("")
   discord String		@default("")
   online Boolean		@default(false)
-  
+  // 1 to many relationship
   friends Friend[]
   pending_friends PendingFriends[]
   match_history match_history[]
+  chat Chats[]
   
   created_at DateTime @default(now())
 
@@ -66,11 +67,12 @@ model match_history {
 
 model Chats {
   chat_id Int @default(autoincrement()) @id
-  user_id Int @default(0)
+  userId Int @default(0)
   opponent_id Int @default(0)
   i_delivered Boolean @default(false)
   message String @default("")
   created_at DateTime @default(now())
+  user User @relation(fields: [userId], references: [user_id])
   
-  @@map("Chat")
+  // @@map("Chat")
 }

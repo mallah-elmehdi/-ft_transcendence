@@ -38,6 +38,7 @@ export class AuthService {
 						user_avatar: avatar,
 					},
 				});
+				// const Account = await this.prisma.,
 				
 				console.log('User Created ', id);
 		return;
