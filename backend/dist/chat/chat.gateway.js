@@ -42,11 +42,10 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ChatGateway.prototype, "handleMessage", null);
 ChatGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({ namespace: 'dm', cors: {
-            origin: process.env.CLIENT_URL,
-            methods: ['POST', 'GET'],
+    (0, websockets_1.WebSocketGateway)(3003, { cors: {
+            origin: "*",
             credentials: true
-        } })
+        }, namespace: 'dm' })
 ], ChatGateway);
 exports.ChatGateway = ChatGateway;
 //# sourceMappingURL=chat.gateway.js.map
