@@ -1,4 +1,5 @@
-export const API = 'http://10.12.9.12:3001/'; // ip of backend
+export const SOCKET = 'http://10.11.8.3:3003'; // ip of backend
+export const API = 'http://10.11.8.3:3001'; // ip of backend
 
 export const pagesContent = {
     home: {

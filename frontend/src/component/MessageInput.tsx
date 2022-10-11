@@ -1,38 +1,34 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { HStack, Input, useColorModeValue } from "@chakra-ui/react";
 import { IoSend } from "react-icons/io5";
 import { ChatContext } from "../State/ChatProvider";
 
 const MessageInput = () => {
-  const { typingMessage, setTypingMessage } = useContext<any>(ChatContext);
+  const [ typingMessage, setTypingMessage ] = useState<any>('');
   const msgInputBg = useColorModeValue("white", "rgb(33,33,33)");
   const { setMessages } = useContext<any>(ChatContext);
-    const {  socket } = useContext<any>(ChatContext);
-  // const socket = io(API + "dm", { withCredentials: true, });
+  const {  socket } = useContext<any>(ChatContext);
+  const {selectedChat} = useContext<any>(ChatContext)
 
   function sendMessageHandler() {
     if (typingMessage.trim()) {
-      console.log({ isSender: true, content: typingMessage });
-        socket.emit("msgToServer", { isSender: true, content: typingMessage });
+        // socket.emit("msgToServer", {sender: selectedChat.id, content: typingMessage });
 
-      //   setMessages((messages: any) => {
-      //     return [...messages, { isSender: true, content: typingMessage }];
-      //   });
+        setMessages((messages: any) => {
+          return [...messages, { isSender: true, content: typingMessage }];
+        });
     }
     setTypingMessage("");
   }
 
   useEffect(() => {
-    // socket.on("msgToClient", (data:any) => {
-    //     console.log('msgToClient', data);
-    // } )
     const keyDownHandler = (event: any) => {
       if (event.key === "Enter") {
         event.preventDefault();
-        // sendMessageHandler();
+        sendMessageHandler();
       }
       return () => {
-        // socket.off('msgToServer')
+        socket.off('msgToServer')
         // socket.close();
       };
     };
@@ -43,11 +39,10 @@ const MessageInput = () => {
       document.removeEventListener("keydown", keyDownHandler);
     };
   }, []);
+
   return (
     <>
       <HStack
-        // pl={5}
-        // pr={6}
         w={"100%"}
         m={5}
         h={"3em"}

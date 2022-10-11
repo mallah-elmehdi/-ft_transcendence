@@ -20,15 +20,15 @@ type Props = {
 };
 export default function MainRoomDetails({ toggleNewMembers, toggleSettings, isAdmin, isOwner }: Props) {
     const { toggleDetails } = useContext<any>(ChatContext);
-    const { data } = useContext<any>(ChatContext);
+    const { data, friends } = useContext<any>(ChatContext);
+    const { groups} = data
     const { selectedChat } = useContext<any>(ChatContext);
-    let searchIndex = data.groups.findIndex((id: any) => selectedChat.id === id.id);
+    let searchIndex = groups.findIndex((id: any) => selectedChat.id === id.id);
     let membersIndex = data.members.findIndex((members: any) => selectedChat.id === members.id);
     const [member, setMember] = useState<any>(null);
     const { isMuteOpen, onMuteOpen, onMuteClose } = useMute();
     const { isBlockOpen, onBlockOpen, onBlockClose } = useBlock();
 
-    const { friends } = data;
     function isFriend(id: any) {
         return friends.findIndex((f: any) => f.id == id) == -1 ? false : true;
     }
@@ -63,7 +63,7 @@ export default function MainRoomDetails({ toggleNewMembers, toggleSettings, isAd
                 )}
             </HStack>
             <VStack pt={'1.5%'} h={'100%'} overflow={'auto'} w={'100%'} alignItems={'left'}>
-                <Image h="20em" src={data.groups[searchIndex].avatar} />
+                <Image h="20em" src={groups[searchIndex].avatar} />
                 <Text>Memebers</Text>
                 {data.members[membersIndex].membs.map((member: any, index: any) => (
                     <ChannelMemeber
@@ -77,12 +77,12 @@ export default function MainRoomDetails({ toggleNewMembers, toggleSettings, isAd
                         onMute={onMuteOpen}
                         setMember={setMember}
                         isFriend={isFriend(member.id)}
-                        roomId={data.groups[searchIndex].id}
+                        roomId={groups[searchIndex].id}
                     />
                 ))}
             </VStack>
-            <MuteMember isOpen={isMuteOpen} onClose={onMuteClose} name={member?.name} memberId={member?.id} roomId={data.groups[searchIndex].id} />
-            <RemoveMember isOpen={isBlockOpen} onClose={onBlockClose} name={member?.name} memberId={member?.id} roomId={data.groups[searchIndex].id} />
+            <MuteMember isOpen={isMuteOpen} onClose={onMuteClose} name={member?.name} memberId={member?.id} roomId={groups[searchIndex].id} />
+            <RemoveMember isOpen={isBlockOpen} onClose={onBlockClose} name={member?.name} memberId={member?.id} roomId={groups[searchIndex].id} />
             {isAdmin && (
                 <Box onClick={toggleNewMembers} position={'absolute'} right={5} bottom={5} rounded={30}>
                     <Tooltip label="add Members" openDelay={500}>

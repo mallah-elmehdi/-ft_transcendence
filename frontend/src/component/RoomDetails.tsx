@@ -10,8 +10,9 @@ function RoomDetails() {
 
     const [newMembers, setNewMembers] = useState<any>(false)
     const { selectedChat } = useContext<any>(ChatContext);
-    const { data } = useContext<any>(ChatContext);
-    let searchIndex = data.groups.findIndex((id: any) => selectedChat.id === id.id);
+    const { data,friends } = useContext<any>(ChatContext);
+    const {groups} = data
+    let searchIndex = groups.findIndex((id: any) => selectedChat.id === id.id);
     const [settings, setSettings] = useState<any>(false)
 
     const toggleNewMembers = () => {
@@ -25,9 +26,9 @@ function RoomDetails() {
     return (
         <>
             {settings ? (
-                <RoomSettings toggleSettings={toggleSettings} roomId={data.groups[searchIndex].id} />
+                <RoomSettings toggleSettings={toggleSettings} roomId={groups[searchIndex].id} />
             ) : newMembers ? (
-                <AddMemebers toggleNewMembers={toggleNewMembers} roomId={data.groups[searchIndex].id} />
+                <AddMemebers toggleNewMembers={toggleNewMembers} roomId={groups[searchIndex].id} />
             ) : (
                 <MainRoomDetails toggleNewMembers={toggleNewMembers} toggleSettings={toggleSettings} isAdmin={isAdmin} isOwner={isOwner} />
             )}

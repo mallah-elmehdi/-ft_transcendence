@@ -6,12 +6,13 @@ import MiniProfile from "./MiniProfile";
 
 
 function ProfileDetails() {
-    const {data} = useContext<any>(ChatContext);
+    const {data, friends} = useContext<any>(ChatContext);
+    const {groups} = data
     const {setChatDetails, toggleDetails} = useContext<any>(ChatContext);
     const {selectedChat} = useContext<any>(ChatContext);
     let searchIndex;
-    if (selectedChat.chat === 'F') searchIndex = data.friends.findIndex((id: any) => selectedChat.id === id.id);
-    else searchIndex = data.groups.findIndex((id: any) => selectedChat.id === id.id);
+    if (selectedChat.chat === 'F') searchIndex = friends.findIndex((id: any) => selectedChat.id === id.id);
+    else searchIndex = groups.findIndex((id: any) => selectedChat.id === id.id);
 
     useEffect(() => {
         const keyDownHandler = (event: any) => {
@@ -43,7 +44,7 @@ function ProfileDetails() {
                 {
                     <MiniProfile
                         name={'Youssef'}
-                        src={selectedChat.chat === 'G' ? data.groups[searchIndex].name.toString() : data.friends[searchIndex].avatar}
+                        src={selectedChat.chat === 'G' ? groups[searchIndex].name.toString() : friends[searchIndex].avatar}
                         facebook={'face'}
                         instagram={'insta'}
                         discord={'discord'}

@@ -3,6 +3,7 @@ import { Box, IconButton, Text, HStack, VStack, Spacer, Button, Tooltip, } from 
 import { ChatContext } from '../State/ChatProvider';
 import NewMember from './NewMember';
 import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
+import { GrIteration } from 'react-icons/gr';
 
 type Props = {
   toggleNewMembers: () => void,
@@ -10,15 +11,15 @@ type Props = {
 }
 
 export default function AddMemebers({ toggleNewMembers, roomId }: Props) {
-  const { data } = useContext<any>(ChatContext);
-  const { members, friends, groups } = data;
+  const { data, friends } = useContext<any>(ChatContext);
+  const { members, groups } = data;
   const membersId = members.findIndex((m: any) => m.id == roomId)
   const [selectedFriends, setSelectedFriends] = useState<any>([]);
 
   function addNewMembersHandler() {
     console.log(roomId, selectedFriends)
   }
-
+  
   function isMember(id: any) {
     return members[membersId]?.membs?.findIndex((m: any) => m.id == id) == -1 ? false : true;
 

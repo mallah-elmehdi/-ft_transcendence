@@ -8,13 +8,14 @@ import FriendMenu from './FriendMenu';
 import GroupMenu from './GroupMenu';
 
 function MessagingBox() {
-    const {data} = useContext<any>(ChatContext);
+    const {data, friends} = useContext<any>(ChatContext);
+    const {groups} = data
     const {selectedChat, setSelectedChat, toggleOffSelectedChat} = useContext<any>(ChatContext);
     const {toggleDetails} = useContext<any>(ChatContext);
     let searchIndex;
 
-    if (selectedChat.chat === 'F') searchIndex = data.friends.findIndex((id: any) => selectedChat.id === id.id);
-    else searchIndex = data.groups.findIndex((id: any) => selectedChat.id === id.id);
+    if (selectedChat.chat === 'F') searchIndex = friends.findIndex((id: any) => selectedChat.id === id.id);
+    else searchIndex = groups.findIndex((id: any) => selectedChat.id === id.id);
     useEffect(() => {
         const keyDownHandler = (event: any) => {
             if (event.key === 'Escape') {
@@ -33,9 +34,9 @@ function MessagingBox() {
     return (
         <VStack h={'100%'} w={'100%'} overflow={'auto'}>
             <ChatHeader
-                avatarName={selectedChat.chat === 'G' ? data.groups[searchIndex].name.toString() : data.friends[searchIndex].name.toString()}
-                chatName={selectedChat.chat === 'G' ? data.groups[searchIndex].name.toString() : data.friends[searchIndex].name.toString()}
-                avatarSrc={selectedChat.chat === 'G' ? data.groups[searchIndex].avatar : data.friends[searchIndex].avatar}
+                avatarName={selectedChat.chat === 'G' ? groups[searchIndex].name.toString() : friends[searchIndex].name.toString()}
+                chatName={selectedChat.chat === 'G' ? groups[searchIndex].name.toString() : friends[searchIndex].name.toString()}
+                avatarSrc={selectedChat.chat === 'G' ? groups[searchIndex].avatar : friends[searchIndex].avatar}
                 isGroup={false}
                 onClickCallBack={toggleDetails}
                 backArrowCallBack={toggleOffSelectedChat}

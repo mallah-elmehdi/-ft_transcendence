@@ -23,12 +23,10 @@ import FloatingActionButton from "./FloatingActionButton";
 function Tabs() {
     const value = useColorModeValue('blackAlpha.200', 'whiteAlpha.200')
     const {setSelectedChat} = useContext<any>(ChatContext)
-    const {data} = useContext<any>(ChatContext)
+    const {data, friends} = useContext<any>(ChatContext)
+    const { groups} = data
     return (
         <ChakraTabs
-            onChange={(index) => {
-                console.log(index);
-            }}
             as={motion.div}
             initial={{ opacity: 0, scale: 0.99 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
@@ -53,8 +51,8 @@ function Tabs() {
             <TabPanels h={'100%'} p={2}>
                 <TabPanel overflow={'auto'} h={'100%'} w={'100%'} m={0} p={0}>
                     <VStack pb={10} spacing={0} w={'100%'}>
-                        {data.friends.length ? (
-                            data.friends.map((friend: any, index: any) => (
+                        {friends.length ? (
+                            friends.map((friend: any, index: any) => (
                                 <HStack
                                     as={'button'}
                                     p={5}
@@ -87,8 +85,8 @@ function Tabs() {
                     overflow={'auto'}
                 >
                     <VStack pb={10} spacing={0} w={'100%'}>
-                        {data.groups.length ? (
-                            data.groups.map((group: any, index: any) => (
+                        {groups.length ? (
+                            groups.map((group: any, index: any) => (
                                 <HStack
                                     onClick={() => {
                                         setSelectedChat({ chat: 'G', id: group.id });

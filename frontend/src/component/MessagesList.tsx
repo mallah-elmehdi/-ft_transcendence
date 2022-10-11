@@ -2,8 +2,6 @@ import React, { useContext, useEffect, useRef } from "react";
 import Message from "./Message";
 import { ChatContext } from "../State/ChatProvider";
 import { Box } from "@chakra-ui/react";
-import io from "socket.io-client";
-import { API } from "../constants";
 
 const AlwaysScrollToBottom = () => {
   const elementRef = useRef();
@@ -14,16 +12,28 @@ const AlwaysScrollToBottom = () => {
 };
 
 function MessagesList() {
-//   const socket = io(API + "dm");
+  const {selectedChat} = useContext<any>(ChatContext)
   const { messages, setMessages, socket } = useContext<any>(ChatContext);
   useEffect(() => {
-    // socket.on("msgToClient", (data: any) => {
-    //   console.log(data);
-    // });
-    // return () => {
-    //   socket.off("msgToServer");
-    // };
-  }, []);
+    console.log("effect")
+    socket.on("msgToClient", (obj: any) => {
+      // console.log("Made it here")
+      console.log(typeof obj)
+      // console.log(obj.content);
+      // if (selectedChat.chat === 'F' && selectedChat.id === obj.sender)
+        setMessages((msgs :any)=>{
+          return [
+            ...msgs,
+            {isSender: true, content: obj.content}
+          ]
+        })
+    });
+
+    return () => {
+      // console.log('Leave ')
+      socket.off("msgToClient");
+    };
+  }, [socket]);
 
   return (
     <Box bottom={0} w={"100%"}>
