@@ -6,7 +6,7 @@ import {Socket, Server} from 'socket.io';
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
 
 @WebSocketGateway(3003, {cors: {
-	origin: "*",
+	origin: " ",
 	credentials: true
 }, namespace:'dm'})
 export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect { 
@@ -30,7 +30,7 @@ export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatew
   
 	@SubscribeMessage('msgToServer') // Equivalent to socket.on('msgToServer') listening to any 'msgToServer' event
 	handleMessage(client: Socket, payload : string) {
-		console.log(payload)
+		console.log("You am the palof", payload)
 		
 		//console.log(`Message from ${client.id}: ${payloadJson.name} or ${payload}`);
 		client.emit('msgToClient', 'Hey from Server');

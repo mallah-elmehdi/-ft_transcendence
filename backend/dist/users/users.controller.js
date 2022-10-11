@@ -23,17 +23,21 @@ let UsersController = class UsersController {
         this.UsersService = UsersService;
         this.cloudinary = cloudinary;
     }
+    async getAllFriends() {
+        return await this.UsersService.getAllFriends(1);
+    }
     async getMe(req) {
         return await this.UsersService.getUser(req.user['userLogin']);
     }
     async getMachHistory() {
-        return await this.UsersService.GetMatchHistory("aymaatou");
+    }
+    async getUser(login) {
+        return await this.UsersService.getUser(login);
     }
     async uploadImageToCloudinary(file) {
         return await this.cloudinary.uploadImage(file).catch((err) => {
             throw new common_1.BadRequestException(err);
         });
-        ;
     }
     async setUsername(login, req, usernameDto) {
         return await this.UsersService.setUsername(login, req.body.username);
@@ -49,6 +53,13 @@ let UsersController = class UsersController {
     }
 };
 __decorate([
+    (0, common_1.Get)('friends'),
+    (0, common_1.HttpCode)(200),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getAllFriends", null);
+__decorate([
     (0, common_1.Get)('me'),
     (0, common_1.HttpCode)(200),
     __param(0, (0, common_1.Req)()),
@@ -63,6 +74,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getMachHistory", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getUser", null);
 __decorate([
     (0, common_1.Post)(':login/avatar'),
     (0, common_1.HttpCode)(201),

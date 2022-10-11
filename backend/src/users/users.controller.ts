@@ -8,6 +8,7 @@ import { diskStorage } from 'multer';
 import { Observable, of } from 'rxjs';
 import { usernameDto, userDataDto} from './DTO/username.dto'
 import { CloudinaryService } from './clodinary/clodinary.service';
+import { get } from 'http';
 
 
 @Controller('user')
@@ -15,6 +16,15 @@ import { CloudinaryService } from './clodinary/clodinary.service';
 export class UsersController {
 
   constructor(private readonly UsersService: UsersService, private cloudinary: CloudinaryService) {}
+
+  @Get('friends')
+  @HttpCode(200)
+  async getAllFriends()  {
+      return await this.UsersService.getAllFriends(1)
+      // .catch((err) => {
+      //   throw new BadRequestException(err);
+      // });
+ }
 
   @Get('me')
   @HttpCode(200)
@@ -27,7 +37,7 @@ export class UsersController {
   async getMachHistory()
   {
     // console.log("HHHHHHHHHHH")
-    return await this.UsersService.GetMatchHistory("aymaatou");
+    // return await this.UsersService.GetMatchHistory("aymaatou");
     // console.log(value)
   }
   @Get(':id')
@@ -44,31 +54,6 @@ export class UsersController {
     return await this.cloudinary.uploadImage(file).catch((err) => {
       throw new BadRequestException(err);
     });
-    ;
-    // .catch(() => {
-      //   throw new BadRequestException('Invalid file type.');
-      // }
-      // );
-      //   @UseInterceptors(FileInterceptor('avatar',  {
-        //     storage : diskStorage({ 
-          //       destination: './avatars',
-          //       filename: (req, file, cb) => {
-            //         const filename : string = req.params.login;
-            //         // console.log('filename', req.params.login);
-            //         const extension : string = '.' + file.originalname.split('.').pop();
-            //         // console.log('extension', `${filename}${extension}`);
-            //         console.log('file', file);
-            //         cb(null, `${filename}${extension}`)
-            //       }
-            //       })
-            //     }))
-            //   UploadedFile( @Param('login') login:string, @UploadedFile() file): Observable<Object> {
-              
-              //     console.log('file', file);
-//     // return file;
-//     return of({ imagePath : file.path });
-//     // return this.UsersService.uploadAvatar(login, file);
-
 }
 
   @Post('username/:login')

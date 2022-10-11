@@ -29,9 +29,9 @@ model User {
   online Boolean		@default(false)
   // 1 to many relationship
   friends Friend[]
-  pending_friends PendingFriends[]
   match_history match_history[]
   chat Chats[]
+  membership Members[]
   
   created_at DateTime @default(now())
 
@@ -43,14 +43,6 @@ model Friend {
   userId   Int
   friendId Int
   user User @relation(fields: [userId], references: [user_id])
-}
-
-model PendingFriends {
-  pending_friendship_id Int @default(autoincrement()) @id
-  userId Int @default(0)
-  friend_id Int @default(0)
-  user User @relation(fields: [userId], references: [user_id])
-  // @@map("PendingFriendship")
 }
 
 model match_history {
@@ -68,10 +60,36 @@ model match_history {
 model Chats {
   chat_id Int @default(autoincrement()) @id
   userId Int @default(0)
-  opponent_id Int @default(0)
-  i_delivered Boolean @default(false)
+  to_id Int @default(0)
+  // chat_type String
+  // i_delivered Boolean @default(false)
   message String @default("")
   created_at DateTime @default(now())
+  user User @relation(fields: [userId], references: [user_id])
+  room Room_info @relation(fields: [to_id], references: [room_id])
+  
+  // @@map("Chat")
+}
+model Room_info {
+  room_id Int @default(autoincrement()) @id
+  room_name String 
+  room_avatar String
+  room_type String
+  password String 
+  created_at DateTime @default(now())
+  room Members[]
+  chat Chats []
+  
+  
+  // @@map("Chat")
+}
+model Members {
+  membership_id Int @default(autoincrement()) @id
+  roomId Int 
+  userId Int 
+  prev String
+  created_at DateTime @default(now())
+  room Room_info @relation(fields: [roomId], references: [room_id])
   user User @relation(fields: [userId], references: [user_id])
   
   // @@map("Chat")

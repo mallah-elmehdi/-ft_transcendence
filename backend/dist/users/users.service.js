@@ -16,12 +16,21 @@ let UsersService = class UsersService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async getAllFriends(login) {
+        const frineds = await this.prisma.friend.findMany({
+            where: {
+                userId: login,
+            },
+        });
+        console.log("Friends", frineds);
+        return frineds;
+    }
     async getUser(login) {
         console.log('login', login);
         try {
             const found = await this.prisma.user.findUnique({
                 where: {
-                    user_login: login,
+                    user_id: Number(login),
                 },
             });
             console.log('found here: ', found);
