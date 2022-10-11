@@ -12,46 +12,37 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
+const common_1 = require("@nestjs/common");
+const websockets_2 = require("@nestjs/websockets");
 const prisma_service_1 = require("../prisma/prisma.service");
+const users_service_1 = require("./users.service");
 let UsersGateway = class UsersGateway {
-    constructor(PrismaService) {
+    constructor(PrismaService, UsersService) {
         this.PrismaService = PrismaService;
+        this.UsersService = UsersService;
+        this.logger = new common_1.Logger('UsersGateway');
     }
-    async handleMessage(client, payload) {
-        const userLogin = JSON.parse(payload).userLogin;
-        const userOnline = await this.PrismaService.user.update({
-            where: {
-                user_login: userLogin
-            },
-            data: {
-                online: true
-            }
-        });
-        console.log('Client connected ' + client.id);
-        client.on('disconnect', async () => {
-            console.log('Client disconnected ' + client.id);
-            const userOffline = await this.PrismaService.user.update({
-                where: {
-                    user_login: userLogin
-                },
-                data: {
-                    online: false
-                }
-            });
-        });
+    afterInit(server) {
+        this.logger.log('Init');
+    }
+    handleConnection(client) {
+        this.logger.log(`${client.handshake.query.login} connected: ${client.id} `);
+        this.UsersService.setUserState(client.handshake.query.login, true);
+    }
+    handleDisconnect(client) {
+        this.logger.log(`User disconnected: ${client.id}`);
+        this.UsersService.setUserState(client.handshake.query.login, false);
     }
 };
 __decorate([
-    (0, websockets_1.SubscribeMessage)('connection'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
-    __metadata("design:returntype", Promise)
-], UsersGateway.prototype, "handleMessage", null);
+    (0, websockets_2.WebSocketServer)(),
+    __metadata("design:type", socket_io_1.Server)
+], UsersGateway.prototype, "server", void 0);
 UsersGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ namespace: 'userstate', cors: {
             origin: process.env.FRONTEND_URL,
         } }),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService, users_service_1.UsersService])
 ], UsersGateway);
 exports.UsersGateway = UsersGateway;
 //# sourceMappingURL=users.gateway.js.map

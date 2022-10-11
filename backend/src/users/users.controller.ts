@@ -77,6 +77,7 @@ export class UsersController {
   {
     return await this.UsersService.setUsername(login, req.body.username);
   }
+  
   @Post('update/:login')
   @HttpCode(201)
   @UseInterceptors(FileInterceptor('avatar'))

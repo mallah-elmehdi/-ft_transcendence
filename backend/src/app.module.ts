@@ -13,7 +13,7 @@ import { join } from 'path';
 import { ChatModule } from './chat/chat.module';
 import { CloudinaryModule } from './users/clodinary/cloudinar.module';
 import { UsersGateway } from './users/users.gateway';
-
+import { UsersModule } from './users/users.module';
 @Module({
   imports: [CloudinaryModule, AuthModule, HttpModule, ConfigModule.forRoot(), PrismaModule,
 	 ChatModule],

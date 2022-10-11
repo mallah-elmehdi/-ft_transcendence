@@ -24,6 +24,7 @@ let UsersService = class UsersService {
                     user_login: login,
                 },
             });
+            console.log('found here: ', found);
             if (!found) {
                 return null;
             }
@@ -49,18 +50,30 @@ let UsersService = class UsersService {
             where: {
                 user_login: login,
             },
-            data: userDataDto,
+            data: {
+                user_avatar: userDataDto.user_avatar,
+                user_name: userDataDto.user_name,
+                facebook: userDataDto.facebook,
+                discord: userDataDto.discord,
+                instagram: userDataDto.instagram,
+            },
         });
     }
-    async GetMatchHistory(login) {
-        const history = await this.prisma.user.findMany({
-            where: {
-                user_login: login,
-            },
-            include: { match_history: true, },
-        });
-        console.log("here is aymaatou history :", history);
-        return history;
+    async setUserState(login, state) {
+        console.log(`${login} userState: ${state}`);
+        try {
+            const userOnline = await this.prisma.user.update({
+                where: {
+                    user_login: login
+                },
+                data: {
+                    online: state
+                }
+            });
+        }
+        catch (err) {
+            console.log('error in setUserState ', err);
+        }
     }
 };
 UsersService = __decorate([

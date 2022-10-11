@@ -8,7 +8,7 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.use(cookieParser());
     app.enableCors({
-        origin: process.env.FRONTEND_URL,
+        origin: process.env.CLIENT_URL,
         credentials: true,
     });
     const config = new swagger_1.DocumentBuilder()

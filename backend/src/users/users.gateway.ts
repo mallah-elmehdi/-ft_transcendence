@@ -4,42 +4,36 @@ import {Socket, Server} from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WebSocketServer } from '@nestjs/websockets';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UsersService } from './users.service';
 
 @WebSocketGateway({namespace:'userstate', cors: {
 	origin: process.env.FRONTEND_URL,
 }})
-export class UsersGateway {
+export class UsersGateway implements  OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+
   
 
-  constructor(private readonly PrismaService: PrismaService) {}
+  constructor(private readonly PrismaService: PrismaService, readonly UsersService : UsersService) {}
 
+  private logger: Logger = new Logger('UsersGateway');
 
-  @SubscribeMessage('connection')
-  async handleMessage(client: Socket, payload: any) 
-  {
-    const userLogin =  JSON.parse(payload).userLogin;
+  @WebSocketServer()
+  server: Server;
 
-   const userOnline =  await this.PrismaService.user.update({
-      where: {
-        user_login: userLogin
-      },
-      data: {
-        online: true
-      }
-    })
-    console.log('Client connected ' + client.id);
-
-    client.on('disconnect', async () =>  //! Client: When a component gets destroyed emit to 'disconnect'
-    { 
-        console.log('Client disconnected ' + client.id);
-        const userOffline =  await this.PrismaService.user.update({
-      where: {
-        user_login: userLogin
-      },
-      data: {
-        online: false
-      }
-    })
-    })
+  afterInit(server: any) {
+    this.logger.log('Init');
   }
+
+  handleConnection(client : Socket) {
+ 
+    this.logger.log(`${client.handshake.query.login} connected: ${client.id} `); //! Add query login when connecting
+    this.UsersService.setUserState(client.handshake.query.login, true);
+
+  }
+
+  handleDisconnect(client: Socket) {
+    this.logger.log(`User disconnected: ${client.id}`);
+    this.UsersService.setUserState(client.handshake.query.login, false);
+  }
+   
 }

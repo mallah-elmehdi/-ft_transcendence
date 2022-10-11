@@ -1,4 +1,6 @@
+import { Injectable } from '@nestjs/common';
 import { v2 } from 'cloudinary';
+
 
 export const UsersProviders = {
   provide: 'Cloudinary',
