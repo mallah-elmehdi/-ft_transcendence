@@ -11,7 +11,7 @@ datasource db {
 }
 
 /// Schema needs updating for relationships
-
+//?https://www.prisma.io/docs/guides/general-guides/database-workflows/foreign-keys/postgresql
 model User {
   user_id        Int        @default(autoincrement()) @id
   user_login    String   @unique
@@ -27,7 +27,7 @@ model User {
   facebook String		@default("")
   discord String		@default("")
   online Boolean		@default(false)
-  // 1 to many relationship
+  //* 1 to many relationship
   friends Friend[]
   match_history match_history[]
   chat Chats[]

@@ -33,9 +33,8 @@ export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatew
 		console.log("You am the palof", payload)
 		
 		//console.log(`Message from ${client.id}: ${payloadJson.name} or ${payload}`);
-		client.emit('msgToClient', 'Hey from Server');
+		//client.emit('msgToClient', payload);
 	}
-
 }
 
 //!https://wanago.io/2021/01/25/api-nestjs-chat-websockets/
