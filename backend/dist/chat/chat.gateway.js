@@ -28,7 +28,8 @@ let ChatGateway = class ChatGateway {
     }
     handleMessage(client, payload) {
         console.log(payload);
-        client.emit('msgToClient', 'Hey from Server');
+        client.join('test');
+        this.server.to('test').emit('msgToClient', "Hey guys");
     }
 };
 __decorate([
@@ -38,7 +39,7 @@ __decorate([
 __decorate([
     (0, websockets_1.SubscribeMessage)('msgToServer'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
     __metadata("design:returntype", void 0)
 ], ChatGateway.prototype, "handleMessage", null);
 ChatGateway = __decorate([

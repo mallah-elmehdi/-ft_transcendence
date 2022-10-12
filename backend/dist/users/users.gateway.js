@@ -39,7 +39,7 @@ __decorate([
     __metadata("design:type", socket_io_1.Server)
 ], UsersGateway.prototype, "server", void 0);
 UsersGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({ namespace: 'userstate', cors: {
+    (0, websockets_1.WebSocketGateway)(3004, { namespace: 'userstate', cors: {
             origin: process.env.FRONTEND_URL,
         } }),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService, users_service_1.UsersService])
