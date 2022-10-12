@@ -44,6 +44,25 @@ let UsersService = class UsersService {
             return null;
         }
     }
+    async getUserbyLogin(login) {
+        console.log('login', login);
+        try {
+            const found = await this.prisma.user.findUnique({
+                where: {
+                    user_login: login,
+                },
+            });
+            console.log('found here: ', found);
+            if (!found) {
+                return null;
+            }
+            return found;
+        }
+        catch (err) {
+            console.log('error in getUser', err);
+            return null;
+        }
+    }
     async setUsername(login, username) {
         return await this.prisma.user.update({
             where: {

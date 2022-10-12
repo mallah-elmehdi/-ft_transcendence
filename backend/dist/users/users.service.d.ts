@@ -5,6 +5,7 @@ export declare class UsersService {
     constructor(prisma: PrismaService);
     getAllFriends(login: number): Promise<import(".prisma/client").Friend[]>;
     getUser(login: number): Promise<import(".prisma/client").User>;
+    getUserbyLogin(login: string): Promise<import(".prisma/client").User>;
     setUsername(login: string, username: string): Promise<import(".prisma/client").User>;
     updateUserData(login: string, userDataDto: userDataDto): Promise<import(".prisma/client").User>;
     setUserState(login: any, state: boolean): Promise<void>;
