@@ -27,9 +27,8 @@ let ChatGateway = class ChatGateway {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     handleMessage(client, payload) {
-        console.log(payload);
-        client.join('test');
-        this.server.to('test').emit('msgToClient', "Hey guys");
+        console.log("You am the palof", payload);
+        client.emit('msgToClient', 'Hey from Server');
     }
 };
 __decorate([
@@ -44,7 +43,7 @@ __decorate([
 ], ChatGateway.prototype, "handleMessage", null);
 ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(3003, { cors: {
-            origin: "*",
+            origin: " ",
             credentials: true
         }, namespace: 'dm' })
 ], ChatGateway);

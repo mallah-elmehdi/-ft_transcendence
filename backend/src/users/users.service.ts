@@ -7,14 +7,45 @@ export class UsersService {
 
 		constructor(private readonly prisma : PrismaService) {}
 
+	async getAllFriends(login: number)
+	{
+		const frineds = await this.prisma.friend.findMany ( {
+			where :
+			{
+				userId : login,
+			},
+		})
+		console.log("Friends", frineds)
+		return frineds
+	}
 
-	async getUser(login : string)
+	async getUser(login : number)
 	{
 			console.log('login', login);
 			 try {
 			const found = await this.prisma.user.findUnique({
 				where: {
-					user_login: login,
+					user_id: Number(login),
+				},
+			}); 
+			console.log('found here: ', found);   
+			if (!found) {
+				return null;
+			}
+			return found;
+	}
+	catch (err: any) {
+			console.log('error in getUser', err);
+			return null;
+		}
+	}
+	async getUserbyLogin(login : string)
+	{
+			console.log('login', login);
+			 try {
+			const found = await this.prisma.user.findUnique({
+				where: {
+					user_login:login,
 				},
 			}); 
 			console.log('found here: ', found);   
@@ -55,6 +86,7 @@ export class UsersService {
 			},
 		});
 	}
+
 
 
 	async setUserState(login : any, state : boolean)
