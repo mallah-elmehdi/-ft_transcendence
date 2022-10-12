@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 
 // types
 type Props = {
@@ -9,15 +9,17 @@ type Props = {
 
 export const Card = ({ children, ...props }: Props) => {
     return (
-        <Box
+        <Stack
             p={10}
             _dark={{ boxShadow: 'dark-lg', bg: 'grey.700' }}
             _light={{ boxShadow: 'md' }}
             borderRadius="2xl"
             boxShadow="2xl"
+            maxH="78vh"
+            h="100%"
             {...props}
         >
             {children}
-        </Box>
+        </Stack>
     );
 };

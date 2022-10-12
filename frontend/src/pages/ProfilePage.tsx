@@ -81,7 +81,7 @@ const ProfilePage = () => {
             {notif && notif.exist && <AlertCompo message={notif.message} type={notif.type} />}
             <Grid h="100%" templateColumns="repeat(12, 1fr)" gap={6}>
                 <GridItem colSpan={profileInfo}>
-                    <Card w="100%" position="relative">
+                    <Card w="100%" h="100%" position="relative">
                         <>
                             <EditProfile
                                 avatar={userInfo?.user_avatar}

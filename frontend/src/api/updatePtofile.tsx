@@ -1,10 +1,10 @@
 import axios from 'axios';
-import * as React from 'react';
+import React from 'react';
 import { API } from '../constants';
 
 // types
 type Data = {
-    avatar: FormData | null;
+    avatar: File | null | undefined;
     user_name: string;
     facebook: string;
     discord: string;
@@ -20,10 +20,12 @@ const UpdatePtofile = (
     setNotif: any
 ) => {
     // general
+    console.log(data);
+
     const backEnd = API + 'user/update/' + login;
 
     // show loader
-    // setLoader(true);
+    setLoader(true);
 
     // api call
     axios.defaults.withCredentials = true;
@@ -37,7 +39,12 @@ const UpdatePtofile = (
                       facebook: data.facebook,
                       discord: data.discord,
                       instagram: data.instagram,
-                  }
+                  },
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
         )
         .then((response) => {
             setUserInfo(response.data);
@@ -55,7 +62,7 @@ const UpdatePtofile = (
             })
         )
         .finally(() => {
-            // setLoader(false);
+            setLoader(false);
             onClose();
         });
 };

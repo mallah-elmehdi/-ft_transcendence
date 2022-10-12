@@ -32,7 +32,7 @@ function MessagingBox() {
 
     const chatBg = useColorModeValue('red', 'green')
     return (
-        <VStack h={'100%'} w={'100%'} overflow={'auto'}>
+        <VStack h={'100%'} w={'100%'} >
             <ChatHeader
                 avatarName={selectedChat.chat === 'G' ? groups[searchIndex].name.toString() : friends[searchIndex].name.toString()}
                 chatName={selectedChat.chat === 'G' ? groups[searchIndex].name.toString() : friends[searchIndex].name.toString()}

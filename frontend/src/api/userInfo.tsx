@@ -1,12 +1,15 @@
 import axios from 'axios';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { API, pagesContent } from '../constants';
 import { GlobalContext } from '../State/GlobalProvider';
 
 const UserInfo = () => {
+    const params = useParams();
     // general
-    const backEnd = API + 'user/me';
+    const backEnd = API + (!params?.user_id || params?.user_id === 'me' ? 'user/me' : 'user/' + params?.user_id);
+    console.log('backEnd', backEnd);
+
     const { setUserInfo, setLoader } = React.useContext<any>(GlobalContext);
 
     const navigate = useNavigate();
