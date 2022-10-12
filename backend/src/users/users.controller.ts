@@ -12,18 +12,32 @@ import { get } from 'http';
 
 
 @Controller('user')
-@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
 export class UsersController {
 
   constructor(private readonly UsersService: UsersService, private cloudinary: CloudinaryService) {}
+
+
+  @Post('add/:id')
+  @HttpCode(201)
+  async  AddFriend(@Param('id') param : number) {
+    const user_info = await this.UsersService.getUserbyLogin('aymaatou');
+    const user = user_info.user_id;
+    return await this.UsersService.friendReq( user,param);
+  }
+  @Get('list/all')
+  @HttpCode(200)
+  async GetAllUsers() {
+      return await this.UsersService.getAllUsers();
+  }
 
   @Get('friends')
   @HttpCode(200)
   async getAllFriends()  {
       return await this.UsersService.getAllFriends(1)
-      // .catch((err) => {
-      //   throw new BadRequestException(err);
-      // });
+      .catch((err) => {
+        throw new BadRequestException(err);
+      });
  }
 
   @Get('me')

@@ -16,6 +16,12 @@ let UsersService = class UsersService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async friendReq(user, params) {
+    }
+    async getAllUsers() {
+        const users = await this.prisma.user.findMany();
+        return users;
+    }
     async getAllFriends(login) {
         const frineds = await this.prisma.friend.findMany({
             where: {

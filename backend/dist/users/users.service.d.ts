@@ -3,6 +3,8 @@ import { userDataDto } from './DTO/username.dto';
 export declare class UsersService {
     private readonly prisma;
     constructor(prisma: PrismaService);
+    friendReq(user: number, params: number): Promise<void>;
+    getAllUsers(): Promise<import(".prisma/client").User[]>;
     getAllFriends(login: number): Promise<import(".prisma/client").Friend[]>;
     getUser(login: number): Promise<import(".prisma/client").User>;
     getUserbyLogin(login: string): Promise<import(".prisma/client").User>;

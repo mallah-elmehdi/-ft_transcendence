@@ -6,6 +6,8 @@ export declare class UsersController {
     private readonly UsersService;
     private cloudinary;
     constructor(UsersService: UsersService, cloudinary: CloudinaryService);
+    AddFriend(param: number): Promise<void>;
+    GetAllUsers(): Promise<import(".prisma/client").User[]>;
     getAllFriends(): Promise<import(".prisma/client").Friend[]>;
     getMe(req: Request): Promise<import(".prisma/client").User>;
     getMachHistory(): Promise<void>;

@@ -42,7 +42,7 @@ model Friend {
   id       Int @id @default(autoincrement())
   userId   Int
   friendId Int
-  user User @relation(fields: [userId], references: [user_id])
+  user User? @relation(fields: [userId], references: [user_id])
 }
 
 model match_history {

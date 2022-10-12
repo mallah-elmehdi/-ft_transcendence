@@ -7,6 +7,29 @@ export class UsersService {
 
 		constructor(private readonly prisma : PrismaService) {}
 
+
+		// inserting to a table with Foreing keys
+	async  friendReq(user :number, params:number) {
+		// const updated_list =  await this.prisma.user.create(
+		// 	{
+		// 		where : {
+		// 			user_id : user,
+		// 			friends :
+		// 			{
+		// 				create :
+		// 				{
+		// 					friendsId: params,
+		// 				},
+		// 			},
+		// 		},
+		// 	});
+	}
+
+	async  getAllUsers() {
+		const users = await this.prisma.user.findMany();
+		return users;
+
+	}
 	async getAllFriends(login: number)
 	{
 		const frineds = await this.prisma.friend.findMany ( {
