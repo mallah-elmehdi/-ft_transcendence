@@ -10,7 +10,7 @@ const useFriends = () => {
 
   useEffect(() => {
     axios
-      .get(API + "/user/friends")
+      .get(API + "user/friends")
       .then((res: any) => {
         setFriend(res.data);
       })

@@ -1,8 +1,8 @@
 import React, { useState, createContext, useEffect } from 'react';
-import { API, SOCKET } from "../constants";
-import socketIOClient, {io} from "socket.io-client";
-import axios from 'axios';
-import useFriends from '../hooks/useFriends';
+// // import { API, SOCKET } from "../constants";
+// import socketIOClient, {io} from "socket.io-client";
+// import axios from 'axios';
+import useFriends from '../api/useFriends';
 
 // @ts-ignore
 export const ChatContext = createContext();
@@ -29,11 +29,7 @@ const ChatProvider = ({ children }: Props) => {
         setSelectedChat(null);
     }
 
-    const [friends, setFriends] = useState<any>([
-        { id: '1', name: 'User1', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
-        { id: '26', name: 'User1', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
-        { id: '31', name: 'User1', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
-    ]);
+    const [friends, setFriends] = useState<any>([]);
 
     const [groups, setGroups] = useState<any>([
         { id: '1', name: 'hhhGroup', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
@@ -45,7 +41,7 @@ const ChatProvider = ({ children }: Props) => {
     
     const [data, setData] = useState(
         {
-            friends: friends,
+            // friends: friends,
             // groups: [
             //     { id: '1', name: 'hhhGroup', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
             //     { id: '2', name: 'retardeds', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
