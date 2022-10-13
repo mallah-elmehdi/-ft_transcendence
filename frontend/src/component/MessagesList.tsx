@@ -16,22 +16,22 @@ function MessagesList() {
   const { messages, setMessages, socket } = useContext<any>(ChatContext);
   useEffect(() => {
     console.log("effect")
-    socket.on("msgToClient", (obj: any) => {
-      // console.log("Made it here")
-      console.log(typeof obj)
-      // console.log(obj.content);
-      // if (selectedChat.chat === 'F' && selectedChat.id === obj.sender)
-        setMessages((msgs :any)=>{
-          return [
-            ...msgs,
-            {isSender: true, content: obj.content}
-          ]
-        })
-    });
+    // socket.on("msgToClient", (obj: any) => {
+    //   // console.log("Made it here")
+    //   console.log(typeof obj)
+    //   // console.log(obj.content);
+    //   // if (selectedChat.chat === 'F' && selectedChat.id === obj.sender)
+    //     setMessages((msgs :any)=>{
+    //       return [
+    //         ...msgs,
+    //         {isSender: true, content: obj.content}
+    //       ]
+    //     })
+    // });
 
     return () => {
       // console.log('Leave ')
-      socket.off("msgToClient");
+      // socket.off("msgToClient");
     };
   }, [socket]);
 

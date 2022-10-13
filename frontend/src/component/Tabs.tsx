@@ -23,8 +23,8 @@ import FloatingActionButton from "./FloatingActionButton";
 function Tabs() {
     const value = useColorModeValue('blackAlpha.200', 'whiteAlpha.200')
     const {setSelectedChat} = useContext<any>(ChatContext)
-    const {data, friends} = useContext<any>(ChatContext)
-    const { groups} = data
+    const {friends, groups} = useContext<any>(ChatContext)
+
     return (
         <ChakraTabs
             as={motion.div}

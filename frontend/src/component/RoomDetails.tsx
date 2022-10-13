@@ -10,8 +10,7 @@ function RoomDetails() {
 
     const [newMembers, setNewMembers] = useState<any>(false)
     const { selectedChat } = useContext<any>(ChatContext);
-    const { data,friends } = useContext<any>(ChatContext);
-    const {groups} = data
+    const { data,friends, groups } = useContext<any>(ChatContext);
     let searchIndex = groups.findIndex((id: any) => selectedChat.id === id.id);
     const [settings, setSettings] = useState<any>(false)
 

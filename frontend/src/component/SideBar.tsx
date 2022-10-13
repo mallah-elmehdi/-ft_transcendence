@@ -6,6 +6,7 @@ import Tabs from './Tabs';
 import Messaging from './Messaging';
 import { ChatContext } from '../State/ChatProvider';
 import NewChannel from './NewChannel';
+import useFriends from '../hooks/useFriends';
 
 const ChatTabs = () => {
     const { isSearch, toggleSearch } = useContext<any>(ChatContext);
@@ -35,6 +36,8 @@ const ChatTabs = () => {
 const SideBar = () => {
     const { selectedChat } = useContext<any>(ChatContext);
     const { newChannel } = useContext<any>(ChatContext);
+
+    useFriends();
 
     return (
         <>

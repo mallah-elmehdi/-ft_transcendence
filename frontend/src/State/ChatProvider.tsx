@@ -1,8 +1,8 @@
 import React, { useState, createContext, useEffect } from 'react';
-import { API } from "../constants";
+import { API, SOCKET } from "../constants";
 import socketIOClient, {io} from "socket.io-client";
 import axios from 'axios';
-import Friends from '../hooks/useFriends';
+import useFriends from '../hooks/useFriends';
 
 // @ts-ignore
 export const ChatContext = createContext();
@@ -12,7 +12,7 @@ type Props = {
 }
 
 const ChatProvider = ({ children }: Props) => {
-    // const socket = io(API + "dm" );
+    // const socket = io(SOCKET + "dm" );
     
     const [newChannel, setNewChannel] = useState(false);
     const toggleNewChannel = () => {
@@ -28,33 +28,31 @@ const ChatProvider = ({ children }: Props) => {
     const toggleOffSelectedChat = () => {
         setSelectedChat(null);
     }
+
     const [friends, setFriends] = useState<any>([
         { id: '1', name: 'User1', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
         { id: '26', name: 'User1', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
-        { id: '27', name: 'User1', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
-        { id: '28', name: 'User1', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
-        { id: '29', name: 'User1', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
-        { id: '30', name: 'User1', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
         { id: '31', name: 'User1', avatar: 'https://cdn.intra.42.fr/users/ynoam.jpg', },
     ]);
-    // const f = Friends()
-    
-    useEffect(()=>{
-        Friends(setFriends);
-    }, [])
-    // console.log(typeof f);
-    // console.log(f[0]?.id);
+
+    const [groups, setGroups] = useState<any>([
+        { id: '1', name: 'hhhGroup', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+        { id: '2', name: 'retardeds',avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+        { id: '3', name: '1337',     avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+        { id: '5', name: 'Group6',   avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+        { id: '6', name: 'Group7',   avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+    ]);
     
     const [data, setData] = useState(
         {
             friends: friends,
-            groups: [
-                { id: '1', name: 'hhhGroup', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
-                { id: '2', name: 'retardeds', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
-                { id: '3', name: '1337', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
-                { id: '5', name: 'Group6', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
-                { id: '6', name: 'Group7', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
-            ],
+            // groups: [
+            //     { id: '1', name: 'hhhGroup', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+            //     { id: '2', name: 'retardeds', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+            //     { id: '3', name: '1337', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+            //     { id: '5', name: 'Group6', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+            //     { id: '6', name: 'Group7', avatar: 'https://source.unsplash.com/user/c_v_r/1900x800' },
+            // ],
             members: [
                 {
                     id: '1',
@@ -94,8 +92,11 @@ const ChatProvider = ({ children }: Props) => {
                 toggleOffSelectedChat: toggleOffSelectedChat,
                 toggleNewChannel: toggleNewChannel,
                 newChannel: newChannel,
-                // socket: socket,
                 friends: friends,
+                // socket: socket,
+                setFriends: setFriends,
+                setGroups: setGroups,
+                groups: groups,
             }}
         >
             {children}

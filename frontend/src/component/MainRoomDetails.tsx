@@ -20,8 +20,7 @@ type Props = {
 };
 export default function MainRoomDetails({ toggleNewMembers, toggleSettings, isAdmin, isOwner }: Props) {
     const { toggleDetails } = useContext<any>(ChatContext);
-    const { data, friends } = useContext<any>(ChatContext);
-    const { groups} = data
+    const { data, friends, groups } = useContext<any>(ChatContext);
     const { selectedChat } = useContext<any>(ChatContext);
     let searchIndex = groups.findIndex((id: any) => selectedChat.id === id.id);
     let membersIndex = data.members.findIndex((members: any) => selectedChat.id === members.id);

@@ -8,8 +8,7 @@ import FriendMenu from './FriendMenu';
 import GroupMenu from './GroupMenu';
 
 function MessagingBox() {
-    const {data, friends} = useContext<any>(ChatContext);
-    const {groups} = data
+    const {data, friends, groups} = useContext<any>(ChatContext);
     const {selectedChat, setSelectedChat, toggleOffSelectedChat} = useContext<any>(ChatContext);
     const {toggleDetails} = useContext<any>(ChatContext);
     let searchIndex;

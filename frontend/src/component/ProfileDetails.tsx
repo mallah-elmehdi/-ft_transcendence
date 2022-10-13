@@ -6,8 +6,7 @@ import MiniProfile from "./MiniProfile";
 
 
 function ProfileDetails() {
-    const {data, friends} = useContext<any>(ChatContext);
-    const {groups} = data
+    const {data, friends, groups} = useContext<any>(ChatContext);
     const {setChatDetails, toggleDetails} = useContext<any>(ChatContext);
     const {selectedChat} = useContext<any>(ChatContext);
     let searchIndex;
