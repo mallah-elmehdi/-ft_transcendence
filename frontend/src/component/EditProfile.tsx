@@ -19,6 +19,7 @@ import {
 import React from 'react';
 import { FaCamera, FaDiscord, FaFacebook, FaInstagram, FaRegEdit } from 'react-icons/fa';
 import UpdatePtofile from '../api/updatePtofile';
+import { REGEX_ALPHANUM } from '../constants';
 import { GlobalContext } from '../State/GlobalProvider';
 
 // types
@@ -38,6 +39,7 @@ const EditProfile = (props: Props) => {
 
     // form
     const [avatar, setAvatar] = React.useState(props.avatar);
+    const [newAvatar, setNewAvatar] = React.useState<File>();
     const [username, setUsername] = React.useState(props.user_name);
     const [facebook, setFacebook] = React.useState(props.facebook);
     const [discord, setDiscord] = React.useState(props.discord);
@@ -46,14 +48,23 @@ const EditProfile = (props: Props) => {
     // update profile
     const changeAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            const objectUrl = URL.createObjectURL(e.target.files[0]);
-            setAvatar(objectUrl);
+            if (e.target.files[0].size > 1024 * 1000) {
+                setNotif({
+                    exist: true,
+                    type: 'Error',
+                    message: 'Avatar image is too large',
+                });
+            } else {
+                const objectUrl = URL.createObjectURL(e.target.files[0]);
+                setAvatar(objectUrl);
+                setNewAvatar(e.target.files[0]);
+            }
         }
     };
-    const changeUsername = (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value);
-    const changeFacebook = (e: React.ChangeEvent<HTMLInputElement>) => setFacebook(e.target.value);
-    const changeDiscord = (e: React.ChangeEvent<HTMLInputElement>) => setDiscord(e.target.value);
-    const changeInstagram = (e: React.ChangeEvent<HTMLInputElement>) => setInstagram(e.target.value);
+    const changeUsername = (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value.replace(REGEX_ALPHANUM, ''));
+    const changeFacebook = (e: React.ChangeEvent<HTMLInputElement>) => setFacebook(e.target.value.replace(REGEX_ALPHANUM, ''));
+    const changeDiscord = (e: React.ChangeEvent<HTMLInputElement>) => setDiscord(e.target.value.replace(REGEX_ALPHANUM, ''));
+    const changeInstagram = (e: React.ChangeEvent<HTMLInputElement>) => setInstagram(e.target.value.replace(REGEX_ALPHANUM, ''));
 
     // first render
     React.useEffect(() => {
@@ -68,27 +79,18 @@ const EditProfile = (props: Props) => {
     const { setLoader, setUserInfo, setNotif } = React.useContext<any>(GlobalContext);
 
     const submitProfile = () => {
-        if (
-            username.length < 2 ||
-            username.length > 12 ||
-            facebook.length < 2 ||
-            facebook.length > 12 ||
-            discord.length < 2 ||
-            discord.length > 12 ||
-            instagram.length < 2 ||
-            instagram.length > 12
-        ) {
+        if (username.length < 2 || username.length > 12 || facebook.length > 12 || discord.length > 12 || instagram.length > 12) {
             setNotif({
                 exist: true,
                 type: 'Error',
                 message: 'Input length should be between 2 and 12 characters',
             });
         } else {
-            const formData = new FormData();
-            formData.append('selectedFile', avatar);
+            // const formData = new FormData();
+            // if (newAvatar) formData.append('avatar', newAvatar ? newAvatar : '', newAvatar ? newAvatar.name : '');
             UpdatePtofile(
                 props.login,
-                { avatar: props.avatar === avatar ? null : formData, user_name: username, facebook, discord, instagram },
+                { avatar: props.avatar === avatar ? null : newAvatar, user_name: username, facebook, discord, instagram },
                 setLoader,
                 setUserInfo,
                 onClose,

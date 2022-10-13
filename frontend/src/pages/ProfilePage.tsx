@@ -39,6 +39,7 @@ import { Loading } from '../component/Loading';
 import { AlertCompo } from '../component/AlertCompo';
 import SignOut from '../api/signOut';
 import { useNavigate } from 'react-router-dom';
+import UserMatchHistory from '../api/userMatchHistory';
 
 const ProfilePage = () => {
     // page title
@@ -61,11 +62,12 @@ const ProfilePage = () => {
     const [isSmallScreen] = useMediaQuery(`(min-width: ${theme.breakpoints.xl})`);
 
     // get the data
-    const { userInfo, loader, notif, setLoader, setUserInfo, setNotif } = React.useContext<any>(GlobalContext);
+    const { userInfo, loader, notif, setLoader, setUserInfo, setNotif, userMatchHistory } = React.useContext<any>(GlobalContext);
     const navigate = useNavigate();
 
     // const get the user info;
     UserInfo();
+    UserMatchHistory();
 
     // signout
     const signoutHandler = () => {
@@ -79,7 +81,7 @@ const ProfilePage = () => {
             {notif && notif.exist && <AlertCompo message={notif.message} type={notif.type} />}
             <Grid h="100%" templateColumns="repeat(12, 1fr)" gap={6}>
                 <GridItem colSpan={profileInfo}>
-                    <Card w="100%" position="relative">
+                    <Card w="100%" h="100%" position="relative">
                         <>
                             <EditProfile
                                 avatar={userInfo?.user_avatar}

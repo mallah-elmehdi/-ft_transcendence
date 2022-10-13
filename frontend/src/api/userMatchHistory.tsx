@@ -1,16 +1,13 @@
 import axios from 'axios';
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { API, pagesContent } from '../constants';
 import { GlobalContext } from '../State/GlobalProvider';
 
-const UserInfo = () => {
-    const params = useParams();
+const UserMatchHistory = () => {
     // general
-    const backEnd = API + (!params?.user_id || params?.user_id === 'me' ? 'user/me' : 'user/' + params?.user_id);
-    console.log('backEnd', backEnd);
-
-    const { setUserInfo, setLoader } = React.useContext<any>(GlobalContext);
+    const backEnd = API + 'user/math';
+    const { setUserMatchHistory, setLoader } = React.useContext<any>(GlobalContext);
 
     const navigate = useNavigate();
     // api call
@@ -22,15 +19,13 @@ const UserInfo = () => {
         axios
             .get(backEnd)
             .then((response) => {
-                setUserInfo(response?.data);
-                window.localStorage.setItem('isSignedIn', 'true');
+                setUserMatchHistory(response?.data);
             })
             .catch((error) => {
                 navigate(pagesContent.login.url);
-                window.localStorage.setItem('isSignedIn', 'false');
             })
             .finally(() => setLoader(false));
     }, []);
 };
 
-export default UserInfo;
+export default UserMatchHistory;

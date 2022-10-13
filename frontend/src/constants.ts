@@ -30,11 +30,13 @@ export const tabs = [
         title: 'Home',
     },
     {
-        url: '/profile',
-        title: 'Profile',
-    },
-    {
         url: '/chat',
         title: 'Chat',
     },
+    {
+        url: '/profile/me',
+        title: 'Profile',
+    },
 ];
+
+export const REGEX_ALPHANUM = /[^A-Za-z0-9_-]/g;

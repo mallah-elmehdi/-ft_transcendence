@@ -2,6 +2,7 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 import {
     Box,
     Button,
+    Container,
     Flex,
     Modal,
     ModalBody,
@@ -10,6 +11,7 @@ import {
     ModalHeader,
     Show,
     Spacer,
+    Stack,
     Text,
     useDisclosure,
 } from '@chakra-ui/react';
@@ -33,7 +35,7 @@ export default function Navbar() {
     const location = useLocation();
 
     return (
-        <>
+        <Stack spacing={5} h="100%">
             <Flex mb={5} px={10} justifyContent={'right'} alignItems={'center'} overflow={'hideen'}>
                 <Show above="md">
                     <Link to={pagesContent.home.url}>
@@ -105,6 +107,6 @@ export default function Navbar() {
             </Flex>
 
             <Outlet />
-        </>
+        </Stack>
     );
 }
