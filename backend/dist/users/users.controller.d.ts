@@ -1,12 +1,17 @@
 import { UsersService } from './users.service';
 import { Request } from 'express';
-import { usernameDto, userDataDto } from './DTO/username.dto';
+import { usernameDto, userDataDto, RoomInfoDto } from './DTO/username.dto';
 import { CloudinaryService } from './clodinary/clodinary.service';
 export declare class UsersController {
     private readonly UsersService;
     private cloudinary;
     constructor(UsersService: UsersService, cloudinary: CloudinaryService);
-    AddFriend(param: number): Promise<void>;
+    GetRooms(req: Request): Promise<import(".prisma/client").Members[]>;
+    AddUsersToRoomsbyId(param: Number, req: Request): Promise<import(".prisma/client").Members>;
+    GetRoomsbyId(param: Number, req: Request): Promise<import(".prisma/client").Room_info>;
+    GetMembersbyId(param: Number, req: Request): Promise<import(".prisma/client").Members[]>;
+    CreateRoom(RoomInfoDto: RoomInfoDto, file: any, req: Request): Promise<import(".prisma/client").Room_info>;
+    AddFriend(param: Number): Promise<import(".prisma/client").Friend>;
     GetAllUsers(): Promise<import(".prisma/client").User[]>;
     getAllFriends(): Promise<import(".prisma/client").Friend[]>;
     getMe(req: Request): Promise<import(".prisma/client").User>;

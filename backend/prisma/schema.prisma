@@ -41,7 +41,7 @@ model User {
 model Friend {
   id       Int @id @default(autoincrement())
   userId   Int
-  friendId Int
+  friendId Int 
   user User? @relation(fields: [userId], references: [user_id])
 }
 
@@ -73,9 +73,9 @@ model Chats {
 model Room_info {
   room_id Int @default(autoincrement()) @id
   room_name String 
-  room_avatar String
+  room_avatar String?
   room_type String
-  password String 
+  password String?
   created_at DateTime @default(now())
   room Members[]
   chat Chats []

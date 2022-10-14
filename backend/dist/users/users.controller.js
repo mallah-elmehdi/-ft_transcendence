@@ -23,9 +23,38 @@ let UsersController = class UsersController {
         this.UsersService = UsersService;
         this.cloudinary = cloudinary;
     }
+    async GetRooms(req) {
+        return this.UsersService.getRooms(1).catch((err) => {
+            throw new common_1.BadRequestException(err);
+        });
+    }
+    async AddUsersToRoomsbyId(param, req) {
+        return this.UsersService.AddToRoom(param, 'member', 1).catch((err) => {
+            throw new common_1.BadRequestException(err);
+        });
+    }
+    async GetRoomsbyId(param, req) {
+        return this.UsersService.getRoombyId(param).catch((err) => {
+            throw new common_1.BadRequestException(err);
+        });
+    }
+    async GetMembersbyId(param, req) {
+        return this.UsersService.getMembersbyId(param).catch((err) => {
+            throw new common_1.BadRequestException(err);
+        });
+    }
+    async CreateRoom(RoomInfoDto, file, req) {
+        console.log("DTO", RoomInfoDto);
+        const ba = await this.UsersService.CreateRooom(RoomInfoDto);
+        if (ba) {
+            const val = await this.UsersService.AddToRoom(1, 'owner', ba.room_id);
+            console.log('here you shit', val);
+        }
+        return ba;
+    }
     async AddFriend(param) {
         const user_info = await this.UsersService.getUserbyLogin('aymaatou');
-        const user = user_info.user_id;
+        const user = 1;
         return await this.UsersService.friendReq(user, param);
     }
     async GetAllUsers() {
@@ -63,6 +92,52 @@ let UsersController = class UsersController {
         return await this.UsersService.updateUserData(login, userDataDto);
     }
 };
+__decorate([
+    (0, common_1.Get)('group/all'),
+    (0, common_1.HttpCode)(200),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "GetRooms", null);
+__decorate([
+    (0, common_1.Post)('group/add/:id'),
+    (0, common_1.HttpCode)(201),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "AddUsersToRoomsbyId", null);
+__decorate([
+    (0, common_1.Get)('group/:id'),
+    (0, common_1.HttpCode)(200),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "GetRoomsbyId", null);
+__decorate([
+    (0, common_1.Get)('members/:id'),
+    (0, common_1.HttpCode)(200),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "GetMembersbyId", null);
+__decorate([
+    (0, common_1.Post)('group'),
+    (0, common_1.HttpCode)(201),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar')),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFile)()),
+    __param(2, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [username_dto_1.RoomInfoDto, Object, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "CreateRoom", null);
 __decorate([
     (0, common_1.Post)('add/:id'),
     (0, common_1.HttpCode)(201),

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { userDataDto} from './DTO/username.dto'
+import { userDataDto, RoomInfoDto} from './DTO/username.dto'
 
 @Injectable()
 export class UsersService {
@@ -9,7 +9,13 @@ export class UsersService {
 
 
 		// inserting to a table with Foreing keys
-	async  friendReq(user :number, params:number) {
+	async  friendReq(user :Number, params:Number) {
+		
+		// check here if the user has already friended the person
+		const update = await this.prisma.friend.create({ data: 
+			{ friendId: Number(params) , user: { connect: { user_id: Number(user) } 
+		} } })
+		return update
 		// const updated_list =  await this.prisma.user.create(
 		// 	{
 		// 		where : {
@@ -23,6 +29,74 @@ export class UsersService {
 		// 			},
 		// 		},
 		// 	});
+	}
+	async AddToRoom(user, rool, roomId)
+	{
+		const update = await this.prisma.members.create({
+			 data: 
+			{ prev: (rool) , 
+				room: { connect: { room_id: Number(roomId) } },
+				user: { connect: { user_id: Number(user) } }
+		 }
+		 })
+		 console.log("Waaaaa3 ",update)
+		 return update;
+		}
+	async CreateRooom(RoomInfoDto: RoomInfoDto)
+	{
+		console.log('aru heri')
+		const room_init = await this.prisma.room_info.create(
+			{
+				data: {
+					room_name: RoomInfoDto.room_name,
+					room_type: RoomInfoDto.room_type,
+					password: RoomInfoDto.room_password,
+					room_avatar: RoomInfoDto.room_avatar,
+				}
+			}
+		)
+		console.log('roooom >>> ', room_init);
+	
+		return room_init;
+	}
+
+	async getRooms (id: Number)
+	{
+		const rooms = await this.prisma.members.findMany(
+		{
+			where :
+			{
+				userId : Number(id),
+			},
+		})
+		console.log('rooms = >', rooms);
+		
+		return rooms
+	}
+	async getRoombyId (id: Number)
+	{
+		const room = await this.prisma.room_info.findUnique(
+		{
+			where :
+			{
+				room_id : Number(id),
+			},
+		})
+		console.log('uniq rooms = >', room);
+		
+		return room
+	}
+	async getMembersbyId (id: Number)
+	{
+		const members = await this.prisma.members.findMany(
+		{
+			where :
+			{
+				roomId : Number(id),
+			},
+		})
+
+		return members
 	}
 
 	async  getAllUsers() {

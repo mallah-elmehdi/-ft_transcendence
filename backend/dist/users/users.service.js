@@ -17,6 +17,58 @@ let UsersService = class UsersService {
         this.prisma = prisma;
     }
     async friendReq(user, params) {
+        const update = await this.prisma.friend.create({ data: { friendId: Number(params), user: { connect: { user_id: Number(user) }
+                } } });
+        return update;
+    }
+    async AddToRoom(user, rool, roomId) {
+        const update = await this.prisma.members.create({
+            data: { prev: (rool),
+                room: { connect: { room_id: Number(roomId) } },
+                user: { connect: { user_id: Number(user) } }
+            }
+        });
+        console.log("Waaaaa3 ", update);
+        return update;
+    }
+    async CreateRooom(RoomInfoDto) {
+        console.log('aru heri');
+        const room_init = await this.prisma.room_info.create({
+            data: {
+                room_name: RoomInfoDto.room_name,
+                room_type: RoomInfoDto.room_type,
+                password: RoomInfoDto.room_password,
+                room_avatar: RoomInfoDto.room_avatar,
+            }
+        });
+        console.log('roooom >>> ', room_init);
+        return room_init;
+    }
+    async getRooms(id) {
+        const rooms = await this.prisma.members.findMany({
+            where: {
+                userId: Number(id),
+            },
+        });
+        console.log('rooms = >', rooms);
+        return rooms;
+    }
+    async getRoombyId(id) {
+        const room = await this.prisma.room_info.findUnique({
+            where: {
+                room_id: Number(id),
+            },
+        });
+        console.log('uniq rooms = >', room);
+        return room;
+    }
+    async getMembersbyId(id) {
+        const members = await this.prisma.members.findMany({
+            where: {
+                roomId: Number(id),
+            },
+        });
+        return members;
     }
     async getAllUsers() {
         const users = await this.prisma.user.findMany();

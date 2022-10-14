@@ -17,5 +17,17 @@ import { Multer } from 'multer';
 	@IsString()
 	discord?: string;
 	@IsString()
- 	instagram?: string;
- }	
+	instagram?: string;
+}
+
+export class RoomInfoDto{
+	
+	@IsString()
+	room_name : string;
+	@IsString()
+	room_type : string;
+	@IsString()
+	room_password? : string;
+	@IsString()
+	room_avatar? : string;
+ }

@@ -8,3 +8,9 @@ export declare class userDataDto {
     discord?: string;
     instagram?: string;
 }
+export declare class RoomInfoDto {
+    room_name: string;
+    room_type: string;
+    room_password?: string;
+    room_avatar?: string;
+}

@@ -6,7 +6,7 @@ import { Express } from 'express'
 import { FileInterceptor, MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Observable, of } from 'rxjs';
-import { usernameDto, userDataDto} from './DTO/username.dto'
+import { usernameDto, userDataDto, RoomInfoDto} from './DTO/username.dto'
 import { CloudinaryService } from './clodinary/clodinary.service';
 import { get } from 'http';
 
@@ -17,13 +17,71 @@ export class UsersController {
 
   constructor(private readonly UsersService: UsersService, private cloudinary: CloudinaryService) {}
 
+  @Get('group/all')
+  @HttpCode(200)
+  async GetRooms(@Req() req: Request) {
+    // here get the room for the current user
+    return this.UsersService.getRooms(1).catch((err) => {
+      throw new BadRequestException(err);
+    });
+  }
+  @Post('group/add/:id')
+  @HttpCode(201)
+  async AddUsersToRoomsbyId(@Param('id') param : Number, @Req() req: Request) {
+    // here get the room for the current user
+    return this.UsersService.AddToRoom(param,'member',1).catch((err) => {
+      throw new BadRequestException(err);
+    });
+  }
+  @Get('group/:id')
+  @HttpCode(200)
+  async GetRoomsbyId(@Param('id') param : Number, @Req() req: Request) {
+    // here get the room for the current user
+    return this.UsersService.getRoombyId(param).catch((err) => {
+      throw new BadRequestException(err);
+    });
+  }
+  @Get('members/:id')
+  @HttpCode(200)
+  async GetMembersbyId(@Param('id') param : Number, @Req() req: Request) {
+    // here get the room for the current user
+    return this.UsersService.getMembersbyId(param).catch((err) => {
+      throw new BadRequestException(err);
+    });
+  }
+  
+  @Post('group')
+  @HttpCode(201)
+  @UseInterceptors(FileInterceptor('avatar'))
+  async CreateRoom(@Body() RoomInfoDto : RoomInfoDto,  @UploadedFile() file, @Req() req: Request) {
+    
+    // here you after succesfully creating room add the creator as the the owner
+    console.log("DTO", RoomInfoDto)
+    // if (file)
+    // {
+    //   const cloud =  await this.cloudinary.uploadImage(file)
+    //   if (cloud)
+    //   {
+    //     RoomInfoDto.room_avatar = cloud['url']
+    //   }
+    // }
+   const ba = await this.UsersService.CreateRooom(RoomInfoDto);
+   if (ba)
+    {
+      const val = await this.UsersService.AddToRoom(1, 'owner', ba.room_id)
+      console.log('here you shit', val);
+      
+    } 
+   return ba
+  }
 
   @Post('add/:id')
   @HttpCode(201)
-  async  AddFriend(@Param('id') param : number) {
+  async  AddFriend(@Param('id') param : Number) {
     const user_info = await this.UsersService.getUserbyLogin('aymaatou');
-    const user = user_info.user_id;
-    return await this.UsersService.friendReq( user,param);
+    // const user = user_info.user_id;
+    const user = 1;
+    return await this.UsersService.friendReq( user ,param);
   }
   @Get('list/all')
   @HttpCode(200)
@@ -95,4 +153,6 @@ export class UsersController {
   }
 
 }
+
+
 

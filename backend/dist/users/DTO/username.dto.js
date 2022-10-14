@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userDataDto = exports.usernameDto = void 0;
+exports.RoomInfoDto = exports.userDataDto = exports.usernameDto = void 0;
 const class_validator_1 = require("class-validator");
 class usernameDto {
 }
@@ -42,4 +42,23 @@ __decorate([
     __metadata("design:type", String)
 ], userDataDto.prototype, "instagram", void 0);
 exports.userDataDto = userDataDto;
+class RoomInfoDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], RoomInfoDto.prototype, "room_name", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], RoomInfoDto.prototype, "room_type", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], RoomInfoDto.prototype, "room_password", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], RoomInfoDto.prototype, "room_avatar", void 0);
+exports.RoomInfoDto = RoomInfoDto;
 //# sourceMappingURL=username.dto.js.map
