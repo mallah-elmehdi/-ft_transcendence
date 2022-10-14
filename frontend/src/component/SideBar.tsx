@@ -7,11 +7,16 @@ import Messaging from './Messaging';
 import { ChatContext } from '../State/ChatProvider';
 import NewChannel from './NewChannel';
 import useFriends from '../api/useFriends';
+import { API } from '../constants';
+import useGroups from '../api/useGroups';
 
 const ChatTabs = () => {
     const { isSearch, toggleSearch } = useContext<any>(ChatContext);
     const { setChatDetails } = useContext<any>(ChatContext);
-
+    
+    useFriends();
+    useGroups();
+    
     useEffect(() => {
         setChatDetails(false);
         const keyDownHandler = (event: any) => {
@@ -36,8 +41,8 @@ const ChatTabs = () => {
 const SideBar = () => {
     const { selectedChat } = useContext<any>(ChatContext);
     const { newChannel } = useContext<any>(ChatContext);
+    
 
-    useFriends();
 
     return (
         <>

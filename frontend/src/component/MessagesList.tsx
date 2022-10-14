@@ -15,7 +15,7 @@ function MessagesList() {
   const {selectedChat} = useContext<any>(ChatContext)
   const { messages, setMessages, socket } = useContext<any>(ChatContext);
   useEffect(() => {
-    console.log("effect")
+    // console.log("effect")
     // socket.on("msgToClient", (obj: any) => {
     //   // console.log("Made it here")
     //   console.log(typeof obj)

@@ -11,6 +11,7 @@ import useBlock from '../hooks/useBlock';
 import RemoveMember from './RemoveMember';
 import MuteMember from './MuteMember';
 import { ArrowBackIcon } from '@chakra-ui/icons';
+import useMembers from '../api/useMembers';
 
 type Props = {
     toggleNewMembers: () => void;
@@ -20,17 +21,19 @@ type Props = {
 };
 export default function MainRoomDetails({ toggleNewMembers, toggleSettings, isAdmin, isOwner }: Props) {
     const { toggleDetails } = useContext<any>(ChatContext);
-    const { data, friends, groups } = useContext<any>(ChatContext);
+    const { data, friends, groups, roomMembers} = useContext<any>(ChatContext);
     const { selectedChat } = useContext<any>(ChatContext);
     let searchIndex = groups.findIndex((id: any) => selectedChat.id === id.id);
-    let membersIndex = data.members.findIndex((members: any) => selectedChat.id === members.id);
-    const [member, setMember] = useState<any>(null);
+    // let membersIndex = data.members.findIndex((members: any) => selectedChat.id === members.id);
+    const [member, setMember] = useState<any>([]);
+    // const [members, setMembers] = useState<any>([]);
     const { isMuteOpen, onMuteOpen, onMuteClose } = useMute();
     const { isBlockOpen, onBlockOpen, onBlockClose } = useBlock();
 
     function isFriend(id: any) {
         return friends.findIndex((f: any) => f.id == id) == -1 ? false : true;
     }
+    // console.log("members", members)
 
     useEffect(() => {
         const keyDownHandler = (event: any) => {
@@ -44,6 +47,8 @@ export default function MainRoomDetails({ toggleNewMembers, toggleSettings, isAd
             document.removeEventListener('keydown', keyDownHandler);
         };
     });
+
+    useMembers();
 
     return (
         <VStack overflow={'auto'} w='100%' position={'relative'} h={'100%'}>
@@ -62,9 +67,9 @@ export default function MainRoomDetails({ toggleNewMembers, toggleSettings, isAd
                 )}
             </HStack>
             <VStack pt={'1.5%'} h={'100%'} overflow={'auto'} w={'100%'} alignItems={'left'}>
-                <Image h="20em" src={groups[searchIndex].avatar} />
+                {groups[searchIndex].avatar && <Image h="20em" src={groups[searchIndex].avatar} />}
                 <Text>Memebers</Text>
-                {data.members[membersIndex].membs.map((member: any, index: any) => (
+                {roomMembers.map((member: any, index: any) => (
                     <ChannelMemeber
                         id={member.id}
                         name={member.name.toString()}
