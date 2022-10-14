@@ -125,7 +125,7 @@ export class UsersController {
   {
     return await this.cloudinary.uploadImage(file).catch((err) => {
       throw new BadRequestException(err);
-    });
+    }); 
 }
 
   @Post('username/:login')
