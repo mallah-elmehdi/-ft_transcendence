@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { Button, Text, IconButton, Menu, MenuButton, MenuList, MenuItem, MenuItemOption, MenuGroup, MenuOptionGroup, MenuDivider } from '@chakra-ui/react';
 import { Avatar, Box, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, Spacer, useDisclosure, useColorModeValue } from '@chakra-ui/react';
 import {MdDelete} from "react-icons/md"
+import { ChatContext } from '../State/ChatProvider';
 
 const GroupMenu = () => {
     const value = useColorModeValue('white', 'lightBlack')
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { selectedChat, setSelectedChat } = useContext<any>(ChatContext);
 
     const leaveChannelHandler = () => {
-        console.log('BLOCK USER');
+        console.log('LEAVE ROOM: ', selectedChat.id);
+        setSelectedChat(null);
     };
     return (
         <>

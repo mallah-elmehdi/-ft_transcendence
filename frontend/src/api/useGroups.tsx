@@ -12,8 +12,6 @@ const useGroups = () => {
     axios
       .get(GROUP + "all")
       .then((res: any) => {
-        // console.log('effect');
-        
         setGroup(res.data);
       })
       .catch((err) => {
@@ -22,39 +20,25 @@ const useGroups = () => {
   }, []);
 
   useEffect(() => {
+    const groups:any = []
     for (var i = 0; i < group.length; i++) {
       axios
         .get(GROUP + group[i].roomId)
         .then((res: any) => {
-          setGroupData((data: any) => {
-            return [
-              ...data,
-              {
-                id: res.data.room_id,
-                name: res.data.room_name,
-                avatar: res.data.room_avatar,
-                type: res.data.room_type,
-              },
-            ];
-          });
-          // console.log({
-          //   id: res.data.room_id,
-          //   name: res.data.room_name,
-          //   avatar: res.data.room_avatar,
-          //   type: res.data.room_type,
-          // },)
+          groups.push({
+            id: res.data.room_id,
+            name: res.data.room_name,
+            avatar: res.data.room_avatar,
+            type: res.data.room_type,
+          })
         })
         .catch((err) => {
           console.log(err);
         });
     }
+    setGroups(()=> groups);
   }, [group]);
 
-  useEffect(() => {
-    // console.log(groupData);
-    
-    setGroups(groupData);
-  }, [groupData]);
 };
 
 export default useGroups;

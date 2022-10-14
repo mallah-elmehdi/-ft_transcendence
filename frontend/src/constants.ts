@@ -1,5 +1,5 @@
-export const SOCKET = 'http://10.11.7.1:3003'; // ip of backend socket
-export const API = 'http://10.11.7.1:3001'; // ip of backend
+export const SOCKET = 'http://10.11.8.1:3003'; // ip of backend socket
+export const API = 'http://10.11.8.1:3001'; // ip of backend
 export const FRIENDS_URL = API + "/user/friends"
 export const USER_URL = API + "/user/"
 export const GROUP = API + "/user/group/"
