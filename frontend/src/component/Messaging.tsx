@@ -6,6 +6,7 @@ import RoomDetails from "./RoomDetails";
 
 const Messaging = () => {
   const { chatDetails, selectedChat } = useContext<any>(ChatContext);
+
   return (
     <>
       {!chatDetails ? (

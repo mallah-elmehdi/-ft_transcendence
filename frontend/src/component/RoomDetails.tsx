@@ -3,6 +3,7 @@ import MainRoomDetails from './MainRoomDetails';
 import AddMemebers from './AddMemebers';
 import RoomSettings from './RoomSettings';
 import { ChatContext } from "../State/ChatProvider";
+import useMembers from '../api/useMembers';
 
 function RoomDetails() {
     const [isAdmin, setIsAdmin] = useState<any>(true);
@@ -10,7 +11,7 @@ function RoomDetails() {
 
     const [newMembers, setNewMembers] = useState<any>(false)
     const { selectedChat } = useContext<any>(ChatContext);
-    const { data,friends, groups } = useContext<any>(ChatContext);
+    const { data,friends, groups, setMembers } = useContext<any>(ChatContext);
     let searchIndex = groups.findIndex((id: any) => selectedChat.id === id.id);
     const [settings, setSettings] = useState<any>(false)
 
@@ -21,7 +22,7 @@ function RoomDetails() {
     const toggleSettings = () => {
         setSettings(!settings)
     }
-
+    useMembers();
     return (
         <>
             {settings ? (

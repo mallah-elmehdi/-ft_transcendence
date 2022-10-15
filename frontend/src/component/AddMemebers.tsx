@@ -11,8 +11,8 @@ type Props = {
 }
 
 export default function AddMemebers({ toggleNewMembers, roomId }: Props) {
-  const { data, friends, groups } = useContext<any>(ChatContext);
-  const { members} = data;
+  const { data, friends, groups, members } = useContext<any>(ChatContext);
+  // const { members} = data;
   const membersId = members.findIndex((m: any) => m.id == roomId)
   const [selectedFriends, setSelectedFriends] = useState<any>([]);
 

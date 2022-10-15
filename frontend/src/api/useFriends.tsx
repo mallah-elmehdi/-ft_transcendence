@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { API } from "../constants";
+import { API, FRIENDS_URL, USER_URL } from "../constants";
 import { ChatContext } from "../State/ChatProvider";
+import { GlobalContext } from "../State/GlobalProvider";
 
 const useFriends = () => {
   const [friend, setFriend] = useState<any>({});
@@ -10,7 +11,7 @@ const useFriends = () => {
 
   useEffect(() => {
     axios
-      .get(API + "user/friends")
+      .get(FRIENDS_URL)
       .then((res: any) => {
         setFriend(res.data);
       })
@@ -22,7 +23,7 @@ const useFriends = () => {
   useEffect(() => {
     for (var i = 0; i < friend.length; i++) {
       axios
-        .get(API + `/user/${friend[i].friendId}`)
+        .get(USER_URL + friend[i].friendId)
         .then((res: any) => {
           setFriendsData((data: any) => {
             return [
@@ -42,9 +43,7 @@ const useFriends = () => {
   }, [friend]);
 
   useEffect(() => {
-    console.log(friendsData);
-    
-    // setFriends(friendsData);
+    setFriends(friendsData);
   }, [friendsData]);
 };
 
