@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const bcrypt = require('bcrypt');
 let UsersService = class UsersService {
     constructor(prisma) {
         this.prisma = prisma;
@@ -44,15 +45,25 @@ let UsersService = class UsersService {
         return update;
     }
     async CreateRooom(RoomInfoDto) {
+        const saltRounds = 10;
+        var hashed_password = null;
+        console.log("room password ", RoomInfoDto.room_password);
+        if (RoomInfoDto.room_password) {
+            hashed_password = bcrypt.hashSync(RoomInfoDto.room_password, saltRounds);
+        }
+        console.log("Hashed paassiwordi =>", hashed_password);
         const room_init = await this.prisma.room_info.create({
             data: {
                 room_name: RoomInfoDto.room_name,
                 room_type: RoomInfoDto.room_type,
-                password: RoomInfoDto.room_password,
+                password: hashed_password,
                 room_avatar: RoomInfoDto.room_avatar,
             }
         });
         return room_init;
+    }
+    check_password(room_password, hash) {
+        return bcrypt.compareSync(room_password, hash);
     }
     async getRooms(id) {
         const rooms = await this.prisma.members.findMany({
@@ -71,7 +82,6 @@ let UsersService = class UsersService {
         });
         if (!room)
             throw "NOT FOUND";
-        console.log('uniq rooms = here :>', room);
         return room;
     }
     async DeleteRoombyId(id) {
@@ -151,7 +161,7 @@ let UsersService = class UsersService {
     async updateUserData(login, userDataDto) {
         return await this.prisma.user.update({
             where: {
-                user_login: login,
+                user_id: Number(login),
             },
             data: {
                 user_avatar: userDataDto.user_avatar,
@@ -167,7 +177,7 @@ let UsersService = class UsersService {
         try {
             const userOnline = await this.prisma.user.update({
                 where: {
-                    user_login: login
+                    user_id: Number(login)
                 },
                 data: {
                     online: state

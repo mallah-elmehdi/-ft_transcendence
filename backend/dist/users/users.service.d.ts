@@ -7,6 +7,7 @@ export declare class UsersService {
     BlockUserById(me: number, DeletedUser: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
     AddToRoom(user: any, rool: any, roomId: any): Promise<import(".prisma/client").Members>;
     CreateRooom(RoomInfoDto: RoomInfoDto): Promise<import(".prisma/client").Room_info>;
+    check_password(room_password: any, hash: any): boolean;
     getRooms(id: Number): Promise<import(".prisma/client").Members[]>;
     getRoombyId(id: Number): Promise<import(".prisma/client").Room_info>;
     DeleteRoombyId(id: Number): Promise<import(".prisma/client").Room_info>;
@@ -16,6 +17,6 @@ export declare class UsersService {
     getUser(login: number): Promise<import(".prisma/client").User>;
     getUserbyLogin(login: string): Promise<import(".prisma/client").User>;
     setUsername(login: string, username: string): Promise<import(".prisma/client").User>;
-    updateUserData(login: string, userDataDto: userDataDto): Promise<import(".prisma/client").User>;
+    updateUserData(login: Number, userDataDto: userDataDto): Promise<import(".prisma/client").User>;
     setUserState(login: any, state: boolean): Promise<void>;
 }

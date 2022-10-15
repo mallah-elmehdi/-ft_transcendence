@@ -6,7 +6,7 @@ import { Express } from 'express'
 import { FileInterceptor, MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Observable, of } from 'rxjs';
-import { usernameDto, userDataDto, RoomInfoDto} from './DTO/username.dto'
+import { usernameDto, userDataDto, RoomInfoDto, AddedUsersDto} from './DTO/username.dto'
 import { CloudinaryService } from './clodinary/clodinary.service';
 import { get } from 'http';
 
@@ -31,15 +31,25 @@ export class UsersController {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     });
   }
+  
   @Post('group/add/:id')
   @HttpCode(201)
-  async AddUsersToRoomsbyId(@Param('id') param : Number, @Req() req: Request) {
-    // here get the room for the current user
-    // craete a room with value "DM"
-    return this.UsersService.AddToRoom(param,'member',1).catch((err) => {
+  @UseInterceptors()
+  async AddUsersToRoomsbyId(@Body() user : AddedUsersDto, @Param('id') param : Number, @Req() req: Request) {
+    
+    
+    if (user.room_password)
+    {
+       const room = await this.UsersService.getRoombyId(user.room_id)
+      const status = this.UsersService.check_password(user.room_password,room.password)
+      if (!status)
+        throw new HttpException('Password Invalid', HttpStatus.UNAUTHORIZED)
+    }
+    return this.UsersService.AddToRoom(param,'member',user.room_id).catch((err) => {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     });
   }
+  
   @Post('block/:id')
   @HttpCode(201)
   async BlockUserById(@Param('id') param : Number, @Req() req: Request) {
@@ -48,6 +58,7 @@ export class UsersController {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     });
   }
+ 
   @Get('group/:id')
   @HttpCode(200)
   async GetRoomsbyId(@Param('id') param : Number, @Req() req: Request) {
@@ -56,6 +67,7 @@ export class UsersController {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     });
   }
+  
   @Post('group/:id')
   @HttpCode(201)
   async DeleteRoomsbyId(@Param('id') param : Number, @Req() req: Request) {
@@ -65,6 +77,7 @@ export class UsersController {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     });
   }
+ 
   @Get('members/:id')
   @HttpCode(200)
   async GetMembersbyId(@Param('id') param : Number, @Req() req: Request) {
@@ -81,20 +94,18 @@ export class UsersController {
     
     // here you after succesfully creating room add the creator as the the owner
     console.log("DTO", RoomInfoDto)
-    // if (file)
-    // {
-    //   const cloud =  await this.cloudinary.uploadImage(file)
-    //   if (cloud)
-    //   {
-    //     RoomInfoDto.room_avatar = cloud['url']
-    //   }
-    // }
+    if (file)
+    {
+      const cloud =  await this.cloudinary.uploadImage(file)
+      if (cloud)
+      {
+        RoomInfoDto.room_avatar = cloud['url']
+      }
+    }
    const ba = await this.UsersService.CreateRooom(RoomInfoDto);
    if (ba)
     {
       const val = await this.UsersService.AddToRoom(1, 'owner', ba.room_id)
-      console.log('here you shit', val);
-      
     } 
    return ba
   }
@@ -107,6 +118,7 @@ export class UsersController {
     const user = 1;
     return await this.UsersService.friendReq( user ,param);
   }
+  
   @Get('list/all')
   @HttpCode(200)
   async GetAllUsers() {
@@ -130,6 +142,7 @@ export class UsersController {
   {
         return await this.UsersService.getUserbyLogin(req.user['userLogin']);
   }
+ 
   @Get("match")
   @HttpCode(200)
   async getMachHistory()
@@ -166,7 +179,7 @@ export class UsersController {
   @Post('update/:login')
   @HttpCode(201)
   @UseInterceptors(FileInterceptor('avatar'))
-  async setData(@Param('login') login: string, @Req() req, @UploadedFile() file, @Body() userDataDto : userDataDto)
+  async setData(@Param('login') login: any, @Req() req, @UploadedFile() file, @Body() userDataDto : userDataDto)
   {
     if (file)
       {
@@ -174,6 +187,8 @@ export class UsersController {
         if (cloud)
         {
           userDataDto.user_avatar = cloud['url']
+          console.log();
+          (userDataDto.user_avatar)
         }
       }
       

@@ -1,4 +1,4 @@
- import {IsString, Max, Min, Length} from 'class-validator'
+ import {IsString, Max, Min, Length, isString, IsNumber} from 'class-validator'
 import { Multer } from 'multer';
 
  export class usernameDto {
@@ -31,3 +31,12 @@ export class RoomInfoDto{
 	@IsString()
 	room_avatar? : string;
  }
+
+export class AddedUsersDto {
+	
+	@IsNumber()
+	room_id : number;
+	
+	@IsString()
+	room_password? : string;
+}

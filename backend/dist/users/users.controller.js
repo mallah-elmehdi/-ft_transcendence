@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
+const passport_1 = require("@nestjs/passport");
 const platform_express_1 = require("@nestjs/platform-express");
 const username_dto_1 = require("./DTO/username.dto");
 const clodinary_service_1 = require("./clodinary/clodinary.service");
@@ -28,8 +29,15 @@ let UsersController = class UsersController {
             throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
         });
     }
-    async AddUsersToRoomsbyId(param, req) {
-        return this.UsersService.AddToRoom(param, 'member', 1).catch((err) => {
+    async AddUsersToRoomsbyId(user, param, req) {
+        console.log('password here ', user);
+        if (user.room_password) {
+            const room = await this.UsersService.getRoombyId(user.room_id);
+            const status = this.UsersService.check_password(user.room_password, room.password);
+            if (!status)
+                throw new common_1.HttpException('Password Invalid', common_1.HttpStatus.UNAUTHORIZED);
+        }
+        return this.UsersService.AddToRoom(param, 'member', user.room_id).catch((err) => {
             throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
         });
     }
@@ -55,10 +63,15 @@ let UsersController = class UsersController {
     }
     async CreateRoom(RoomInfoDto, file, req) {
         console.log("DTO", RoomInfoDto);
+        if (file) {
+            const cloud = await this.cloudinary.uploadImage(file);
+            if (cloud) {
+                RoomInfoDto.room_avatar = cloud['url'];
+            }
+        }
         const ba = await this.UsersService.CreateRooom(RoomInfoDto);
         if (ba) {
             const val = await this.UsersService.AddToRoom(1, 'owner', ba.room_id);
-            console.log('here you shit', val);
         }
         return ba;
     }
@@ -99,6 +112,8 @@ let UsersController = class UsersController {
             const cloud = await this.cloudinary.uploadImage(file);
             if (cloud) {
                 userDataDto.user_avatar = cloud['url'];
+                console.log();
+                (userDataDto.user_avatar);
             }
         }
         return await this.UsersService.updateUserData(login, userDataDto);
@@ -115,10 +130,12 @@ __decorate([
 __decorate([
     (0, common_1.Post)('group/add/:id'),
     (0, common_1.HttpCode)(201),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Req)()),
+    (0, common_1.UseInterceptors)(),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('id')),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:paramtypes", [username_dto_1.AddedUsersDto, Number, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "AddUsersToRoomsbyId", null);
 __decorate([
@@ -240,11 +257,12 @@ __decorate([
     __param(2, (0, common_1.UploadedFile)()),
     __param(3, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object, Object, username_dto_1.userDataDto]),
+    __metadata("design:paramtypes", [Object, Object, Object, username_dto_1.userDataDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "setData", null);
 UsersController = __decorate([
     (0, common_1.Controller)('user'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __metadata("design:paramtypes", [users_service_1.UsersService, clodinary_service_1.CloudinaryService])
 ], UsersController);
 exports.UsersController = UsersController;

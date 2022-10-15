@@ -3,6 +3,7 @@ import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import { Http2ServerRequest } from 'http2';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { userDataDto, RoomInfoDto} from './DTO/username.dto'
+const bcrypt = require('bcrypt');
 
 @Injectable()
 export class UsersService {
@@ -19,6 +20,7 @@ export class UsersService {
 		} } })
 		return update
 	}
+
 	async BlockUserById(me: number, DeletedUser )
 	{
 		// const id = await this.prisma.user.findMany(
@@ -84,21 +86,36 @@ export class UsersService {
 		 console.log("Waaaaa3 ",update)
 		 return update;
 		}
+
 	async CreateRooom(RoomInfoDto: RoomInfoDto)
 	{
+		const saltRounds = 10;
+		var hashed_password  = null
+		console.log("room password ",RoomInfoDto.room_password);
+		
+		if (RoomInfoDto.room_password)
+		{
+			hashed_password = bcrypt.hashSync(RoomInfoDto.room_password, saltRounds);
+		}
+		console.log("Hashed paassiwordi =>",hashed_password);
+		
+		// console.log(status)
 		const room_init = await this.prisma.room_info.create(
 			{
 				data: {
 					room_name: RoomInfoDto.room_name,
 					room_type: RoomInfoDto.room_type,
-					password: RoomInfoDto.room_password,
+					password: hashed_password,
 					room_avatar: RoomInfoDto.room_avatar,
 				}
 			}
-		)	
-		return room_init;
-	}
-
+			)	
+			return room_init;
+		}
+		check_password(room_password, hash) : boolean
+		{
+			return  bcrypt.compareSync(room_password, hash);	
+		}
 	async getRooms (id: Number)
 	{
 		const rooms = await this.prisma.members.findMany(
@@ -112,11 +129,9 @@ export class UsersService {
 		
 		return rooms
 	}
+
 	async getRoombyId (id: Number)
 	{
-
-		// try {
-			
 			const room = await this.prisma.room_info.findUnique(
 				{
 					where :
@@ -126,13 +141,9 @@ export class UsersService {
 				})
 				if (!room)
 					throw "NOT FOUND"
-				console.log('uniq rooms = here :>', room);
-				return room
-			// } catch (error) {
-			// 	console.log("are u here", error);
-			// }
-		
+				return room		
 	}
+
 	async DeleteRoombyId (id: Number)
 	{
 		// before deletion check if the user has the right to delete
@@ -236,11 +247,11 @@ export class UsersService {
 			},
 		});
 	}
-	async updateUserData(login : string, userDataDto : userDataDto)
+	async updateUserData(login : Number, userDataDto : userDataDto)
 	{
 		return await this.prisma.user.update({
 			where: {
-				user_login: login,
+				user_id: Number(login),
 			},
 			data: {
 				user_avatar: userDataDto.user_avatar,
@@ -261,7 +272,7 @@ export class UsersService {
 		{
 			const userOnline =  await this.prisma.user.update({
 			where: {
-				user_login: login
+				user_id: Number(login)
 			},
 			data: {
 				online: state
