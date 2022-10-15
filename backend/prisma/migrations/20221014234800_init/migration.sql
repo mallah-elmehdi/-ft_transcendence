@@ -29,15 +29,6 @@ CREATE TABLE "Friend" (
 );
 
 -- CreateTable
-CREATE TABLE "PendingFriends" (
-    "pending_friendship_id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL DEFAULT 0,
-    "friend_id" INTEGER NOT NULL DEFAULT 0,
-
-    CONSTRAINT "PendingFriends_pkey" PRIMARY KEY ("pending_friendship_id")
-);
-
--- CreateTable
 CREATE TABLE "match_history" (
     "match_id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL DEFAULT 0,
@@ -53,12 +44,34 @@ CREATE TABLE "match_history" (
 CREATE TABLE "Chats" (
     "chat_id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL DEFAULT 0,
-    "opponent_id" INTEGER NOT NULL DEFAULT 0,
-    "i_delivered" BOOLEAN NOT NULL DEFAULT false,
+    "to_id" INTEGER NOT NULL DEFAULT 0,
     "message" TEXT NOT NULL DEFAULT '',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Chats_pkey" PRIMARY KEY ("chat_id")
+);
+
+-- CreateTable
+CREATE TABLE "Room_info" (
+    "room_id" SERIAL NOT NULL,
+    "room_name" TEXT NOT NULL,
+    "room_avatar" TEXT,
+    "room_type" TEXT NOT NULL,
+    "password" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Room_info_pkey" PRIMARY KEY ("room_id")
+);
+
+-- CreateTable
+CREATE TABLE "Members" (
+    "membership_id" SERIAL NOT NULL,
+    "roomId" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "prev" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Members_pkey" PRIMARY KEY ("membership_id")
 );
 
 -- CreateIndex
@@ -68,10 +81,16 @@ CREATE UNIQUE INDEX "Account_user_login_key" ON "Account"("user_login");
 ALTER TABLE "Friend" ADD CONSTRAINT "Friend_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Account"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PendingFriends" ADD CONSTRAINT "PendingFriends_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Account"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "match_history" ADD CONSTRAINT "match_history_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Account"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Chats" ADD CONSTRAINT "Chats_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Account"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Chats" ADD CONSTRAINT "Chats_to_id_fkey" FOREIGN KEY ("to_id") REFERENCES "Room_info"("room_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Members" ADD CONSTRAINT "Members_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "Room_info"("room_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Members" ADD CONSTRAINT "Members_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Account"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;

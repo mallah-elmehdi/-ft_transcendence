@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
+const http_error_by_code_util_1 = require("@nestjs/common/utils/http-error-by-code.util");
 const prisma_service_1 = require("../prisma/prisma.service");
 let UsersService = class UsersService {
     constructor(prisma) {
@@ -20,6 +21,16 @@ let UsersService = class UsersService {
         const update = await this.prisma.friend.create({ data: { friendId: Number(params), user: { connect: { user_id: Number(user) }
                 } } });
         return update;
+    }
+    async BlockUserById(me, DeletedUser) {
+        const deleted = await this.prisma.friend.deleteMany({
+            where: {
+                userId: Number(me),
+                friendId: Number(DeletedUser)
+            }
+        });
+        console.log(deleted);
+        return deleted;
     }
     async AddToRoom(user, rool, roomId) {
         const update = await this.prisma.members.create({
@@ -32,7 +43,6 @@ let UsersService = class UsersService {
         return update;
     }
     async CreateRooom(RoomInfoDto) {
-        console.log('aru heri');
         const room_init = await this.prisma.room_info.create({
             data: {
                 room_name: RoomInfoDto.room_name,
@@ -41,7 +51,6 @@ let UsersService = class UsersService {
                 room_avatar: RoomInfoDto.room_avatar,
             }
         });
-        console.log('roooom >>> ', room_init);
         return room_init;
     }
     async getRooms(id) {
@@ -59,8 +68,23 @@ let UsersService = class UsersService {
                 room_id: Number(id),
             },
         });
-        console.log('uniq rooms = >', room);
+        if (!room)
+            throw http_error_by_code_util_1.HttpErrorByCode;
+        console.log('uniq rooms = here :>', room);
         return room;
+    }
+    async DeleteRoombyId(id) {
+        const removed = await this.prisma.members.deleteMany({
+            where: {
+                roomId: Number(id)
+            }
+        });
+        const deleted = await this.prisma.room_info.delete({
+            where: {
+                room_id: Number(id),
+            }
+        });
+        return deleted;
     }
     async getMembersbyId(id) {
         const members = await this.prisma.members.findMany({
@@ -70,8 +94,14 @@ let UsersService = class UsersService {
         });
         return members;
     }
-    async getAllUsers() {
-        const users = await this.prisma.user.findMany();
+    async getAllUsers(me) {
+        const users = await this.prisma.user.findMany({
+            where: {
+                NOT: {
+                    user_id: Number(me)
+                }
+            }
+        });
         return users;
     }
     async getAllFriends(login) {
@@ -84,42 +114,27 @@ let UsersService = class UsersService {
         return frineds;
     }
     async getUser(login) {
-        console.log('login', login);
-        try {
-            const found = await this.prisma.user.findUnique({
-                where: {
-                    user_id: Number(login),
-                },
-            });
-            console.log('found here: ', found);
-            if (!found) {
-                return null;
-            }
-            return found;
+        const found = await this.prisma.user.findUnique({
+            where: {
+                user_id: Number(login),
+            },
+        });
+        if (!found) {
+            throw "NOT FOUND";
         }
-        catch (err) {
-            console.log('error in getUser', err);
-            return null;
-        }
+        return found;
     }
     async getUserbyLogin(login) {
-        console.log('login', login);
-        try {
-            const found = await this.prisma.user.findUnique({
-                where: {
-                    user_login: login,
-                },
-            });
-            console.log('found here: ', found);
-            if (!found) {
-                return null;
-            }
-            return found;
+        const found = await this.prisma.user.findUnique({
+            where: {
+                user_login: login,
+            },
+        });
+        console.log('found here: ', found);
+        if (!found) {
+            throw "NOT FOUND";
         }
-        catch (err) {
-            console.log('error in getUser', err);
-            return null;
-        }
+        return found;
     }
     async setUsername(login, username) {
         return await this.prisma.user.update({

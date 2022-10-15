@@ -1,4 +1,4 @@
-import { Controller, Get, Redirect, Query, Param, Req, UseGuards, Post, UseInterceptors, UploadedFile, MaxFileSizeValidator, FileTypeValidator, ParseFilePipe, HttpCode, Body, Module, BadRequestException} from '@nestjs/common';
+import { Controller, Get, Redirect, Query, Param, Req, UseGuards, Post, UseInterceptors, UploadedFile, MaxFileSizeValidator, FileTypeValidator, ParseFilePipe, HttpCode, HttpStatus, Body, Module, BadRequestException, HttpException} from '@nestjs/common';
 import { UsersService } from './users.service';
 import {Request} from 'express';
 import { AuthGuard } from '@nestjs/passport';
@@ -10,19 +10,25 @@ import { usernameDto, userDataDto, RoomInfoDto} from './DTO/username.dto'
 import { CloudinaryService } from './clodinary/clodinary.service';
 import { get } from 'http';
 
+// ! Before End, Check if the user is extracted from JWT, and remove static User (1)
+
+//? blocking user by changing prev to "blocked"
 
 @Controller('user')
 // @UseGuards(AuthGuard('jwt'))
 export class UsersController {
-
-  constructor(private readonly UsersService: UsersService, private cloudinary: CloudinaryService) {}
-
+  
+  constructor(private readonly UsersService: UsersService, private cloudinary: CloudinaryService) {
+    
+  }
+  
   @Get('group/all')
   @HttpCode(200)
   async GetRooms(@Req() req: Request) {
     // here get the room for the current user
+    
     return this.UsersService.getRooms(1).catch((err) => {
-      throw new BadRequestException(err);
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     });
   }
   @Post('group/add/:id')
@@ -30,6 +36,14 @@ export class UsersController {
   async AddUsersToRoomsbyId(@Param('id') param : Number, @Req() req: Request) {
     // here get the room for the current user
     return this.UsersService.AddToRoom(param,'member',1).catch((err) => {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    });
+  }
+  @Post('block/:id')
+  @HttpCode(201)
+  async BlockUserById(@Param('id') param : Number, @Req() req: Request) {
+
+    return this.UsersService.BlockUserById(1, param).catch((err) => {
       throw new BadRequestException(err);
     });
   }
@@ -38,7 +52,16 @@ export class UsersController {
   async GetRoomsbyId(@Param('id') param : Number, @Req() req: Request) {
     // here get the room for the current user
     return this.UsersService.getRoombyId(param).catch((err) => {
-      throw new BadRequestException(err);
+      throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
+    });
+  }
+  @Post('group/:id')
+  @HttpCode(201)
+  async DeleteRoomsbyId(@Param('id') param : Number, @Req() req: Request) {
+    // check if the user is owner or an admin after deletion you may delete all
+    // and delete all the corresponded data from 
+    return this.UsersService.DeleteRoombyId(param).catch((err) => {
+      throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     });
   }
   @Get('members/:id')
@@ -86,12 +109,14 @@ export class UsersController {
   @Get('list/all')
   @HttpCode(200)
   async GetAllUsers() {
-      return await this.UsersService.getAllUsers();
+    // add JWT ID user
+      return await this.UsersService.getAllUsers(1);
   }
 
   @Get('friends')
   @HttpCode(200)
   async getAllFriends()  {
+    /// add here JWT user
       return await this.UsersService.getAllFriends(1)
       .catch((err) => {
         throw new BadRequestException(err);
@@ -115,7 +140,9 @@ export class UsersController {
   @Get(':id')
   async getUser(@Param('id') login:number)
   {
-    return await this.UsersService.getUser(login);
+    return await this.UsersService.getUser(login)   .catch((err) => {
+      throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
+    });
   }
   
   @Post(':login/avatar')

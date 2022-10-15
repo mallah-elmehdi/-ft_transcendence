@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { HttpCode, Injectable } from '@nestjs/common';
+import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
+import { Http2ServerRequest } from 'http2';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { userDataDto, RoomInfoDto} from './DTO/username.dto'
 
@@ -16,20 +18,58 @@ export class UsersService {
 			{ friendId: Number(params) , user: { connect: { user_id: Number(user) } 
 		} } })
 		return update
-		// const updated_list =  await this.prisma.user.create(
+	}
+	async BlockUserById(me: number, DeletedUser )
+	{
+		// const id = await this.prisma.user.findMany(
 		// 	{
-		// 		where : {
-		// 			user_id : user,
-		// 			friends :
+		// 		where:
+		// 		{
+		// 			user_id : Number(DeletedUser),
+		// 			friends:
 		// 			{
-		// 				create :
+		// 			connect: {
+
+		// 				: Number(me),
+		// 			}	
+
+		// 			}
+		// 		}
+				
+		// 	}
+		// )
+		const deleted = await this.prisma.friend.deleteMany(
+			{
+				where :
+				{
+					userId : Number(me),
+					friendId: Number(DeletedUser)
+					
+				}
+			}
+		)
+		// const deleted = await this.prisma.user.update(
+		// 	{	
+		// 		where:
+		// 		{
+		// 			user_id: me,
+		// 		},
+		// 			data : {
+		// 				friends :
 		// 				{
-		// 					friendsId: params,
+		// 					disconnect : [ { id: Number(DeletedUser) } ],
 		// 				},
 		// 			},
-		// 		},
-		// 	});
+		// 			select:
+		// 			{
+		// 				friends: true,
+		// 			}
+		// 	}
+		// )
+		console.log(deleted)
+		return deleted;
 	}
+
 	async AddToRoom(user, rool, roomId)
 	{
 		const update = await this.prisma.members.create({
@@ -44,7 +84,6 @@ export class UsersService {
 		}
 	async CreateRooom(RoomInfoDto: RoomInfoDto)
 	{
-		console.log('aru heri')
 		const room_init = await this.prisma.room_info.create(
 			{
 				data: {
@@ -54,9 +93,7 @@ export class UsersService {
 					room_avatar: RoomInfoDto.room_avatar,
 				}
 			}
-		)
-		console.log('roooom >>> ', room_init);
-	
+		)	
 		return room_init;
 	}
 
@@ -75,16 +112,48 @@ export class UsersService {
 	}
 	async getRoombyId (id: Number)
 	{
-		const room = await this.prisma.room_info.findUnique(
+
+		// try {
+			
+			const room = await this.prisma.room_info.findUnique(
+				{
+					where :
+					{
+						room_id : Number(id),
+					},
+				})
+				if (!room)
+					throw HttpErrorByCode
+				console.log('uniq rooms = here :>', room);
+				return room
+			// } catch (error) {
+			// 	console.log("are u here", error);
+			// }
+		
+	}
+	async DeleteRoombyId (id: Number)
+	{
+		// before deletion check if the user has the right to delete
+		// then after that delete the chat after that do the actions below
+		const removed  = await this.prisma.members.deleteMany(
+			{
+				where :
+				{
+					roomId : Number(id)
+				}
+			}
+		)
+		const deleted = await this.prisma.room_info.delete(
 		{
 			where :
 			{
 				room_id : Number(id),
-			},
-		})
-		console.log('uniq rooms = >', room);
+			}
+		}
+		)
 		
-		return room
+		return deleted;
+	
 	}
 	async getMembersbyId (id: Number)
 	{
@@ -99,8 +168,18 @@ export class UsersService {
 		return members
 	}
 
-	async  getAllUsers() {
-		const users = await this.prisma.user.findMany();
+	async  getAllUsers(me) {
+		const users = await this.prisma.user.findMany(
+			{
+				where:
+				{
+					NOT :
+					{
+						user_id: Number(me)
+					}
+				}
+			}
+		);
 		return users;
 
 	}
@@ -117,29 +196,20 @@ export class UsersService {
 	}
 
 	async getUser(login : number)
-	{
-			console.log('login', login);
-			 try {
-			const found = await this.prisma.user.findUnique({
-				where: {
-					user_id: Number(login),
-				},
-			}); 
-			console.log('found here: ', found);   
-			if (!found) {
-				return null;
-			}
-			return found;
-	}
-	catch (err: any) {
-			console.log('error in getUser', err);
-			return null;
+	{	 
+		const found = await this.prisma.user.findUnique({
+			where: {
+				user_id: Number(login),
+			},
+		});
+		if (!found) {
+			throw "NOT FOUND"
 		}
+		return found;
 	}
 	async getUserbyLogin(login : string)
 	{
-			console.log('login', login);
-			 try {
+			
 			const found = await this.prisma.user.findUnique({
 				where: {
 					user_login:login,
@@ -147,14 +217,9 @@ export class UsersService {
 			}); 
 			console.log('found here: ', found);   
 			if (!found) {
-				return null;
+				throw "NOT FOUND";
 			}
 			return found;
-	}
-	catch (err: any) {
-			console.log('error in getUser', err);
-			return null;
-		}
 	}
 
 	async setUsername(login : string, username : string)

@@ -8,7 +8,9 @@ export declare class UsersController {
     constructor(UsersService: UsersService, cloudinary: CloudinaryService);
     GetRooms(req: Request): Promise<import(".prisma/client").Members[]>;
     AddUsersToRoomsbyId(param: Number, req: Request): Promise<import(".prisma/client").Members>;
+    BlockUserById(param: Number, req: Request): Promise<import(".prisma/client").Prisma.BatchPayload>;
     GetRoomsbyId(param: Number, req: Request): Promise<import(".prisma/client").Room_info>;
+    DeleteRoomsbyId(param: Number, req: Request): Promise<import(".prisma/client").Room_info>;
     GetMembersbyId(param: Number, req: Request): Promise<import(".prisma/client").Members[]>;
     CreateRoom(RoomInfoDto: RoomInfoDto, file: any, req: Request): Promise<import(".prisma/client").Room_info>;
     AddFriend(param: Number): Promise<import(".prisma/client").Friend>;

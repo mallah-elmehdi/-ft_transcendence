@@ -25,17 +25,27 @@ let UsersController = class UsersController {
     }
     async GetRooms(req) {
         return this.UsersService.getRooms(1).catch((err) => {
-            throw new common_1.BadRequestException(err);
+            throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
         });
     }
     async AddUsersToRoomsbyId(param, req) {
         return this.UsersService.AddToRoom(param, 'member', 1).catch((err) => {
+            throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
+        });
+    }
+    async BlockUserById(param, req) {
+        return this.UsersService.BlockUserById(1, param).catch((err) => {
             throw new common_1.BadRequestException(err);
         });
     }
     async GetRoomsbyId(param, req) {
         return this.UsersService.getRoombyId(param).catch((err) => {
-            throw new common_1.BadRequestException(err);
+            throw new common_1.HttpException('NOT FOUND', common_1.HttpStatus.NOT_FOUND);
+        });
+    }
+    async DeleteRoomsbyId(param, req) {
+        return this.UsersService.DeleteRoombyId(param).catch((err) => {
+            throw new common_1.HttpException('NOT FOUND', common_1.HttpStatus.NOT_FOUND);
         });
     }
     async GetMembersbyId(param, req) {
@@ -58,7 +68,7 @@ let UsersController = class UsersController {
         return await this.UsersService.friendReq(user, param);
     }
     async GetAllUsers() {
-        return await this.UsersService.getAllUsers();
+        return await this.UsersService.getAllUsers(1);
     }
     async getAllFriends() {
         return await this.UsersService.getAllFriends(1)
@@ -72,7 +82,9 @@ let UsersController = class UsersController {
     async getMachHistory() {
     }
     async getUser(login) {
-        return await this.UsersService.getUser(login);
+        return await this.UsersService.getUser(login).catch((err) => {
+            throw new common_1.HttpException('NOT FOUND', common_1.HttpStatus.NOT_FOUND);
+        });
     }
     async uploadImageToCloudinary(file) {
         return await this.cloudinary.uploadImage(file).catch((err) => {
@@ -110,6 +122,15 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "AddUsersToRoomsbyId", null);
 __decorate([
+    (0, common_1.Post)('block/:id'),
+    (0, common_1.HttpCode)(201),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "BlockUserById", null);
+__decorate([
     (0, common_1.Get)('group/:id'),
     (0, common_1.HttpCode)(200),
     __param(0, (0, common_1.Param)('id')),
@@ -118,6 +139,15 @@ __decorate([
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "GetRoomsbyId", null);
+__decorate([
+    (0, common_1.Post)('group/:id'),
+    (0, common_1.HttpCode)(201),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "DeleteRoomsbyId", null);
 __decorate([
     (0, common_1.Get)('members/:id'),
     (0, common_1.HttpCode)(200),
