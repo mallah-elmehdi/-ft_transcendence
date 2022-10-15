@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
-const http_error_by_code_util_1 = require("@nestjs/common/utils/http-error-by-code.util");
 const prisma_service_1 = require("../prisma/prisma.service");
 let UsersService = class UsersService {
     constructor(prisma) {
@@ -29,6 +28,8 @@ let UsersService = class UsersService {
                 friendId: Number(DeletedUser)
             }
         });
+        if (deleted.count == 0)
+            throw "NOT FOUND";
         console.log(deleted);
         return deleted;
     }
@@ -69,7 +70,7 @@ let UsersService = class UsersService {
             },
         });
         if (!room)
-            throw http_error_by_code_util_1.HttpErrorByCode;
+            throw "NOT FOUND";
         console.log('uniq rooms = here :>', room);
         return room;
     }
@@ -110,7 +111,8 @@ let UsersService = class UsersService {
                 userId: login,
             },
         });
-        console.log("Friends", frineds);
+        if (!frineds)
+            throw 'NOT FOUND';
         return frineds;
     }
     async getUser(login) {

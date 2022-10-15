@@ -35,6 +35,7 @@ export class UsersController {
   @HttpCode(201)
   async AddUsersToRoomsbyId(@Param('id') param : Number, @Req() req: Request) {
     // here get the room for the current user
+    // craete a room with value "DM"
     return this.UsersService.AddToRoom(param,'member',1).catch((err) => {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     });
@@ -44,7 +45,7 @@ export class UsersController {
   async BlockUserById(@Param('id') param : Number, @Req() req: Request) {
 
     return this.UsersService.BlockUserById(1, param).catch((err) => {
-      throw new BadRequestException(err);
+      throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     });
   }
   @Get('group/:id')
@@ -52,7 +53,7 @@ export class UsersController {
   async GetRoomsbyId(@Param('id') param : Number, @Req() req: Request) {
     // here get the room for the current user
     return this.UsersService.getRoombyId(param).catch((err) => {
-      throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
+      throw new HttpException(err, HttpStatus.NOT_FOUND);
     });
   }
   @Post('group/:id')
@@ -69,7 +70,7 @@ export class UsersController {
   async GetMembersbyId(@Param('id') param : Number, @Req() req: Request) {
     // here get the room for the current user
     return this.UsersService.getMembersbyId(param).catch((err) => {
-      throw new BadRequestException(err);
+      throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     });
   }
   

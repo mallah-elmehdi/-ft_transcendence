@@ -35,12 +35,12 @@ let UsersController = class UsersController {
     }
     async BlockUserById(param, req) {
         return this.UsersService.BlockUserById(1, param).catch((err) => {
-            throw new common_1.BadRequestException(err);
+            throw new common_1.HttpException('NOT FOUND', common_1.HttpStatus.NOT_FOUND);
         });
     }
     async GetRoomsbyId(param, req) {
         return this.UsersService.getRoombyId(param).catch((err) => {
-            throw new common_1.HttpException('NOT FOUND', common_1.HttpStatus.NOT_FOUND);
+            throw new common_1.HttpException(err, common_1.HttpStatus.NOT_FOUND);
         });
     }
     async DeleteRoomsbyId(param, req) {
@@ -50,7 +50,7 @@ let UsersController = class UsersController {
     }
     async GetMembersbyId(param, req) {
         return this.UsersService.getMembersbyId(param).catch((err) => {
-            throw new common_1.BadRequestException(err);
+            throw new common_1.HttpException('NOT FOUND', common_1.HttpStatus.NOT_FOUND);
         });
     }
     async CreateRoom(RoomInfoDto, file, req) {

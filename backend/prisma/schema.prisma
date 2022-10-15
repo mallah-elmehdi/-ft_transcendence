@@ -41,7 +41,8 @@ model User {
 model Friend {
   id       Int @id @default(autoincrement())
   userId   Int
-  friendId Int 
+  friendId Int
+  blocked Boolean @default(false)
   user User @relation(fields: [userId], references: [user_id])
 }
 
@@ -60,7 +61,7 @@ model match_history {
 model Chats {
   chat_id Int @default(autoincrement()) @id
   userId Int @default(0)
-  to_id Int @default(0)
+  to_id Int
   // chat_type String
   // i_delivered Boolean @default(false)
   message String @default("")

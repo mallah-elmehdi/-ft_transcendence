@@ -66,6 +66,8 @@ export class UsersService {
 		// 			}
 		// 	}
 		// )
+		if (deleted.count == 0)
+			throw "NOT FOUND"
 		console.log(deleted)
 		return deleted;
 	}
@@ -123,7 +125,7 @@ export class UsersService {
 					},
 				})
 				if (!room)
-					throw HttpErrorByCode
+					throw "NOT FOUND"
 				console.log('uniq rooms = here :>', room);
 				return room
 			// } catch (error) {
@@ -191,7 +193,8 @@ export class UsersService {
 				userId : login,
 			},
 		})
-		console.log("Friends", frineds)
+		if (!frineds)
+			throw 'NOT FOUND'
 		return frineds
 	}
 
