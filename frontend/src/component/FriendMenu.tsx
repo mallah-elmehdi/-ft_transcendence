@@ -29,15 +29,32 @@ import {MdDelete} from "react-icons/md"
 import { ChatContext } from '../State/ChatProvider';
 import {RiPingPongFill} from "react-icons/ri"
 import {AiOutlineUser} from "react-icons/ai"
+import axios from 'axios';
+import { BLOCK_DM, pagesContent } from '../constants';
+import { useNavigate } from 'react-router-dom';
 
 const FriendMenu = () => {
     const { selectedChat, setSelectedChat} = useContext<any>(ChatContext);
     const value = useColorModeValue('white', 'lightBlack')
     const {isOpen, onOpen, onClose} = useDisclosure();
+    const navigate = useNavigate();
+    const { setFriends } = useContext<any>(ChatContext)
 
     const blockUserHandler = () => {
         console.log('BLOCK USER', selectedChat.id)
-        setSelectedChat(null)
+        axios.post(BLOCK_DM + selectedChat.id)
+        .then((response)=>{
+            // console.log(response)
+            // navigate(pagesContent.chat.url)
+            // setFriends()
+            // FIXME: delete blocked user from friends
+            setSelectedChat(null)
+        })
+        .catch(()=>{
+            navigate(pagesContent.chat.url)
+            // setSelectedChat(null)
+        })
+        // setSelectedChat(null)
     }
 
     const inviteToGameHandler = () => {

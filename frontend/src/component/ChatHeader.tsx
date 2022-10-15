@@ -23,7 +23,7 @@ function ChatHeader({avatarName, avatarSrc, chatName, isGroup, onClickCallBack, 
             <HStack onClick={() => isGroup ? onClickCallBack() : undefined} as={isGroup ? 'button' : undefined} px={5} w={'100%'} m={0} h={''}>
                 <ArrowBackIcon m={0} mr={25} p={0} h={30} fontSize={25} onClick={() => backArrowCallBack()}/>
                 <Avatar name={avatarName} src={avatarSrc} ></Avatar>
-                <Text>{chatName}</Text>
+                <Text>{chatName.length > 10 ? chatName.slice(0, 10) + "..." : chatName}</Text>
             </HStack>
             <Spacer/>
             {menu}

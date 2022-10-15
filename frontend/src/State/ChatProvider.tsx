@@ -33,7 +33,8 @@ const ChatProvider = ({ children }: Props) => {
 
   const [groups, setGroups] = useState<any>([]);
 
-  const [roomMembers, setMembers] = React.useState<any>([]);
+  const [roomMembers, setRoomMembers] = React.useState<any>([]);
+  const [allUsers, setAllUsers] =  React.useState<any>([]);
   // console.log("Chat Provider", friends)
 
   // const [data, setData] = useState({
@@ -113,7 +114,9 @@ const ChatProvider = ({ children }: Props) => {
         setGroups,
         groups,
         roomMembers,
-        setMembers,
+        setRoomMembers,
+        allUsers,
+        setAllUsers,
       }}
     >
       {children}

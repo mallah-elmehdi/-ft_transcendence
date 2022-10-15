@@ -47,6 +47,7 @@ const RoomSettings = ({ toggleSettings, roomId }: Props) => {
   const updateRoomNewInfo = () => {
     console.log(roomData);
   };
+  
   useEffect(() => {
     if (
       image != null ||

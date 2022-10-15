@@ -15,8 +15,7 @@ const ChatTabs = () => {
     const { isSearch, toggleSearch } = useContext<any>(ChatContext);
     const { setChatDetails } = useContext<any>(ChatContext);
 
-    useFriends();
-    useGroups();
+  
     
     useEffect(() => {
         setChatDetails(false);

@@ -21,7 +21,7 @@ type Props = {
 };
 export default function MainRoomDetails({ toggleNewMembers, toggleSettings, isAdmin, isOwner }: Props) {
     const { toggleDetails } = useContext<any>(ChatContext);
-    const { data, friends, groups, roomMembers} = useContext<any>(ChatContext);
+    const { data, friends, groups, roomMembers, setMembers} = useContext<any>(ChatContext);
     const { selectedChat } = useContext<any>(ChatContext);
     let searchIndex = groups.findIndex((id: any) => selectedChat.id === id.id);
     // let membersIndex = data.members.findIndex((members: any) => selectedChat.id === members.id);
@@ -48,13 +48,11 @@ export default function MainRoomDetails({ toggleNewMembers, toggleSettings, isAd
         };
     });
 
-    useMembers();
-
     return (
         <VStack overflow={'auto'} w='100%' position={'relative'} h={'100%'}>
             <HStack overflow={'visible'} px={5} w={'100%'} m={1} spacing={8}>
                 <Box as={'button'}>
-                    <ArrowBackIcon m={0} p={0} h={30} fontSize={25} onClick={toggleDetails} />
+                    <ArrowBackIcon m={0} p={0} h={30} fontSize={25} onClick={toggleDetails }/>
                 </Box>
                 <Text fontSize={20}>Details</Text>
                 <Spacer />
