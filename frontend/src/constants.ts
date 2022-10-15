@@ -1,5 +1,5 @@
 export const SOCKET = 'http://192.168.100.5:3003/'; // ip of backend
-export const API = 'http://192.168.100.5:3005/'; // ip of backend
+export const API = 'http://192.168.100.5:3005'; // ip of backend
 export const FRIENDS_URL = API + "/user/friends"
 export const USER_URL = API + "/user/"
 export const GROUP = API + "/user/group/"

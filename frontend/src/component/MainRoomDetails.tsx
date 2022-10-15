@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Box, IconButton, Text, HStack, VStack, Spacer, Button, Tooltip } from '@chakra-ui/react';
+import { Box, IconButton, Text, HStack, VStack, Spacer, Button, Tooltip, Flex } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { ChatContext } from '../State/ChatProvider';
 import { Image } from '@chakra-ui/react';
@@ -33,7 +33,7 @@ export default function MainRoomDetails({ toggleNewMembers, toggleSettings, isAd
     function isFriend(id: any) {
         return friends.findIndex((f: any) => f.id == id) == -1 ? false : true;
     }
-    // console.log("members", members)
+    // console.log("members", roomMembers)
 
     useEffect(() => {
         const keyDownHandler = (event: any) => {
@@ -64,24 +64,30 @@ export default function MainRoomDetails({ toggleNewMembers, toggleSettings, isAd
                     </Tooltip>
                 )}
             </HStack>
-            <VStack pt={'1.5%'} h={'100%'} overflow={'auto'} w={'100%'} alignItems={'left'}>
+            <VStack pt={'1.5%'} h={'100%'} overflow={'auto'} w={'100%'} alignItems={'left'} px={5}>
                 {groups[searchIndex].avatar && <Image h="20em" src={groups[searchIndex].avatar} />}
                 <Text>Memebers</Text>
-                {roomMembers.map((member: any, index: any) => (
-                    <ChannelMemeber
-                        id={member.id}
-                        name={member.name.toString()}
-                        avatar={member.avatar}
-                        key={index.toString()}
-                        isAdmin={isAdmin}
-                        isOwner={isOwner}
-                        onBlock={onBlockOpen}
-                        onMute={onMuteOpen}
-                        setMember={setMember}
-                        isFriend={isFriend(member.id)}
-                        roomId={groups[searchIndex].id}
-                    />
-                ))}
+                {roomMembers.length ? 
+                    roomMembers.map((member: any, index: any) => (
+                        <ChannelMemeber
+                            id={member.id}
+                            name={member.name.toString()}
+                            avatar={member.avatar}
+                            key={index.toString()}
+                            isAdmin={isAdmin}
+                            isOwner={isOwner}
+                            onBlock={onBlockOpen}
+                            onMute={onMuteOpen}
+                            setMember={setMember}
+                            isFriend={isFriend(member.id)}
+                            roomId={groups[searchIndex].id}
+                        />
+                    ))
+                    :
+                    <Flex pt={'1.5%'} h={'100%'} w={'100%'} alignItems={'center'} px={5} justifyContent={'center'}>
+                        <Text alignSelf={'center'} justifyContent="center">No Memebers</Text>
+                    </Flex>
+                }
             </VStack>
             <MuteMember isOpen={isMuteOpen} onClose={onMuteClose} name={member?.name} memberId={member?.id} roomId={groups[searchIndex].id} />
             <RemoveMember isOpen={isBlockOpen} onClose={onBlockClose} name={member?.name} memberId={member?.id} roomId={groups[searchIndex].id} />

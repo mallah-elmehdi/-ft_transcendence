@@ -10,7 +10,7 @@ const useAllUsers = () => {
     axios
       .get(ALL_USERS)
       .then((res: any) => {
-        console.log(res.data);
+        // console.log(res.data);
         setAllUsers(res.data);
       })
       .catch((err) => {
