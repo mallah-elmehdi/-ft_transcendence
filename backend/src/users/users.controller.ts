@@ -42,7 +42,7 @@ import { get } from 'http';
 //? blocking user by changing prev to "blocked"
 
 @Controller('user')
-@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
 export class UsersController {
   constructor(
     private readonly UsersService: UsersService,
@@ -241,7 +241,9 @@ export class UsersController {
     @UploadedFile() file,
     @Body() userDataDto: userDataDto,
   ) {
-    const userRecord = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+    const userRecord = await this.UsersService.getUserbyLogin(
+      req.user['userLogin'],
+    );
 
     if (file) {
       const cloud = await this.cloudinary.uploadImage(file);
@@ -252,6 +254,9 @@ export class UsersController {
       }
     }
 
-    return await this.UsersService.updateUserData(Number(userRecord.user_id), userDataDto);
+    return await this.UsersService.updateUserData(
+      Number(userRecord.user_id),
+      userDataDto,
+    );
   }
 }
