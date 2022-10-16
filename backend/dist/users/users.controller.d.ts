@@ -1,12 +1,13 @@
 import { UsersService } from './users.service';
 import { Request } from 'express';
-import { usernameDto, userDataDto, RoomInfoDto, AddedUsersDto } from './DTO/username.dto';
+import { usernameDto, userDataDto, RoomInfoDto, AddedUsersDto, MemberStatus } from './DTO/username.dto';
 import { CloudinaryService } from './clodinary/clodinary.service';
 export declare class UsersController {
     private readonly UsersService;
     private cloudinary;
     constructor(UsersService: UsersService, cloudinary: CloudinaryService);
     GetRooms(req: Request): Promise<import(".prisma/client").Members[]>;
+    ChangeMemberStatus(status: MemberStatus, param: Number, req: Request): Promise<import(".prisma/client").Prisma.BatchPayload>;
     AddUsersToRoomsbyId(user: AddedUsersDto, param: Number, req: Request): Promise<import(".prisma/client").Members>;
     BlockUserById(param: Number, req: Request): Promise<import(".prisma/client").Prisma.BatchPayload>;
     GetRoomsbyId(param: Number, req: Request): Promise<import(".prisma/client").Room_info>;

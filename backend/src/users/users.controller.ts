@@ -1,4 +1,4 @@
-import { Controller, Get, Redirect, Query, Param, Req, UseGuards, Post, UseInterceptors, UploadedFile, MaxFileSizeValidator, FileTypeValidator, ParseFilePipe, HttpCode, HttpStatus, Body, Module, BadRequestException, HttpException} from '@nestjs/common';
+import { Controller, Get, Redirect, Query, Param, Req, UseGuards, Post, UseInterceptors, UploadedFile, MaxFileSizeValidator, FileTypeValidator, ParseFilePipe, HttpCode, HttpStatus, Body, Module, BadRequestException, HttpException, Patch} from '@nestjs/common';
 import { UsersService } from './users.service';
 import {Request} from 'express';
 import { AuthGuard } from '@nestjs/passport';
@@ -6,7 +6,7 @@ import { Express } from 'express'
 import { FileInterceptor, MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Observable, of } from 'rxjs';
-import { usernameDto, userDataDto, RoomInfoDto, AddedUsersDto} from './DTO/username.dto'
+import { usernameDto, userDataDto, RoomInfoDto, AddedUsersDto, MemberStatus} from './DTO/username.dto'
 import { CloudinaryService } from './clodinary/clodinary.service';
 import { get } from 'http';
 
@@ -32,6 +32,22 @@ export class UsersController {
     });
   }
   
+  @Patch('group/update/:id')
+  @HttpCode(200)
+  @UseInterceptors()
+  async ChangeMemberStatus(@Body() status : MemberStatus, @Param('id') param : Number, @Req() req: Request) {
+    
+    // GET ID USER FROM JWT
+       const member = await this.UsersService.getMembersbyIdRoom(status.room_id, 1)
+      
+       if (member[0].prev != "owner" )
+          throw new HttpException('Password Invalid', HttpStatus.UNAUTHORIZED)
+
+    return this.UsersService.ChangeMemberStatus(param, status.room_status,status.room_id).catch((err) => {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    });
+  }
+
   @Post('group/add/:id')
   @HttpCode(201)
   @UseInterceptors()

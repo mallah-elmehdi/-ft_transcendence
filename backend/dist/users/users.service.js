@@ -41,6 +41,17 @@ let UsersService = class UsersService {
                 user: { connect: { user_id: Number(user) } }
             }
         });
+        return update;
+    }
+    async ChangeMemberStatus(user, rool, roomId) {
+        const update = await this.prisma.members.updateMany({
+            where: {
+                roomId: Number(roomId),
+                userId: Number(user)
+            },
+            data: { prev: (rool)
+            }
+        });
         console.log("Waaaaa3 ", update);
         return update;
     }
@@ -105,6 +116,15 @@ let UsersService = class UsersService {
         });
         return members;
     }
+    async getMembersbyIdRoom(id, user) {
+        const members = await this.prisma.members.findMany({
+            where: {
+                userId: Number(user),
+                roomId: Number(id),
+            },
+        });
+        return members;
+    }
     async getAllUsers(me) {
         const users = await this.prisma.user.findMany({
             where: {
@@ -142,7 +162,6 @@ let UsersService = class UsersService {
                 user_login: login,
             },
         });
-        console.log('found here: ', found);
         if (!found) {
             throw "NOT FOUND";
         }

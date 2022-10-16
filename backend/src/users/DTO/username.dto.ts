@@ -40,3 +40,11 @@ export class AddedUsersDto {
 	@IsString()
 	room_password? : string;
 }
+export class MemberStatus {
+	
+	@IsNumber()
+	room_id : number;
+	
+	@IsString()
+	room_status : string;
+}

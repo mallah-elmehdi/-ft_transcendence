@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
-const passport_1 = require("@nestjs/passport");
 const platform_express_1 = require("@nestjs/platform-express");
 const username_dto_1 = require("./DTO/username.dto");
 const clodinary_service_1 = require("./clodinary/clodinary.service");
@@ -29,8 +28,15 @@ let UsersController = class UsersController {
             throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
         });
     }
+    async ChangeMemberStatus(status, param, req) {
+        const member = await this.UsersService.getMembersbyIdRoom(status.room_id, 1);
+        if (member[0].prev != "owner")
+            throw new common_1.HttpException('Password Invalid', common_1.HttpStatus.UNAUTHORIZED);
+        return this.UsersService.ChangeMemberStatus(param, status.room_status, status.room_id).catch((err) => {
+            throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
+        });
+    }
     async AddUsersToRoomsbyId(user, param, req) {
-        console.log('password here ', user);
         if (user.room_password) {
             const room = await this.UsersService.getRoombyId(user.room_id);
             const status = this.UsersService.check_password(user.room_password, room.password);
@@ -127,6 +133,17 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "GetRooms", null);
+__decorate([
+    (0, common_1.Patch)('group/update/:id'),
+    (0, common_1.HttpCode)(200),
+    (0, common_1.UseInterceptors)(),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('id')),
+    __param(2, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [username_dto_1.MemberStatus, Number, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "ChangeMemberStatus", null);
 __decorate([
     (0, common_1.Post)('group/add/:id'),
     (0, common_1.HttpCode)(201),
@@ -262,7 +279,6 @@ __decorate([
 ], UsersController.prototype, "setData", null);
 UsersController = __decorate([
     (0, common_1.Controller)('user'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __metadata("design:paramtypes", [users_service_1.UsersService, clodinary_service_1.CloudinaryService])
 ], UsersController);
 exports.UsersController = UsersController;

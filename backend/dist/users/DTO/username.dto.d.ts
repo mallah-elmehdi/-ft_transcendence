@@ -18,3 +18,7 @@ export declare class AddedUsersDto {
     room_id: number;
     room_password?: string;
 }
+export declare class MemberStatus {
+    room_id: number;
+    room_status: string;
+}

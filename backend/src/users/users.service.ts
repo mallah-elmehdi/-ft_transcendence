@@ -83,7 +83,22 @@ export class UsersService {
 				user: { connect: { user_id: Number(user) } }
 		 }
 		 })
-		 console.log("Waaaaa3 ",update)
+		//  console.log("Waaaaa3 ",update)
+		 return update;
+		}
+	async ChangeMemberStatus(user, rool, roomId)
+	{
+		const update = await this.prisma.members.updateMany({
+			where :
+			{
+				roomId: Number(roomId),
+				userId: Number(user)
+			} ,
+			data: 
+			{ prev: (rool) 
+		 }
+		 })
+		console.log("Waaaaa3 ",update)
 		 return update;
 		}
 
@@ -170,10 +185,25 @@ export class UsersService {
 	}
 	async getMembersbyId (id: Number)
 	{
+		// console.log(user)
+		const members = await this.prisma.members.findMany(
+			{
+				where :
+				{
+					roomId : Number(id),
+				},
+			})
+			
+		// console.log(members)
+		return members
+	}
+	async getMembersbyIdRoom (id: Number, user:Number)
+	{
 		const members = await this.prisma.members.findMany(
 		{
 			where :
 			{
+				userId: Number(user),
 				roomId : Number(id),
 			},
 		})
@@ -229,7 +259,6 @@ export class UsersService {
 					user_login:login,
 				},
 			}); 
-			console.log('found here: ', found);   
 			if (!found) {
 				throw "NOT FOUND";
 			}
