@@ -41,7 +41,6 @@ const FriendMenu = () => {
     const { setFriends } = useContext<any>(ChatContext)
 
     const blockUserHandler = () => {
-        console.log('BLOCK USER', selectedChat.id)
         axios.post(BLOCK_DM + selectedChat.id)
         .then((response)=>{
             // console.log(response)
