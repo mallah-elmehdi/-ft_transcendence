@@ -13,22 +13,22 @@ const SignOut = (
   // // show loader
   // setLoader(true);
 
-  // api call
-  axios.defaults.withCredentials = true;
-  axios
-    .post(backEnd)
-    .then((response) => {
-      setUserInfo(null);
-      window.localStorage.setItem("isSignedIn", "false");
-    })
-    .catch((error) =>
-      setNotif({
-        exist: true,
-        type: "Error",
-        message: error.message,
-      })
-    );
-  // .finally(() => setLoader(false));
+    // api call
+    axios.defaults.withCredentials = true;
+    axios
+        .post(backEnd)
+        .then((response) => {
+            setUserInfo(null);
+            window.localStorage.setItem('isSignedIn', 'false');
+        })
+        .catch((error) =>
+            setNotif({
+                exist: true,
+                type: 'Error',
+                message: error.message,
+            })
+        );
+    // .finally(() => setLoader(false));
 };
 
 export default SignOut;

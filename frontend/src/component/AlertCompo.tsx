@@ -2,7 +2,8 @@ import { Box, chakra, Flex, Icon, ScaleFade } from '@chakra-ui/react';
 import React from 'react';
 import { BsLightningFill } from 'react-icons/bs';
 import { IoMdCheckmarkCircle } from 'react-icons/io';
-import { GlobalContext } from '../State/GlobalProvider';
+import { resetAlert } from '../State/Action';
+import { GlobalContext } from '../State/Provider';
 
 interface Props {
     message: string;
@@ -11,18 +12,15 @@ interface Props {
 
 export const AlertCompo = ({ message, type }: Props) => {
     // context
-    const { setNotif } = React.useContext<any>(GlobalContext);
+    const { dispatch } = React.useContext<any>(GlobalContext);
 
     // clear the notif tate
     React.useEffect(() => {
         const timer = setTimeout(() => {
-            setNotif({
-                exist: false,
-                type: '',
-                message: '',
-            });
+            dispatch(resetAlert());
         }, 3000);
         return () => clearTimeout(timer);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

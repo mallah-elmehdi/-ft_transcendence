@@ -20,8 +20,6 @@ const UpdatePtofile = (
     setNotif: any
 ) => {
     // general
-    console.log(data);
-
     const backEnd = API + 'user/update/' + login;
 
     // show loader

@@ -5,28 +5,31 @@ import Logo from '../component/logo';
 import ToggleMode from '../component/toggleMode';
 import { API, pagesContent } from '../constants';
 import { useNavigate } from 'react-router-dom';
-import { Loading } from '../component/Loading';
-import { GlobalContext } from '../State/GlobalProvider';
+import { GlobalContext } from '../State/Provider';
+import { usePageTitle } from '../hooks/usePageTitle';
+import { getUserInfo } from '../State/Api';
 
 export default function SignInPage() {
+    // page title
+    usePageTitle(pagesContent.login.title);
     // general
-    const backEnd = API + '42';
+    const URL = API + '/42';
     // naviate
     const navigate = useNavigate();
-    // check the sign in
-    const isSignedIn = window.localStorage.getItem('isSignedIn');
     // context
-    const { loader } = React.useContext<any>(GlobalContext);
+    const { dispatch } = React.useContext<any>(GlobalContext);
+    // ex
 
+    // useEffect
     React.useEffect(() => {
-        if (isSignedIn === 'true') {
+        getUserInfo(dispatch).then(() => {
             navigate(pagesContent.home.url);
-        }
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <>
-            {loader && <Loading />}
             <Flex mb={5} px={10} justifyContent={'right'} alignItems={'center'} overflow={'hideen'}>
                 <Spacer />
                 <ToggleMode />
@@ -50,7 +53,7 @@ export default function SignInPage() {
                         Welcome To
                     </Heading>
                     <Logo />
-                    <form method={'GET'} action={backEnd}>
+                    <form method={'GET'} action={URL}>
                         <Button
                             type={'submit'}
                             _hover={{ bg: 'green' }}
