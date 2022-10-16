@@ -15,47 +15,44 @@ import ChangeAvatar from "./ChangeAvatar";
 import axios from "axios";
 import { GROUP } from "../constants";
 import useGroups from "../api/useGroups";
-import { useNavigate } from 'react-router-dom';
-import {  pagesContent } from '../constants'
+import { useNavigate } from "react-router-dom";
+import { pagesContent } from "../constants";
 
 function NewChannel() {
   const { toggleNewChannel } = useContext<any>(ChatContext);
   const [channelName, setChannelName] = useState<any>("");
   const [image, setImage] = useState(null);
-  const { setGroups, groups} = React.useContext<any>(ChatContext);
+  const { setGroups, groups } = React.useContext<any>(ChatContext);
+  const { dispatch, state } = useContext<any>(ChatContext);
   const navigate = useNavigate();
-
 
   const uploadRoomInfo = () => {
     if (channelName.trim()) {
       axios.defaults.withCredentials = true;
       axios
-        .post(
-          GROUP,
-          {
-            room_name: channelName,
-            room_type: "private",
-          }
-        )
+        .post(GROUP, {
+          room_name: channelName,
+          room_type: "private",
+        })
         .then((res) => {
-          // FIXME: call alert notify when channel created
-          setGroups((old: any)=> {
-            return [
-              ...old,
-              {
-                id: res.data.room_id,
-                name: res.data.room_name,
-                avatar: res.data.room_avatar,
-                type: res.data.room_type,
-              }
-            ]
-          });
-          // console.log(res);
-          navigate(pagesContent.chat.url)
+          // {room_id: 5, room_name: 'hello', room_avatar: null, room_type: 'private', password: null,
+          console.log(res.data)
+            const group = {
+              id: res.data.room_id,
+              name: res.data.room_name,
+              avatar: res.data.room_avatar,
+              type: res.data.room_type,
+              password: res.data.room_password,
+            };
+            dispatch({
+              type: "ADD_GROUP",
+              data: group,
+            });
+          // navigate(pagesContent.chat.url);
           toggleNewChannel();
-    })
-    .catch((error) => {
-            //   FIXME: call alert notify when channel not created
+        })
+        .catch((error) => {
+          //   FIXME: call alert notify when channel not created
           console.log(error);
           toggleNewChannel();
         });

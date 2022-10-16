@@ -29,37 +29,17 @@ import { FRIENDS_URL, FRIEND_REQ, USER_URL } from "../constants";
 function Tabs() {
   const value = useColorModeValue("blackAlpha.200", "whiteAlpha.200");
   const { setSelectedChat } = useContext<any>(ChatContext);
-  const { friends, setFriends, groups } = useContext<any>(ChatContext);
-  const { allUsers, setAllUsers } = React.useContext<any>(ChatContext);
+  const { setFriends, } = useContext<any>(ChatContext);
   const { dispatch, state } = useContext<any>(ChatContext);
-  const { newFriends, users } = state;
-//   useEffect(() => {
-//     axios.get(FRIENDS_URL).then((response: any) => {
-//       for (var i = 0; i < response.data.length; i++) {
-//         axios.get(USER_URL + response.data[i].friendId).then((res: any) => {
-//           dispatch({
-//             type: "ADD_FRIEND",
-//             data: {
-//               id: res.data.user_id,
-//               name: res.data.user_name,
-//               avatar: res.data.user_avatar,
-//             },
-//           });
-//         });
-//       }
-//     });
-//   }, []);
+  const { newFriends, users, newGroups } = state;
 
-//   useFriends();
-  useGroups();
-  useAllUsers();
+  // useAllUsers();
 
   function isFriend(id: any) {
     return newFriends.findIndex((f: any) => f.id == id) == -1 ? false : true;
   }
 
   function sendFriendReq(id: any) {
-    //   console.log("user", users)
     const user = users.find((element:any) => element.user_id == id)
     axios
       .post(FRIEND_REQ + id)
@@ -142,8 +122,8 @@ function Tabs() {
         </TabPanel>
         <TabPanel h={"100%"} w={"100%"} m={0} p={0} overflow={"auto"}>
           <VStack pb={10} spacing={0} w={"100%"}>
-            {groups.length ? (
-              groups.map((group: any, index: any) => (
+            {newGroups.length ? (
+              newGroups.map((group: any, index: any) => (
                 <HStack
                   onClick={() => {
                     setSelectedChat({ chat: "G", id: group.id });

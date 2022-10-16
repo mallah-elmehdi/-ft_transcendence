@@ -36,17 +36,22 @@ const GroupMenu = () => {
   const value = useColorModeValue("white", "lightBlack");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { selectedChat, setSelectedChat } = useContext<any>(ChatContext);
+  const { dispatch, state } = useContext<any>(ChatContext);
 
   const leaveChannelHandler = () => {
-    console.log("LEAVE ROOM: ", selectedChat.id);
-    axios.post(DELETE_ROOM + selectedChat.id)
-    .then((response) => {
-    //   console.log(response);
-      setSelectedChat(null);
-    })
-    .catch((error) =>{
+    axios
+      .post(DELETE_ROOM + selectedChat.id)
+      .then((response) => {
+        console.log(response);
+        dispatch({
+          type: "REMOVE_GROUP",
+          data: selectedChat.id,
+        });
+        setSelectedChat(null);
+      })
+      .catch((error) => {
         // console.log(error)
-    })
+      });
   };
   return (
     <>
