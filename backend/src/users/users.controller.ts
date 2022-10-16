@@ -232,9 +232,11 @@ export class UsersController {
     return await this.UsersService.setUsername(login, req.body.username);
   }
 
+
+  //! Add Validators to Upload
   @Post('update/profile')
   @HttpCode(201)
-  @UseInterceptors(FileInterceptor('avatar'))
+  @UseInterceptors(FileInterceptor('avatar')) //https://docs.nestjs.com/techniques/file-upload
   async setData(
     @Param('login') login: any,
     @Req() req,
@@ -245,7 +247,8 @@ export class UsersController {
       req.user['userLogin'],
     );
 
-    if (file) {
+    if (file) 
+    {
       const cloud = await this.cloudinary.uploadImage(file);
       if (cloud) {
         userDataDto.user_avatar = cloud['url'];

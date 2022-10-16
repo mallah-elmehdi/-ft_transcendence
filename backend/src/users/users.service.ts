@@ -11,7 +11,7 @@ export class UsersService {
 		constructor(private readonly prisma : PrismaService) {}
 
 
-		// inserting to a table with Foreing keys
+	// inserting to a table with Foreing keys
 	async  friendReq(user :Number, params:Number) {
 		
 		// check here if the user has already friended the person

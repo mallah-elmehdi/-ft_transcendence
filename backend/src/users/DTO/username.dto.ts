@@ -7,6 +7,7 @@ import { Multer } from 'multer';
  	@IsString()
  	username: string;
  }
+ 
  export class userDataDto {
 	@IsString()
 	user_avatar? : string;

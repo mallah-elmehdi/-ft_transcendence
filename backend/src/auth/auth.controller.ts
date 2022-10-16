@@ -21,6 +21,7 @@ import { write } from 'fs';
 import { TwoFactDto } from './DTOs/2fa.dto';
 
 
+
 @Controller('42')
 export class AuthController {
   constructor(private readonly AuthService: AuthService, private JwtService : JwtService) {}
@@ -63,7 +64,7 @@ export class AuthController {
   }
 
   @Post('2fa')
-  async TwoFAcheck( @Body() body : TwoFactDto,) {
+  async TwoFAcheck(@Body() body : TwoFactDto,) {
     // after check push secrect to db
     var res = await this.AuthService.verify2fa(body.userToken, body.base32secret);
       return {message: res};
