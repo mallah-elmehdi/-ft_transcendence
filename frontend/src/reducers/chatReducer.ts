@@ -55,7 +55,7 @@ export const chatReducer = (state: any, action: any) => {
     case "SET_MEMBERS":
       return {
         ...state,
-        members: action.data,
+        newMembers: action.data,
       };
     case "ADD_MEMBER":
       return {

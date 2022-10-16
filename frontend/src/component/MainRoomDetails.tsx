@@ -47,7 +47,6 @@ export default function MainRoomDetails({
   const [member, setMember] = useState<any>([]);
   const { isMuteOpen, onMuteOpen, onMuteClose } = useMute();
   const { isBlockOpen, onBlockOpen, onBlockClose } = useBlock();
-  const { signedUser, setSignedUser } = useState('1');
 
   function isFriend(id: any) {
     return newFriends.findIndex((f: any) => f.id == id) == -1 ? false : true;
@@ -67,10 +66,10 @@ export default function MainRoomDetails({
   });
 
   useEffect(() => {
-    dispatch({
-      type: "SET_MEMBERS",
-      data: [],
-    });
+    // dispatch({
+    //   type: "SET_MEMBERS",
+    //   data: [],
+    // });
     axios.get(MEMBERS + selectedChat.id).then((response: any) => {
       for (var i = 0; i < response.data.length; i++) {
         axios.get(USER_URL + response.data[i].userId).then((res: any) => {
@@ -80,7 +79,7 @@ export default function MainRoomDetails({
             avatar: res.data.user_avatar,
             role: response.data[i]?.prev,
           };
-          if (res.data.user_id != signedUser.toString())
+          if (res.data.user_id != 1)
             dispatch({
               type: "ADD_MEMBER",
               data: member,
@@ -89,14 +88,10 @@ export default function MainRoomDetails({
         });
       }
     });
-    return {
-    dispatch({
-      type: "SET_MEMBERS",
-      data: [],
-    });
-
-    }
-
+    // return dispatch({
+    //   type: "SET_MEMBERS",
+    //   data: [],
+    // });
   }, []);
 
   return (
