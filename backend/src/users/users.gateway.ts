@@ -6,7 +6,7 @@ import { OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WebSocketServe
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from './users.service';
 
-@WebSocketGateway({namespace:'userstate', cors: {
+@WebSocketGateway(3004,{namespace:'userstate', cors: {
 	origin: process.env.FRONTEND_URL,
 }})
 export class UsersGateway implements  OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -19,7 +19,7 @@ export class UsersGateway implements  OnGatewayInit, OnGatewayConnection, OnGate
 
   @WebSocketServer()
   server: Server;
-
+  
   afterInit(server: any) {
     this.logger.log('Init');
   }
