@@ -7,10 +7,11 @@ import * as express from 'express';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
-  app.enableCors({
+  app.enableCors(
+    {
     origin: process.env.CLIENT_URL,
     credentials: true,
-  });
+  },);
   const config = new DocumentBuilder()
     .setTitle('ft_Transcendence')
     .setDescription('Transcendence Routes')

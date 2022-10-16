@@ -5,10 +5,11 @@ import {Socket, Server} from 'socket.io';
 
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
 
-@WebSocketGateway(3003, {cors: {
-	origin: " ",
+@WebSocketGateway(3001, {cors: {
+	origin: '*',
 	credentials: true
-}, namespace:'dm'})
+	},	namespace : 'dm'
+})
 export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect { 
  
 	private logger: Logger = new Logger('ChatGateway BRRRR');
