@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
+const passport_1 = require("@nestjs/passport");
 const platform_express_1 = require("@nestjs/platform-express");
 const username_dto_1 = require("./DTO/username.dto");
 const clodinary_service_1 = require("./clodinary/clodinary.service");
@@ -30,7 +31,7 @@ let UsersController = class UsersController {
     }
     async ChangeMemberStatus(status, param, req) {
         const member = await this.UsersService.getMembersbyIdRoom(status.room_id, 1);
-        if (member[0].prev != "owner")
+        if (member[0].prev != 'owner')
             throw new common_1.HttpException('Password Invalid', common_1.HttpStatus.UNAUTHORIZED);
         return this.UsersService.ChangeMemberStatus(param, status.room_status, status.room_id).catch((err) => {
             throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
@@ -68,7 +69,7 @@ let UsersController = class UsersController {
         });
     }
     async CreateRoom(RoomInfoDto, file, req) {
-        console.log("DTO", RoomInfoDto);
+        console.log('DTO', RoomInfoDto);
         if (file) {
             const cloud = await this.cloudinary.uploadImage(file);
             if (cloud) {
@@ -90,8 +91,7 @@ let UsersController = class UsersController {
         return await this.UsersService.getAllUsers(1);
     }
     async getAllFriends() {
-        return await this.UsersService.getAllFriends(1)
-            .catch((err) => {
+        return await this.UsersService.getAllFriends(1).catch((err) => {
             throw new common_1.BadRequestException(err);
         });
     }
@@ -114,15 +114,16 @@ let UsersController = class UsersController {
         return await this.UsersService.setUsername(login, req.body.username);
     }
     async setData(login, req, file, userDataDto) {
+        const userRecord = await this.UsersService.getUserbyLogin(req.user['userLogin']);
         if (file) {
             const cloud = await this.cloudinary.uploadImage(file);
             if (cloud) {
                 userDataDto.user_avatar = cloud['url'];
                 console.log();
-                (userDataDto.user_avatar);
+                userDataDto.user_avatar;
             }
         }
-        return await this.UsersService.updateUserData(login, userDataDto);
+        return await this.UsersService.updateUserData(Number(userRecord.user_id), userDataDto);
     }
 };
 __decorate([
@@ -141,7 +142,8 @@ __decorate([
     __param(1, (0, common_1.Param)('id')),
     __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [username_dto_1.MemberStatus, Number, Object]),
+    __metadata("design:paramtypes", [username_dto_1.MemberStatus,
+        Number, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "ChangeMemberStatus", null);
 __decorate([
@@ -152,7 +154,8 @@ __decorate([
     __param(1, (0, common_1.Param)('id')),
     __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [username_dto_1.AddedUsersDto, Number, Object]),
+    __metadata("design:paramtypes", [username_dto_1.AddedUsersDto,
+        Number, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "AddUsersToRoomsbyId", null);
 __decorate([
@@ -233,7 +236,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getMe", null);
 __decorate([
-    (0, common_1.Get)("match"),
+    (0, common_1.Get)('match'),
     (0, common_1.HttpCode)(200),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -266,7 +269,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "setUsername", null);
 __decorate([
-    (0, common_1.Post)('update/:login'),
+    (0, common_1.Post)('update/profile'),
     (0, common_1.HttpCode)(201),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar')),
     __param(0, (0, common_1.Param)('login')),
@@ -279,7 +282,9 @@ __decorate([
 ], UsersController.prototype, "setData", null);
 UsersController = __decorate([
     (0, common_1.Controller)('user'),
-    __metadata("design:paramtypes", [users_service_1.UsersService, clodinary_service_1.CloudinaryService])
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    __metadata("design:paramtypes", [users_service_1.UsersService,
+        clodinary_service_1.CloudinaryService])
 ], UsersController);
 exports.UsersController = UsersController;
 //# sourceMappingURL=users.controller.js.map
