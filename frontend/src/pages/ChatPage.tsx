@@ -4,6 +4,8 @@ import SideBar from "../component/SideBar";
 import ChatProvider, { ChatContext } from "../State/ChatProvider";
 import Messaging from "../component/Messaging";
 import WideMessaging from "../component/WideMessaging";
+import axios from "axios";
+import { FRIENDS_URL, USER_URL } from "../constants";
 
 export default function ChatPage() {
   return (

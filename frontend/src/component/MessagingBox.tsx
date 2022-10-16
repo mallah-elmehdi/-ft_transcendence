@@ -8,13 +8,15 @@ import FriendMenu from "./FriendMenu";
 import GroupMenu from "./GroupMenu";
 
 function MessagingBox() {
-  const { data, friends, groups } = useContext<any>(ChatContext);
+  const { dispatch, state } = useContext<any>(ChatContext);
+  const { newFriends } = state;
+  const { data,  groups } = useContext<any>(ChatContext);
   const { selectedChat, setSelectedChat, toggleOffSelectedChat } = useContext<any>(ChatContext);
   const { toggleDetails } = useContext<any>(ChatContext);
   let searchIndex;
 
   if (selectedChat.chat === "F")
-    searchIndex = friends.findIndex((id: any) => selectedChat.id === id.id);
+    searchIndex = newFriends.findIndex((id: any) => selectedChat.id === id.id);
   else searchIndex = groups.findIndex((id: any) => selectedChat.id === id.id);
   
   useEffect(() => {
@@ -38,17 +40,17 @@ function MessagingBox() {
         avatarName={
           selectedChat.chat === "G"
             ? groups[searchIndex].name.toString()
-            : friends[searchIndex].name.toString()
+            : newFriends[searchIndex].name.toString()
         }
         chatName={
           selectedChat.chat === "G"
             ? groups[searchIndex].name.toString()
-            : friends[searchIndex].name.toString()
+            : newFriends[searchIndex].name.toString()
         }
         avatarSrc={
           selectedChat.chat === "G"
             ? groups[searchIndex].avatar
-            : friends[searchIndex].avatar
+            : newFriends[searchIndex].avatar
         }
         isGroup={selectedChat.chat === "F" ? false : true}
         onClickCallBack={toggleDetails}
