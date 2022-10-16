@@ -18,9 +18,10 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { FaCamera, FaDiscord, FaFacebook, FaInstagram, FaRegEdit } from 'react-icons/fa';
-import UpdatePtofile from '../api/updatePtofile';
 import { REGEX_ALPHANUM } from '../constants';
-import { GlobalContext } from '../State/GlobalProvider';
+import { newNotification } from '../State/Action';
+import { updatePtofile } from '../State/Api';
+import { GlobalContext } from '../State/Provider';
 
 // types
 type Props = {
@@ -36,6 +37,7 @@ type Props = {
 const EditProfile = (props: Props) => {
     // modal
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { dispatch } = React.useContext<any>(GlobalContext);
 
     // form
     const [avatar, setAvatar] = React.useState(props.avatar);
@@ -49,11 +51,7 @@ const EditProfile = (props: Props) => {
     const changeAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             if (e.target.files[0].size > 1024 * 1000) {
-                setNotif({
-                    exist: true,
-                    type: 'Error',
-                    message: 'Avatar image is too large',
-                });
+                dispatch(newNotification({ type: 'Error', message: 'Avatar image is too large' }));
             } else {
                 const objectUrl = URL.createObjectURL(e.target.files[0]);
                 setAvatar(objectUrl);
@@ -76,26 +74,19 @@ const EditProfile = (props: Props) => {
     }, [props]);
 
     // submitProfile
-    const { setLoader, setUserInfo, setNotif } = React.useContext<any>(GlobalContext);
-
     const submitProfile = () => {
         if (username.length < 2 || username.length > 12 || facebook.length > 12 || discord.length > 12 || instagram.length > 12) {
-            setNotif({
-                exist: true,
-                type: 'Error',
-                message: 'Input length should be between 2 and 12 characters',
-            });
+            dispatch(newNotification({ type: 'Error', message: 'Input length should be between 2 and 12 characters' }));
         } else {
-            // const formData = new FormData();
-            // if (newAvatar) formData.append('avatar', newAvatar ? newAvatar : '', newAvatar ? newAvatar.name : '');
-            UpdatePtofile(
-                props.login,
-                { avatar: props.avatar === avatar ? null : newAvatar, user_name: username, facebook, discord, instagram },
-                setLoader,
-                setUserInfo,
-                onClose,
-                setNotif
-            );
+            updatePtofile(dispatch, props.login, {
+                avatar: props.avatar === avatar ? null : newAvatar,
+                user_name: username,
+                facebook,
+                discord,
+                instagram,
+            }).then(() => {
+                onClose()
+            });
         }
     };
     const handleClose = () => {

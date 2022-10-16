@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API, pagesContent } from '../constants';
-import { GlobalContext } from '../State/GlobalProvider';
+import { GlobalContext } from '../State/Provider';
 
 const UserMatchHistory = () => {
     // general

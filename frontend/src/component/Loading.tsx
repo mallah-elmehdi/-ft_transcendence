@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Box, Spinner } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
+import loadingGif from '../assets/pongame.gif';
 
 export const Loading = () => {
     return (
         <Box
-            _light={{ bg: 'white' }}
-            _dark={{ bg: 'gray.900' }}
+            _light={{ bg: 'rgba(0,0,0,0.5)' }}
+            _dark={{ bg: 'rgba(0,0,0,0.5)' }}
             sx={{
                 w: '100vw',
                 h: '100vh',
@@ -15,22 +16,18 @@ export const Loading = () => {
                 position: 'fixed',
             }}
         >
-            <Spinner
-                thickness="4px"
-                speed="0.65s"
-                emptyColor="gray.200"
-                color="blue.500"
-                size="xl"
-                position="fixed"
-                top="50%"
-                right="50%"
-                transform="translate(-50%, -50%)"
-            />
-            {/* <img
+            <img
                 alt="ok"
-                style={{ maxWidth: '15rem', width: '100%', position: 'fixed', top: '50%', right: '50%, trams }}
-                src="https://img.pikbest.com/png-images/20190918/cartoon-snail-loading-loading-gif-animation_2734139.png"
-            /> */}
+                style={{
+                    maxWidth: '15rem',
+                    width: '100%',
+                    position: 'fixed',
+                    top: '50%',
+                    right: '50%',
+                    transform: 'translate(50%, -50%)',
+                }}
+                src={loadingGif}
+            />
         </Box>
     );
 };

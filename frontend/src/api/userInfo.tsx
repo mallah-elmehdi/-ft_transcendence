@@ -2,13 +2,12 @@ import axios from 'axios';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { API, pagesContent } from '../constants';
-import { GlobalContext } from '../State/GlobalProvider';
+import { GlobalContext } from '../State/Provider';
 
-const UserInfo = () => {
+const UserInfo = (callback: any | null, ret?: any) => {
     const params = useParams();
     // general
     const backEnd = API + (!params?.user_id || params?.user_id === 'me' ? 'user/me' : 'user/' + params?.user_id);
-    console.log('backEnd', backEnd);
 
     const { setUserInfo, setLoader } = React.useContext<any>(GlobalContext);
 
@@ -24,13 +23,17 @@ const UserInfo = () => {
             .then((response) => {
                 setUserInfo(response?.data);
                 window.localStorage.setItem('isSignedIn', 'true');
+                if (callback) return callback(response?.data);
             })
             .catch((error) => {
                 navigate(pagesContent.login.url);
                 window.localStorage.setItem('isSignedIn', 'false');
             })
             .finally(() => setLoader(false));
-    }, []);
+
+        if (ret) return ret;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [params?.user_id]);
 };
 
 export default UserInfo;

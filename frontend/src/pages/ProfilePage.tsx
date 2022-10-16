@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {
     Button,
     Grid,
@@ -12,6 +11,7 @@ import {
     useMediaQuery,
     useTheme,
 } from '@chakra-ui/react';
+import React from 'react';
 
 // ICONS
 import { FaDiscord, FaFacebook, FaInstagram, FaShieldAlt } from 'react-icons/fa';
@@ -33,64 +33,73 @@ import { pagesContent } from '../constants';
 
 // Context
 // import { useRedirect } from '../hooks/useRedirect';
-import { GlobalContext } from '../State/GlobalProvider';
-import UserInfo from '../api/userInfo';
-import { Loading } from '../component/Loading';
-import { AlertCompo } from '../component/AlertCompo';
-import SignOut from '../api/signOut';
-import { useNavigate } from 'react-router-dom';
-import UserMatchHistory from '../api/userMatchHistory';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getFriendInfo, getUserInfo, signOut } from '../State/Api';
+import { GlobalContext } from '../State/Provider';
 
 const ProfilePage = () => {
     // page title
     usePageTitle(pagesContent.profile.title);
-
     // vars
     const theme = useTheme();
-
-    // breakpoint
-    const profileInfo = useBreakpointValue({
-        xl: 3,
-        lg: 4,
-        base: 12,
-    });
-    const statusInfo = useBreakpointValue({
-        xl: 9,
-        lg: 8,
-        base: 12,
-    });
-    const [isSmallScreen] = useMediaQuery(`(min-width: ${theme.breakpoints.xl})`);
-
-    // get the data
-    const { userInfo, loader, notif, setLoader, setUserInfo, setNotif, userMatchHistory } = React.useContext<any>(GlobalContext);
     const navigate = useNavigate();
-
-    // const get the user info;
-    UserInfo();
-    UserMatchHistory();
-
+    // breakpoint
+    const profileInfo = useBreakpointValue({ xl: 3, lg: 4, base: 12 });
+    const statusInfo = useBreakpointValue({ xl: 9, lg: 8, base: 12 });
+    const [isSmallScreen] = useMediaQuery(`(min-width: ${theme.breakpoints.xl})`);
     // signout
     const signoutHandler = () => {
-        SignOut(setLoader, setUserInfo, setNotif);
-        navigate(pagesContent.login.url);
+        signOut(dispatch).then(() => {
+            navigate(pagesContent.login.url);
+        });
     };
+
+    // which user
+    const params = useParams();
+    const [me, setMe] = React.useState(false);
+    // context
+    const { data, dispatch } = React.useContext<any>(GlobalContext);
+    // ex
+    const { userInfo } = data;
+
+    // useEffect
+    React.useEffect(() => {
+        if (params?.user_id === 'me') {
+            getUserInfo(dispatch)
+                .then(() => {
+                    setMe(params?.user_id === 'me');
+                })
+                .catch(() => {
+                    navigate(pagesContent.login.url);
+                });
+        } else {
+            getFriendInfo(dispatch, params?.user_id)
+                .then(() => {
+                    setMe(params?.user_id === 'me');
+                })
+                .catch(() => {
+                    navigate(pagesContent.profile.url);
+                });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [params?.user_id]);
 
     return (
         <>
-            {loader && <Loading />}
-            {notif && notif.exist && <AlertCompo message={notif.message} type={notif.type} />}
             <Grid h="100%" templateColumns="repeat(12, 1fr)" gap={6}>
                 <GridItem colSpan={profileInfo}>
                     <Card w="100%" h="100%" position="relative">
                         <>
-                            <EditProfile
-                                avatar={userInfo?.user_avatar}
-                                login={userInfo?.user_login}
-                                user_name={userInfo?.user_name}
-                                facebook={userInfo?.facebook}
-                                discord={userInfo?.discord}
-                                instagram={userInfo?.instagram}
-                            />
+                            {me && (
+                                <EditProfile
+                                    avatar={userInfo?.user_avatar}
+                                    login={userInfo?.user_login}
+                                    user_name={userInfo?.user_name}
+                                    facebook={userInfo?.facebook}
+                                    discord={userInfo?.discord}
+                                    instagram={userInfo?.instagram}
+                                />
+                            )}
                             <Stack spacing={5} alignItems="center">
                                 <ProfileAvatar name={userInfo?.user_name} avatar={userInfo?.user_avatar} isOnline={userInfo?.online} />
 
@@ -128,45 +137,51 @@ const ProfilePage = () => {
                                         />
                                     </ChakraLink>
                                 </HStack>
-                                <Button
-                                    _focus={{
-                                        bg: 'gray.400',
-                                    }}
-                                    _hover={{
-                                        bg: 'gray.400',
-                                    }}
-                                    bg="gray.400"
-                                    color="blackAlpha.900"
-                                    leftIcon={<FaShieldAlt fontSize="xs" />}
-                                    borderRadius="2xl"
-                                >
-                                    2-Factor Auth
-                                </Button>
+                                {me && (
+                                    <Button
+                                        _focus={{
+                                            bg: 'gray.400',
+                                        }}
+                                        _hover={{
+                                            bg: 'gray.400',
+                                        }}
+                                        bg="gray.400"
+                                        color="blackAlpha.900"
+                                        leftIcon={<FaShieldAlt fontSize="xs" />}
+                                        borderRadius="2xl"
+                                    >
+                                        2-Factor Auth
+                                    </Button>
+                                )}
                                 <Line maxW="10rem" />
                                 <StatusProfile
                                     rate={
                                         userInfo?.games_played === 0 ? 0 : Math.round((userInfo?.games_won / userInfo?.games_played) * 100)
                                     }
                                 />
-                                <Line maxW="10rem" />
-                                <Button
-                                    bg="red"
-                                    color="blackAlpha.900"
-                                    borderRadius="3xl"
-                                    fontSize="3xl"
-                                    fontWeight="light"
-                                    px={10}
-                                    py={8}
-                                    _focus={{
-                                        bg: 'red',
-                                    }}
-                                    _hover={{
-                                        bg: 'red',
-                                    }}
-                                    onClick={signoutHandler}
-                                >
-                                    Sign Out
-                                </Button>
+                                {me && (
+                                    <>
+                                        <Line maxW="10rem" />
+                                        <Button
+                                            bg="red"
+                                            color="blackAlpha.900"
+                                            borderRadius="3xl"
+                                            fontSize="3xl"
+                                            fontWeight="light"
+                                            px={10}
+                                            py={8}
+                                            _focus={{
+                                                bg: 'red',
+                                            }}
+                                            _hover={{
+                                                bg: 'red',
+                                            }}
+                                            onClick={signoutHandler}
+                                        >
+                                            Sign Out
+                                        </Button>
+                                    </>
+                                )}
                             </Stack>
                         </>
                     </Card>

@@ -1,13 +1,17 @@
-import axios from 'axios';
-import React from 'react';
-import { API } from '../constants';
+import axios from "axios";
+import React from "react";
+import { API } from "../constants";
 
-const SignOut = (setLoader: (value: boolean) => void, setUserInfo: (value: any) => void, setNotif: any) => {
-    // general
-    const backEnd = API + '42/signout';
+const SignOut = (
+  setLoader: (value: boolean) => void,
+  setUserInfo: (value: any) => void,
+  setNotif: any
+) => {
+  // general
+  const backEnd = API + "42/signout";
 
-    // // show loader
-    // setLoader(true);
+  // // show loader
+  // setLoader(true);
 
     // api call
     axios.defaults.withCredentials = true;
@@ -23,8 +27,8 @@ const SignOut = (setLoader: (value: boolean) => void, setUserInfo: (value: any) 
                 type: 'Error',
                 message: error.message,
             })
-        )
-        // .finally(() => setLoader(false));
+        );
+    // .finally(() => setLoader(false));
 };
 
 export default SignOut;

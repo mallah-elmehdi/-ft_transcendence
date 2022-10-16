@@ -1,8 +1,11 @@
-import React, { useState, createContext, useEffect } from "react";
+import axios from "axios";
+import React, { useState, createContext, useEffect, useReducer } from "react";
 // // import { API, SOCKET } from "../constants";
 // import socketIOClient, {io} from "socket.io-client";
 // import axios from 'axios';
 import useFriends from "../api/useFriends";
+import { FRIENDS_URL, USER_URL } from "../constants";
+import { chatReducer } from "../reducers/chatReducer";
 
 // @ts-ignore
 export const ChatContext = createContext();
@@ -12,6 +15,12 @@ type Props = {
 };
 
 const ChatProvider = ({ children }: Props) => {
+  const InitialValues = {
+    newFriends: [],
+    users: [],
+  };
+  const [state, dispatch] = useReducer<any>(chatReducer, InitialValues);
+
   // const socket = io(SOCKET + "dm" );
 
   const [newChannel, setNewChannel] = useState(false);
@@ -34,7 +43,7 @@ const ChatProvider = ({ children }: Props) => {
   const [groups, setGroups] = useState<any>([]);
 
   const [roomMembers, setRoomMembers] = React.useState<any>([]);
-  const [allUsers, setAllUsers] =  React.useState<any>([]);
+  const [allUsers, setAllUsers] = React.useState<any>([]);
   // console.log("Chat Provider", friends)
 
   // const [data, setData] = useState({
@@ -117,6 +126,8 @@ const ChatProvider = ({ children }: Props) => {
         setRoomMembers,
         allUsers,
         setAllUsers,
+        state,
+        dispatch,
       }}
     >
       {children}

@@ -3,11 +3,13 @@ import { group } from "console";
 import React, { useContext } from "react";
 import { MEMBERS, USER_URL } from "../constants";
 import { ChatContext } from "../State/ChatProvider";
+import { GlobalContext } from "../State/GlobalProvider";
 
 const useMembers = () => {
   const { selectedChat } = useContext<any>(ChatContext);
   const { setRoomMembers, roomMembers } = useContext<any>(ChatContext);
   const [localMembers, setLocalMem] = React.useState<any>([]);
+  const { setUserMatchHistory, setLoader } = React.useContext<any>(GlobalContext);
 
   React.useEffect(() => {
     axios
@@ -29,6 +31,7 @@ const useMembers = () => {
   }, []);
 
   React.useEffect(() => {
+    setLoader(true);
     const members: any = [];
     for (var i = 0; i < localMembers.length; i++) {
       const role = localMembers[i].role;
@@ -44,7 +47,8 @@ const useMembers = () => {
         })
         .catch((err) => {
           console.log(err);
-        });
+        })
+        .finally(() => setLoader(false));
       setRoomMembers(members);
     }
   }, [localMembers]);
