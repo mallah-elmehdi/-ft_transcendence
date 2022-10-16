@@ -1,40 +1,51 @@
 import { Logger } from '@nestjs/common';
-import { OnGatewayInit, SubscribeMessage, WebSocketGateway, OnGatewayConnection, OnGatewayDisconnect, WebSocketServer, ConnectedSocket } from '@nestjs/websockets';
-import {Socket, Server} from 'socket.io';
-
+import {
+  OnGatewayInit,
+  SubscribeMessage,
+  WebSocketGateway,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  WebSocketServer,
+  ConnectedSocket,
+} from '@nestjs/websockets';
+import { Socket, Server } from 'socket.io';
 
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
 
-@WebSocketGateway(3003, {cors: {
-	origin: " ",
-	credentials: true
-}, namespace:'dm'})
-export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect { 
- 
-	private logger: Logger = new Logger('ChatGateway BRRRR');
+@WebSocketGateway(3003, {
+  cors: {
+    origin: '*',
+    credentials: true,
+  },
+  namespace: 'dm',
+})
+export class ChatGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
+  private logger: Logger = new Logger('ChatGateway BRRRR');
 
-	@WebSocketServer() 
-	server : Server;
+  @WebSocketServer()
+  server: Server;
 
-	afterInit(server: any) {
-		this.logger.log('Init');
-	}
+  afterInit(server: any) {
+    this.logger.log('Init');
+  }
 
-	handleConnection(client : Socket, ...args: any[]) {
-		this.logger.log(`Client connected: ${client.id}`);
-	}
+  handleConnection(client: Socket, ...args: any[]) {
+    this.logger.log(`Client connected: ${client.id}`);
+  }
 
-	handleDisconnect(client: any) {
-		this.logger.log(`Client disconnected: ${client.id}`);
-	}
-  
-	@SubscribeMessage('msgToServer') // Equivalent to socket.on('msgToServer') listening to any 'msgToServer' event
-	handleMessage(client: Socket, payload : string) {
-		console.log("You am the palof", payload)
-		
-		//console.log(`Message from ${client.id}: ${payloadJson.name} or ${payload}`);
-		//client.emit('msgToClient', payload);
-	}
+  handleDisconnect(client: any) {
+    this.logger.log(`Client disconnected: ${client.id}`);
+  }
+
+  @SubscribeMessage('msgToServer') // Equivalent to socket.on('msgToServer') listening to any 'msgToServer' event
+  handleMessage(client: Socket, payload: string) {
+    console.log('You am the palof', payload);
+
+    //console.log(`Message from ${client.id}: ${payloadJson.name} or ${payload}`);
+    //client.emit('msgToClient', payload);
+  }
 }
 
 //!https://wanago.io/2021/01/25/api-nestjs-chat-websockets/
@@ -48,6 +59,6 @@ export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatew
 //* @SubscribeMessage('msgToServer') makes it listen to an event named msgToServer.
 
 //@SubscribeMessage('connection') = listen to an event named connection
- //socket.on = receive
- //socket.emit = send
- //socket.to(room).emit = send to everyone in a room including the sender
+//socket.on = receive
+//socket.emit = send
+//socket.to(room).emit = send to everyone in a room including the sender

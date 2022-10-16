@@ -12,7 +12,7 @@ import { get } from 'http';
 
 
 @Controller('user')
-// @UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'))
 export class UsersController {
 
   constructor(private readonly UsersService: UsersService, private cloudinary: CloudinaryService) {}

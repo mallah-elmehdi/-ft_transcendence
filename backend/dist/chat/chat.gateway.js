@@ -27,7 +27,7 @@ let ChatGateway = class ChatGateway {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     handleMessage(client, payload) {
-        console.log("You am the palof", payload);
+        console.log('You am the palof', payload);
     }
 };
 __decorate([
@@ -41,10 +41,13 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ChatGateway.prototype, "handleMessage", null);
 ChatGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(3003, { cors: {
-            origin: " ",
-            credentials: true
-        }, namespace: 'dm' })
+    (0, websockets_1.WebSocketGateway)(3003, {
+        cors: {
+            origin: '*',
+            credentials: true,
+        },
+        namespace: 'dm',
+    })
 ], ChatGateway);
 exports.ChatGateway = ChatGateway;
 //# sourceMappingURL=chat.gateway.js.map
