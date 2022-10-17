@@ -105,6 +105,19 @@ let UsersService = class UsersService {
             throw "NOT FOUND";
         return room;
     }
+    async getAllRooms() {
+        const all_rooms = await this.prisma.room_info.findMany({
+            where: {
+                NOT: {
+                    room_type: "protectd",
+                    AND: {
+                        room_type: "DM",
+                    }
+                },
+            },
+        });
+        return all_rooms;
+    }
     async DeleteRoombyId(id) {
         const removed = await this.prisma.members.deleteMany({
             where: {

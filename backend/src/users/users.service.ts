@@ -179,6 +179,7 @@ export class UsersService {
 				{
 					where :
 					{
+					
 						room_id : Number(id),
 					},
 				})
@@ -186,7 +187,30 @@ export class UsersService {
 					throw "NOT FOUND"
 				return room		
 	}
+	async getAllRooms()
+	{
+		const all_rooms = await this.prisma.room_info.findMany (
+			{// not working
+				where:
+				{
+					NOT :
+					{
+						room_type : "protectd",
+						AND :
+						{
+							room_type : "DM",
+						}
+					},
+				},
+				// OR :
+				// {
+				// 	room_type: "DM"
+				// }
 
+			}
+		)
+		return all_rooms
+	}
 	async DeleteRoombyId (id: Number)
 	{
 		// before deletion check if the user has the right to delete

@@ -6,6 +6,7 @@ export declare class UsersController {
     private readonly UsersService;
     private cloudinary;
     constructor(UsersService: UsersService, cloudinary: CloudinaryService);
+    GetAllRooms(req: Request): Promise<import(".prisma/client").Room_info[]>;
     GetRooms(req: Request): Promise<import(".prisma/client").Members[]>;
     ChangeMemberStatus(status: MemberStatus, param: Number, req: Request): Promise<import(".prisma/client").Prisma.BatchPayload>;
     AddUsersToRoomsbyId(user: AddedUsersDto, param: Number, req: Request): Promise<import(".prisma/client").Members>;

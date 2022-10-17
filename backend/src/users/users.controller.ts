@@ -51,6 +51,15 @@ export class UsersController {
 
   @Get('group/all')
   @HttpCode(200)
+  async GetAllRooms(@Req() req: Request) {
+    // here get the room for the current user
+
+    return this.UsersService.getAllRooms().catch((err) => {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    });
+  }
+  @Get('group/member')
+  @HttpCode(200)
   async GetRooms(@Req() req: Request) {
     // here get the room for the current user
 

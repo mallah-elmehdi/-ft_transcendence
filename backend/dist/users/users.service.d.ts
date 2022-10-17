@@ -13,6 +13,7 @@ export declare class UsersService {
     check_password(room_password: any, hash: any): boolean;
     getRooms(id: Number): Promise<import(".prisma/client").Members[]>;
     getRoombyId(id: Number): Promise<import(".prisma/client").Room_info>;
+    getAllRooms(): Promise<import(".prisma/client").Room_info[]>;
     DeleteRoombyId(id: Number): Promise<import(".prisma/client").Room_info>;
     getMembersbyId(id: Number): Promise<import(".prisma/client").Members[]>;
     getMembersbyIdRoom(id: Number, user: Number): Promise<import(".prisma/client").Members[]>;

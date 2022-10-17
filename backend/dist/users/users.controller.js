@@ -23,6 +23,11 @@ let UsersController = class UsersController {
         this.UsersService = UsersService;
         this.cloudinary = cloudinary;
     }
+    async GetAllRooms(req) {
+        return this.UsersService.getAllRooms().catch((err) => {
+            throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
+        });
+    }
     async GetRooms(req) {
         return this.UsersService.getRooms(1).catch((err) => {
             throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
@@ -131,6 +136,14 @@ let UsersController = class UsersController {
 };
 __decorate([
     (0, common_1.Get)('group/all'),
+    (0, common_1.HttpCode)(200),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "GetAllRooms", null);
+__decorate([
+    (0, common_1.Get)('group/member'),
     (0, common_1.HttpCode)(200),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
