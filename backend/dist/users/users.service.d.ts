@@ -4,6 +4,7 @@ export declare class UsersService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     friendReq(user: Number, params: Number): Promise<import(".prisma/client").Friend>;
+    BlockUserFromGroupById(group_id: any, user_id: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
     BlockUserById(me: number, DeletedUser: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
     AddToRoom(user: any, rool: any, roomId: any): Promise<import(".prisma/client").Members>;
     ChangeMemberStatus(user: any, rool: any, roomId: any): Promise<import(".prisma/client").Prisma.BatchPayload>;

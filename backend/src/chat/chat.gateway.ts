@@ -30,8 +30,11 @@ export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatew
 	}
   
 	@SubscribeMessage('msgToServer') // Equivalent to socket.on('msgToServer') listening to any 'msgToServer' event
-	handleMessage(client: Socket, payload : string) {
+	handleMessage(client: Socket, payload) {
 		console.log("You am the palof", payload)
+
+		client.join(payload.userId + 'mougnou');
+		this.server.to(payload.userId + 'mougnou').emit(payload.message);
 		
 		//console.log(`Message from ${client.id}: ${payloadJson.name} or ${payload}`);
 		//client.emit('msgToClient', payload);

@@ -73,7 +73,7 @@ export class UsersController {
       1,
     );
 
-    if (member[0].prev != 'owner')
+    if (member[0].prev != ('owner' || 'admin'))
       throw new HttpException('Password Invalid', HttpStatus.UNAUTHORIZED);
 
     return this.UsersService.ChangeMemberStatus(
@@ -112,7 +112,16 @@ export class UsersController {
   @Post('block/:id')
   @HttpCode(201)
   async BlockUserById(@Param('id') param: Number, @Req() req: Request) {
+    // get id from user
     return this.UsersService.BlockUserById(1, param).catch((err) => {
+      throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
+    });
+  }
+  @Post('group/block/:id')
+  @HttpCode(201)
+  async BlockUserFromGroupById(@Body() room, @Param('id') user_id: Number, @Req() req: Request) {
+    // get id from user
+    return this.UsersService.BlockUserFromGroupById(Number(room.room_id) , user_id).catch((err) => {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     });
   }
@@ -232,9 +241,11 @@ export class UsersController {
     return await this.UsersService.setUsername(login, req.body.username);
   }
 
+
+  //! Add Validators to Upload
   @Post('update/profile')
   @HttpCode(201)
-  @UseInterceptors(FileInterceptor('avatar'))
+  @UseInterceptors(FileInterceptor('avatar')) //https://docs.nestjs.com/techniques/file-upload
   async setData(
     @Param('login') login: any,
     @Req() req,
@@ -245,7 +256,8 @@ export class UsersController {
       req.user['userLogin'],
     );
 
-    if (file) {
+    if (file) 
+    {
       const cloud = await this.cloudinary.uploadImage(file);
       if (cloud) {
         userDataDto.user_avatar = cloud['url'];

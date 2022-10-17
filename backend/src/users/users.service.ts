@@ -11,7 +11,7 @@ export class UsersService {
 		constructor(private readonly prisma : PrismaService) {}
 
 
-		// inserting to a table with Foreing keys
+	// inserting to a table with Foreing keys
 	async  friendReq(user :Number, params:Number) {
 		
 		// check here if the user has already friended the person
@@ -21,6 +21,22 @@ export class UsersService {
 		return update
 	}
 
+	async BlockUserFromGroupById(group_id, user_id)
+	{
+		const blocked = await this.prisma.members.deleteMany (
+			{
+				where :
+				{
+					roomId: Number(group_id),
+					userId: Number(user_id)
+				}
+			}
+		)
+		if (blocked.count == 0)
+			throw "NOT FOUND"
+		console.log("Heeeeeee from group ", blocked)
+		return blocked
+	}
 	async BlockUserById(me: number, DeletedUser )
 	{
 		// const id = await this.prisma.user.findMany(
