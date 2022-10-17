@@ -147,6 +147,7 @@ export class UsersService {
 
 	async getRoombyId (id: Number)
 	{
+			console.log("Id: ", id);
 			const room = await this.prisma.room_info.findUnique(
 				{
 					where :

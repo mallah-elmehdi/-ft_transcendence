@@ -9,13 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChatGateway = void 0;
+exports.GameGateway = void 0;
 const common_1 = require("@nestjs/common");
 const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
-let ChatGateway = class ChatGateway {
+let GameGateway = class GameGateway {
     constructor() {
-        this.logger = new common_1.Logger('ChatGateway BRRRR');
+        this.logger = new common_1.Logger('GameGateway BRRRR');
     }
     afterInit(server) {
         this.logger.log('Init');
@@ -26,26 +26,64 @@ let ChatGateway = class ChatGateway {
     handleDisconnect(client) {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
-    handleMessage(client, payload) {
-        console.log("You am the palof", payload);
+    handleMovement(client) {
+        const user = {
+            x: 0,
+            y: 0,
+            w: 0,
+            h: 0,
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+        };
+        const opponent = {
+            x: 0,
+            y: 0,
+            w: 0,
+            h: 0,
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+        };
+        const ball = {
+            x: 0,
+            y: 0,
+            r: 0,
+            d: {
+                x: 0,
+                y: 0,
+            },
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+        };
+    }
+    startGame(socket, payload) {
+        socket.join('aRoom');
+        console.log('socket--->', socket);
     }
 };
 __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", socket_io_1.Server)
-], ChatGateway.prototype, "server", void 0);
+], GameGateway.prototype, "server", void 0);
 __decorate([
-    (0, websockets_1.SubscribeMessage)('msgToServer'),
+    (0, websockets_1.SubscribeMessage)('startGame'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
     __metadata("design:returntype", void 0)
-], ChatGateway.prototype, "handleMessage", null);
-ChatGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(3002, { cors: {
+], GameGateway.prototype, "startGame", null);
+GameGateway = __decorate([
+    (0, websockets_1.WebSocketGateway)(3003, {
+        cors: {
             origin: '*',
-            credentials: true
-        }, namespace: 'dm'
+            credentials: true,
+        },
+        namespace: 'game',
     })
-], ChatGateway);
-exports.ChatGateway = ChatGateway;
-//# sourceMappingURL=chat.gateway.js.map
+], GameGateway);
+exports.GameGateway = GameGateway;
+//# sourceMappingURL=game.gateway.js.map

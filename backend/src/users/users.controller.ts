@@ -171,7 +171,7 @@ export class UsersController {
   @Post('add/:id')
   @HttpCode(201)
   async AddFriend(@Param('id') param: Number) {
-    const user_info = await this.UsersService.getUserbyLogin('aymaatou');
+    const user_info = await this.UsersService.getUserbyLogin('ynoam'); //! get User who sent the request using JWT
     // const user = user_info.user_id;
     const user = 1;
     return await this.UsersService.friendReq(user, param);
