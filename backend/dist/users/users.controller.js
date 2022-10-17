@@ -30,7 +30,7 @@ let UsersController = class UsersController {
     }
     async ChangeMemberStatus(status, param, req) {
         const member = await this.UsersService.getMembersbyIdRoom(status.room_id, 1);
-        if (member[0].prev != 'owner')
+        if (member[0].prev != ('owner' || 'admin'))
             throw new common_1.HttpException('Password Invalid', common_1.HttpStatus.UNAUTHORIZED);
         return this.UsersService.ChangeMemberStatus(param, status.room_status, status.room_id).catch((err) => {
             throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
@@ -49,6 +49,11 @@ let UsersController = class UsersController {
     }
     async BlockUserById(param, req) {
         return this.UsersService.BlockUserById(1, param).catch((err) => {
+            throw new common_1.HttpException('NOT FOUND', common_1.HttpStatus.NOT_FOUND);
+        });
+    }
+    async BlockUserFromGroupById(room, user_id, req) {
+        return this.UsersService.BlockUserFromGroupById(Number(room.room_id), user_id).catch((err) => {
             throw new common_1.HttpException('NOT FOUND', common_1.HttpStatus.NOT_FOUND);
         });
     }
@@ -166,6 +171,16 @@ __decorate([
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "BlockUserById", null);
+__decorate([
+    (0, common_1.Post)('group/block/:id'),
+    (0, common_1.HttpCode)(201),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('id')),
+    __param(2, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Number, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "BlockUserFromGroupById", null);
 __decorate([
     (0, common_1.Get)('group/:id'),
     (0, common_1.HttpCode)(200),

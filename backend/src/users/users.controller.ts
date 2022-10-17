@@ -73,7 +73,7 @@ export class UsersController {
       1,
     );
 
-    if (member[0].prev != 'owner')
+    if (member[0].prev != ('owner' || 'admin'))
       throw new HttpException('Password Invalid', HttpStatus.UNAUTHORIZED);
 
     return this.UsersService.ChangeMemberStatus(
@@ -112,7 +112,16 @@ export class UsersController {
   @Post('block/:id')
   @HttpCode(201)
   async BlockUserById(@Param('id') param: Number, @Req() req: Request) {
+    // get id from user
     return this.UsersService.BlockUserById(1, param).catch((err) => {
+      throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
+    });
+  }
+  @Post('group/block/:id')
+  @HttpCode(201)
+  async BlockUserFromGroupById(@Body() room, @Param('id') user_id: Number, @Req() req: Request) {
+    // get id from user
+    return this.UsersService.BlockUserFromGroupById(Number(room.room_id) , user_id).catch((err) => {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     });
   }
