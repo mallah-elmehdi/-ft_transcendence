@@ -299,7 +299,12 @@ __decorate([
 __decorate([
     (0, common_1.Post)('update/profile'),
     (0, common_1.HttpCode)(201),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar')),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar', {
+        limits: {
+            files: 1,
+            fileSize: 10000000,
+        }
+    })),
     __param(0, (0, common_1.Param)('login')),
     __param(1, (0, common_1.Req)()),
     __param(2, (0, common_1.UploadedFile)()),

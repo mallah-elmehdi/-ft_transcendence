@@ -28,14 +28,9 @@ let ChatGateway = class ChatGateway {
     }
     handleMessage(client, payload) {
         console.log("You am the palof", payload);
-<<<<<<< HEAD
         const roomId = payload.roomId;
         client.join(roomId);
         this.server.to(roomId).emit(payload.message);
-=======
-        client.join(payload.userId + 'mougnou');
-        this.server.to(payload.userId + 'mougnou').emit(payload.message);
->>>>>>> 14814da77e0e57fec3d7d0811f083d5af674b82c
     }
 };
 __decorate([
@@ -49,11 +44,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ChatGateway.prototype, "handleMessage", null);
 ChatGateway = __decorate([
-<<<<<<< HEAD
-    (0, websockets_1.WebSocketGateway)(3003, { cors: {
-=======
     (0, websockets_1.WebSocketGateway)(3002, { cors: {
->>>>>>> 14814da77e0e57fec3d7d0811f083d5af674b82c
             origin: '*',
             credentials: true
         }, namespace: 'dm'

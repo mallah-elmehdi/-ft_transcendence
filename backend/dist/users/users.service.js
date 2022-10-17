@@ -108,13 +108,19 @@ let UsersService = class UsersService {
     async getAllRooms() {
         const all_rooms = await this.prisma.room_info.findMany({
             where: {
-                NOT: {
-                    room_type: "protectd",
-                    AND: {
-                        room_type: "DM",
-                    }
-                },
-            },
+                OR: [
+                    {
+                        room_type: {
+                            contains: "public",
+                        },
+                    },
+                    {
+                        room_type: {
+                            contains: "protected",
+                        },
+                    },
+                ]
+            }
         });
         return all_rooms;
     }

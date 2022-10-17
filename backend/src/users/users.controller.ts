@@ -37,6 +37,7 @@ import {
 import { CloudinaryService } from './clodinary/clodinary.service';
 import { get } from 'http';
 import { ApiProperty, ApiTags  } from '@nestjs/swagger';
+import { IsMimeType } from 'class-validator';
 
 
 // ! Before End, Check if the user is extracted from JWT, and remove static User (1)
@@ -278,7 +279,17 @@ export class UsersController {
   //! Add Validators to Upload
   @Post('update/profile')
   @HttpCode(201)
-  @UseInterceptors(FileInterceptor('avatar')) //https://docs.nestjs.com/techniques/file-upload
+  @UseInterceptors(FileInterceptor('avatar',
+  {
+    limits :
+    {
+      files : 1,
+      fileSize : 	10000000,
+    }
+  }
+    
+  
+  )) //https://docs.nestjs.com/techniques/file-upload
   async setData(
     @Param('login') login: any,
     @Req() req,
@@ -291,6 +302,8 @@ export class UsersController {
 
     if (file) 
     {
+
+      
       const cloud = await this.cloudinary.uploadImage(file);
       if (cloud) {
         userDataDto.user_avatar = cloud['url'];

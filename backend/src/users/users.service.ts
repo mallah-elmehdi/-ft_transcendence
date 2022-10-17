@@ -190,25 +190,27 @@ export class UsersService {
 	async getAllRooms()
 	{
 		const all_rooms = await this.prisma.room_info.findMany (
-			{// not working
+			{
 				where:
 				{
-					NOT :
-					{
-						room_type : "protectd",
-						AND :
+					OR:
+					[
 						{
-							room_type : "DM",
-						}
-					},
-				},
-				// OR :
-				// {
-				// 	room_type: "DM"
-				// }
-
+							room_type: {
+								contains : "public",
+							},
+						},
+						{
+							room_type :
+							{
+								contains : "protected",
+							},
+						},
+					]
+				}
 			}
 		)
+
 		return all_rooms
 	}
 	async DeleteRoombyId (id: Number)
