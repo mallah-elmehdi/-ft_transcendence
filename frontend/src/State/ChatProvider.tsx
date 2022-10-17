@@ -20,6 +20,7 @@ const ChatProvider = ({ children }: Props) => {
     users: [],
     newGroups: [],
     newMembers: [],
+    allGroups: [],
   };
   const [state, dispatch] = useReducer<any>(chatReducer, InitialValues);
 

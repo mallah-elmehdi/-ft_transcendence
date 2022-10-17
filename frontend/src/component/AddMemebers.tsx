@@ -13,6 +13,8 @@ import { ChatContext } from "../State/ChatProvider";
 import NewMember from "./NewMember";
 import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import { GrIteration } from "react-icons/gr";
+import axios from "axios";
+import { ADD_MEMBER } from "../constants";
 
 type Props = {
   toggleNewMembers: () => void;
@@ -20,20 +22,28 @@ type Props = {
 };
 
 export default function AddMemebers({ toggleNewMembers, roomId }: Props) {
-  const { dispatch, state } = useContext<any>(ChatContext);
+  const { dispatch, state, selectedChat } = useContext<any>(ChatContext);
   const { newMembers, newGroups, newFriends } = state;
   const [selectedFriends, setSelectedFriends] = useState<any>([]);
 
   function addNewMembersHandler() {
     const selectedNewMembers = [...new Set(selectedFriends)];
-    console.log(roomId, selectedNewMembers);
     for (var i = 0; i != newFriends.length; i++) {
       for (var j = 0; j != selectedNewMembers.length; j++) {
-        if (newFriends[i].id == selectedNewMembers[j])
-          dispatch({
-            type: "ADD_MEMBER",
-            data: newFriends[i],
-          });
+        if (newFriends[i].id == selectedNewMembers[j]) {
+          const member = { ...newFriends[i], role: "member" }
+          axios
+            .post(ADD_MEMBER + selectedNewMembers[j], {
+              room_id: selectedChat.id,
+              room_password: "",
+            })
+            .then((res) => {
+              dispatch({
+                type: "ADD_MEMBER",
+                data: member,
+              });
+            });
+        }
       }
     }
     toggleNewMembers();

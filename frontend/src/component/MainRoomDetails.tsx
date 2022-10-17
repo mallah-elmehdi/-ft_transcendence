@@ -47,6 +47,7 @@ export default function MainRoomDetails({
   const [member, setMember] = useState<any>([]);
   const { isMuteOpen, onMuteOpen, onMuteClose } = useMute();
   const { isBlockOpen, onBlockOpen, onBlockClose } = useBlock();
+  const [signedUser, setSigned] = useState<any>(1); // FIXME: add current user id here as default
 
   function isFriend(id: any) {
     return newFriends.findIndex((f: any) => f.id == id) == -1 ? false : true;
@@ -66,32 +67,33 @@ export default function MainRoomDetails({
   });
 
   useEffect(() => {
-    // dispatch({
-    //   type: "SET_MEMBERS",
-    //   data: [],
-    // });
+    dispatch({
+      type: "SET_MEMBERS",
+      data: [],
+    });
+    
     axios.get(MEMBERS + selectedChat.id).then((response: any) => {
+      const mems: any[] = [];
       for (var i = 0; i < response.data.length; i++) {
-        axios.get(USER_URL + response.data[i].userId).then((res: any) => {
+        mems.push({id: response.data[i].userId,role: response.data[i].prev});
+      }
+      for (var j = 0; j < response.data.length; j++) {
+        axios.get(USER_URL + response.data[j].userId).then((res: any) => {
           const member = {
             id: res.data.user_id,
             name: res.data.user_name,
             avatar: res.data.user_avatar,
-            role: response.data[i]?.prev,
+            role: mems[j],
           };
-          if (res.data.user_id != 1)
+          if (res.data.user_id != signedUser) {
             dispatch({
               type: "ADD_MEMBER",
               data: member,
             });
-          //   console.log(member)
+          }
         });
       }
     });
-    // return dispatch({
-    //   type: "SET_MEMBERS",
-    //   data: [],
-    // });
   }, []);
 
   return (
@@ -147,6 +149,7 @@ export default function MainRoomDetails({
               setMember={setMember}
               isFriend={isFriend(member.id)}
               roomId={newGroups[searchIndex].id}
+              role={member.role}
             />
           ))
         ) : (
@@ -159,7 +162,7 @@ export default function MainRoomDetails({
             justifyContent={"center"}
           >
             <Text alignSelf={"center"} justifyContent="center">
-              No Memebers
+              No Members
             </Text>
           </Flex>
         )}
@@ -178,7 +181,7 @@ export default function MainRoomDetails({
         memberId={member?.id}
         roomId={newGroups[searchIndex].id}
       />
-      {isAdmin && (
+      {(isAdmin || isOwner) && (
         <Box
           onClick={toggleNewMembers}
           position={"absolute"}

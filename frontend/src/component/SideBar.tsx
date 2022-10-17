@@ -7,7 +7,7 @@ import Messaging from "./Messaging";
 import { ChatContext } from "../State/ChatProvider";
 import NewChannel from "./NewChannel";
 import useFriends from "../api/useFriends";
-import { ALL_USERS, API, FRIENDS_URL, GROUP, USER_URL } from "../constants";
+import { ALL_USERS, API, FRIENDS_URL, GROUP, USER_URL, MY_GROUPS } from "../constants";
 import useGroups from "../api/useGroups";
 // import { GlobalContext } from "../State/GlobalProvider";
 import axios from "axios";
@@ -63,7 +63,7 @@ const SideBar = () => {
 
   useEffect(() => {
     axios
-      .get(GROUP + "all")
+      .get(MY_GROUPS)
       .then((res: any) => {
         for (var i = 0; i < res.data.length; i++) {
           axios.get(GROUP + res.data[i].roomId).then((res: any) => {

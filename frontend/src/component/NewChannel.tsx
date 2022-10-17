@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Box,
   FormControl,
@@ -24,7 +24,6 @@ function NewChannel() {
   const [image, setImage] = useState(null);
   const { setGroups, groups } = React.useContext<any>(ChatContext);
   const { dispatch, state } = useContext<any>(ChatContext);
-  const navigate = useNavigate();
 
   const uploadRoomInfo = () => {
     if (channelName.trim()) {
@@ -35,20 +34,17 @@ function NewChannel() {
           room_type: "private",
         })
         .then((res) => {
-          // {room_id: 5, room_name: 'hello', room_avatar: null, room_type: 'private', password: null,
-          console.log(res.data)
-            const group = {
-              id: res.data.room_id,
-              name: res.data.room_name,
-              avatar: res.data.room_avatar,
-              type: res.data.room_type,
-              password: res.data.room_password,
-            };
-            dispatch({
-              type: "ADD_GROUP",
-              data: group,
-            });
-          // navigate(pagesContent.chat.url);
+          const group = {
+            id: res.data.room_id,
+            name: res.data.room_name,
+            avatar: res.data.room_avatar,
+            type: res.data.room_type,
+            password: res.data.room_password,
+          };
+          dispatch({
+            type: "ADD_GROUP",
+            data: group,
+          });
           toggleNewChannel();
         })
         .catch((error) => {

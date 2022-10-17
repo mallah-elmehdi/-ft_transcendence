@@ -29,11 +29,10 @@ import { FRIENDS_URL, FRIEND_REQ, USER_URL } from "../constants";
 function Tabs() {
   const value = useColorModeValue("blackAlpha.200", "whiteAlpha.200");
   const { setSelectedChat } = useContext<any>(ChatContext);
-  const { setFriends, } = useContext<any>(ChatContext);
+  const { friends, setFriends, groups } = useContext<any>(ChatContext);
+  const { allUsers, setAllUsers } = React.useContext<any>(ChatContext);
   const { dispatch, state } = useContext<any>(ChatContext);
   const { newFriends, users, newGroups } = state;
-
-  // useAllUsers();
 
   function isFriend(id: any) {
     return newFriends.findIndex((f: any) => f.id == id) == -1 ? false : true;
@@ -82,6 +81,9 @@ function Tabs() {
         </Tab>
         <Tab _selected={{ color: "red" }}>
           <Text fontSize={20}>All Users</Text>
+        </Tab>
+        <Tab _selected={{ color: "red" }}>
+          <Text fontSize={20}>All Groups</Text>
         </Tab>
       </TabList>
       <TabPanels h={"100%"} p={2}>
@@ -161,10 +163,6 @@ function Tabs() {
               users.map((user: any, index: any) =>
                 !isFriend(user.user_id) ? (
                   <HStack
-                    // onClick={() => {
-                    //     setSelectedChat({ chat: 'G', id: user.user_id });
-                    // }}
-                    // as={'button'}
                     p={5}
                     alignItems={"center"}
                     _hover={{ bg: value }}
@@ -186,16 +184,6 @@ function Tabs() {
                       <IconButton
                         onClick={() => {
                           sendFriendReq(user.user_id);
-                          setFriends((old: any) => {
-                            return [
-                              ...old,
-                              {
-                                id: user.user_id,
-                                name: user.user_name,
-                                avatar: user.user_avatar,
-                              },
-                            ];
-                          });
                         }}
                         fontSize={18}
                         rounded={30}
