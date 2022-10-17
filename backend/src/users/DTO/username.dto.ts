@@ -66,5 +66,8 @@ export class MemberStatus {
 	
 	@ApiProperty()
 	@IsString()
+	room_password? : string;
+	
+	@IsString()
 	room_status : string;
 }

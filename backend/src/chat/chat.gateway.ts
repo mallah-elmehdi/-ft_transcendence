@@ -5,7 +5,7 @@ import {Socket, Server} from 'socket.io';
 
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
 
-@WebSocketGateway(3003, {cors: {
+@WebSocketGateway(3002, {cors: {
 	origin: '*',
 	credentials: true
 	},	namespace : 'dm'

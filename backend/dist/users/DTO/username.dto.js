@@ -96,6 +96,10 @@ __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
+], MemberStatus.prototype, "room_password", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
 ], MemberStatus.prototype, "room_status", void 0);
 exports.MemberStatus = MemberStatus;
 //# sourceMappingURL=username.dto.js.map

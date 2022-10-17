@@ -22,6 +22,18 @@ let UsersService = class UsersService {
                 } } });
         return update;
     }
+    async BlockUserFromGroupById(group_id, user_id) {
+        const blocked = await this.prisma.members.deleteMany({
+            where: {
+                roomId: Number(group_id),
+                userId: Number(user_id)
+            }
+        });
+        if (blocked.count == 0)
+            throw "NOT FOUND";
+        console.log("Heeeeeee from group ", blocked);
+        return blocked;
+    }
     async BlockUserById(me, DeletedUser) {
         const deleted = await this.prisma.friend.deleteMany({
             where: {
@@ -29,10 +41,6 @@ let UsersService = class UsersService {
                 friendId: Number(DeletedUser)
             }
         });
-        if (deleted.count == 0)
-            throw "NOT FOUND";
-        console.log(deleted);
-        return deleted;
     }
     async AddToRoom(user, rool, roomId) {
         const update = await this.prisma.members.create({
@@ -54,6 +62,8 @@ let UsersService = class UsersService {
         });
         console.log("Waaaaa3 ", update);
         return update;
+    }
+    async ChangeGroupStatus(id, status) {
     }
     async CreateRooom(RoomInfoDto) {
         const saltRounds = 10;
@@ -94,6 +104,19 @@ let UsersService = class UsersService {
         if (!room)
             throw "NOT FOUND";
         return room;
+    }
+    async getAllRooms() {
+        const all_rooms = await this.prisma.room_info.findMany({
+            where: {
+                NOT: {
+                    room_type: "protectd",
+                    AND: {
+                        room_type: "DM",
+                    }
+                },
+            },
+        });
+        return all_rooms;
     }
     async DeleteRoombyId(id) {
         const removed = await this.prisma.members.deleteMany({
@@ -141,9 +164,15 @@ let UsersService = class UsersService {
                 userId: login,
             },
         });
-        if (!frineds)
-            throw 'NOT FOUND';
-        return frineds;
+        const other_frineds = await this.prisma.friend.findMany({
+            where: {
+                friendId: login,
+            },
+        });
+        const user_id = frineds.map((friend) => friend.friendId);
+        const other_user_id = other_frineds.map((friend) => friend.userId);
+        const frineds_id = [...user_id, ...other_user_id];
+        return frineds_id;
     }
     async getUser(login) {
         const found = await this.prisma.user.findUnique({

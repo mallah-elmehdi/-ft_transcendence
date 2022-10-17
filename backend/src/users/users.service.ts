@@ -21,25 +21,35 @@ export class UsersService {
 		return update
 	}
 
+	async BlockUserFromGroupById(group_id, user_id)
+	{
+		const blocked = await this.prisma.members.deleteMany (
+			{
+				where :
+				{
+					roomId: Number(group_id),
+					userId: Number(user_id)
+				}
+			}
+		)
+		if (blocked.count == 0)
+			throw "NOT FOUND"
+		console.log("Heeeeeee from group ", blocked)
+		return blocked
+	}
 	async BlockUserById(me: number, DeletedUser )
 	{
-		// const id = await this.prisma.user.findMany(
+
+		// const user_data = await this.prisma.friend.findMany(
 		// 	{
-		// 		where:
-		// 		{
-		// 			user_id : Number(DeletedUser),
-		// 			friends:
-		// 			{
-		// 			connect: {
-
-		// 				: Number(me),
-		// 			}	
-
-		// 			}
+		// 		where: {
+		// 			userId : Number(me),
+		// 			friendId: Number(DeletedUser)
 		// 		}
-				
 		// 	}
 		// )
+		// console.log(user_data);
+		// const status  = user_data.isBl
 		const deleted = await this.prisma.friend.deleteMany(
 			{
 				where :
@@ -68,10 +78,10 @@ export class UsersService {
 		// 			}
 		// 	}
 		// )
-		if (deleted.count == 0)
-			throw "NOT FOUND"
-		console.log(deleted)
-		return deleted;
+		// if (deleted.count == 0)
+			// throw "NOT FOUND"
+		// console.log(deleted)
+		// return deleted;
 	}
 
 	async AddToRoom(user, rool, roomId)
@@ -101,6 +111,24 @@ export class UsersService {
 		console.log("Waaaaa3 ",update)
 		 return update;
 		}
+	async ChangeGroupStatus(id , status)
+	{
+		// const update = await this.prisma.room_info.updateMany(
+		// 	{
+		// 		where :
+		// 		{
+
+		// 			room_id : Number(id),
+				
+		// 		},
+		// 		data :{
+		// 			room_name : status.room_name,
+		// 			room_type : status.room_g,
+
+		// 		}
+		// 	}
+		// )
+	}
 
 	async CreateRooom(RoomInfoDto: RoomInfoDto)
 	{
@@ -151,6 +179,7 @@ export class UsersService {
 				{
 					where :
 					{
+					
 						room_id : Number(id),
 					},
 				})
@@ -158,7 +187,30 @@ export class UsersService {
 					throw "NOT FOUND"
 				return room		
 	}
+	async getAllRooms()
+	{
+		const all_rooms = await this.prisma.room_info.findMany (
+			{// not working
+				where:
+				{
+					NOT :
+					{
+						room_type : "protectd",
+						AND :
+						{
+							room_type : "DM",
+						}
+					},
+				},
+				// OR :
+				// {
+				// 	room_type: "DM"
+				// }
 
+			}
+		)
+		return all_rooms
+	}
 	async DeleteRoombyId (id: Number)
 	{
 		// before deletion check if the user has the right to delete
@@ -232,11 +284,22 @@ export class UsersService {
 			where :
 			{
 				userId : login,
+					// friendId : login
 			},
 		})
-		if (!frineds)
-			throw 'NOT FOUND'
-		return frineds
+		const other_frineds = await this.prisma.friend.findMany ( {
+			where :
+			{
+				friendId : login,
+					// friendId : login
+			},
+		})
+		const user_id = frineds.map((friend) => friend.friendId);
+		const other_user_id = other_frineds.map((friend) => friend.userId);
+		
+		const frineds_id = [...user_id, ...other_user_id];
+
+		return frineds_id
 	}
 
 	async getUser(login : number)

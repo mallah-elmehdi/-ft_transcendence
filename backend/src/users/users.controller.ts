@@ -53,6 +53,15 @@ export class UsersController {
 
   @Get('group/all')
   @HttpCode(200)
+  async GetAllRooms(@Req() req: Request) {
+    // here get the room for the current user
+
+    return this.UsersService.getAllRooms().catch((err) => {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    });
+  }
+  @Get('group/member')
+  @HttpCode(200)
   async GetRooms(@Req() req: Request) {
     // here get the room for the current user
     return this.UsersService.getRooms(1).catch((err) => {
@@ -74,7 +83,7 @@ export class UsersController {
       1,
     );
 
-    if (member[0].prev != 'owner')
+    if (member[0].prev != ('owner' || 'admin'))
       throw new HttpException('Password Invalid', HttpStatus.UNAUTHORIZED);
 
     return this.UsersService.ChangeMemberStatus(
@@ -85,6 +94,22 @@ export class UsersController {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     });
   }
+  // @Patch('group/update/data/:id')
+  // @HttpCode(200)
+  // @UseInterceptors()
+  // async ChangeGroupStatus(
+  //   @Body() status: AddedUsersDto,
+  //   @Param('id') param: Number,
+  //   @Req() req: Request,
+  // ) {
+  //   // GET ID USER FROM JWT;
+
+  //   return this.UsersService.ChangeGroupStatus( param,
+  //     status
+  //   ).catch((err) => {
+  //     throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+  //   });
+  // }
 
 
   @ApiTags('Add User to Room {AddedUsersDto}')
@@ -116,7 +141,16 @@ export class UsersController {
   @Post('block/:id')
   @HttpCode(201)
   async BlockUserById(@Param('id') param: Number, @Req() req: Request) {
+    // get id from user
     return this.UsersService.BlockUserById(1, param).catch((err) => {
+      throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
+    });
+  }
+  @Post('group/block/:id')
+  @HttpCode(201)
+  async BlockUserFromGroupById(@Body() room, @Param('id') user_id: Number, @Req() req: Request) {
+    // get id from user
+    return this.UsersService.BlockUserFromGroupById(Number(room.room_id) , user_id).catch((err) => {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     });
   }
@@ -142,6 +176,7 @@ export class UsersController {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     });
   }
+  
 
   @Get('members/:id')
   @HttpCode(200)
@@ -161,7 +196,7 @@ export class UsersController {
     @Req() req: Request,
   ) {
     // here you after succesfully creating room add the creator as the the owner
-    console.log('DTO', RoomInfoDto);
+    // console.log('DTO', RoomInfoDto);
     if (file) {
       const cloud = await this.cloudinary.uploadImage(file);
       if (cloud) {
