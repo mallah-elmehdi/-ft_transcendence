@@ -31,6 +31,9 @@ export const GlobalReducer = (state: any, action: any) => {
         case 'SET_NOTIFICATION':
             newState.notification = payload;
             break;
+        case 'LIVE_MATCH':
+            newState.liveMatch = payload;
+            break;
 
         default:
             break;

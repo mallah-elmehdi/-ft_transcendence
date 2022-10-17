@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { API, FRIENDS_URL, USER_URL } from "../constants";
 import { ChatContext } from "../State/ChatProvider";
-import { GlobalContext } from "../State/GlobalProvider";
+import { GlobalContext } from "../State/Provider"
 
 const useFriends = () => {
   const [friend, setFriend] = useState<any>({});

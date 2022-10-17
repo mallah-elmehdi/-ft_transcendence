@@ -78,7 +78,7 @@ const ProfilePage = () => {
                     setMe(params?.user_id === 'me');
                 })
                 .catch(() => {
-                    navigate(pagesContent.profile.url);
+                    navigate(pagesContent.home.url);
                 });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
