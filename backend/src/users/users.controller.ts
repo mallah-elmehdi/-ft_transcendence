@@ -36,6 +36,8 @@ import {
 } from './DTO/username.dto';
 import { CloudinaryService } from './clodinary/clodinary.service';
 import { get } from 'http';
+import { ApiProperty, ApiTags  } from '@nestjs/swagger';
+
 
 // ! Before End, Check if the user is extracted from JWT, and remove static User (1)
 
@@ -53,15 +55,14 @@ export class UsersController {
   @HttpCode(200)
   async GetRooms(@Req() req: Request) {
     // here get the room for the current user
-
     return this.UsersService.getRooms(1).catch((err) => {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     });
   }
 
   @Patch('group/update/:id')
+  @ApiTags("Change Member status")
   @HttpCode(200)
-  @UseInterceptors()
   async ChangeMemberStatus(
     @Body() status: MemberStatus,
     @Param('id') param: Number,
@@ -85,6 +86,8 @@ export class UsersController {
     });
   }
 
+
+  @ApiTags('Add User to Room {AddedUsersDto}')
   @Post('group/add/:id')
   @HttpCode(201)
   @UseInterceptors()
@@ -109,6 +112,7 @@ export class UsersController {
     );
   }
 
+
   @Post('block/:id')
   @HttpCode(201)
   async BlockUserById(@Param('id') param: Number, @Req() req: Request) {
@@ -116,6 +120,8 @@ export class UsersController {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     });
   }
+
+
 
   @Get('group/:id')
   @HttpCode(200)
@@ -125,6 +131,7 @@ export class UsersController {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     });
   }
+
 
   @Post('group/:id')
   @HttpCode(201)

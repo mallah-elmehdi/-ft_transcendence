@@ -5,7 +5,7 @@ import {Socket, Server} from 'socket.io';
 
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
 
-@WebSocketGateway(3001, {cors: {
+@WebSocketGateway(3003, {cors: {
 	origin: '*',
 	credentials: true
 	},	namespace : 'dm'
@@ -33,9 +33,15 @@ export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatew
 	handleMessage(client: Socket, payload) {
 		console.log("You am the palof", payload)
 
-		client.join(payload.userId + 'mougnou');
-		this.server.to(payload.userId + 'mougnou').emit(payload.message);
 		
+		//const token = client.handshake.query.token.toString();
+		//const payload = verifyAccessToken(token);
+		const roomId = payload.roomId;
+		
+		//const user = payload && (await this.prismaService.findOne(payload.id));
+		//const room = user?.room;
+		client.join(roomId);
+		this.server.to(roomId).emit(payload.message);
 		//console.log(`Message from ${client.id}: ${payloadJson.name} or ${payload}`);
 		//client.emit('msgToClient', payload);
 	}

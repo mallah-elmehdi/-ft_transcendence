@@ -18,6 +18,7 @@ const users_service_1 = require("./users.service");
 const platform_express_1 = require("@nestjs/platform-express");
 const username_dto_1 = require("./DTO/username.dto");
 const clodinary_service_1 = require("./clodinary/clodinary.service");
+const swagger_1 = require("@nestjs/swagger");
 let UsersController = class UsersController {
     constructor(UsersService, cloudinary) {
         this.UsersService = UsersService;
@@ -135,8 +136,8 @@ __decorate([
 ], UsersController.prototype, "GetRooms", null);
 __decorate([
     (0, common_1.Patch)('group/update/:id'),
+    (0, swagger_1.ApiTags)("Change Member status"),
     (0, common_1.HttpCode)(200),
-    (0, common_1.UseInterceptors)(),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id')),
     __param(2, (0, common_1.Req)()),
@@ -146,6 +147,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "ChangeMemberStatus", null);
 __decorate([
+    (0, swagger_1.ApiTags)('Add User to Room {AddedUsersDto}'),
     (0, common_1.Post)('group/add/:id'),
     (0, common_1.HttpCode)(201),
     (0, common_1.UseInterceptors)(),

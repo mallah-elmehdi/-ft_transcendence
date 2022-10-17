@@ -27,14 +27,10 @@ let ChatGateway = class ChatGateway {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     handleMessage(client, payload) {
-<<<<<<< HEAD
         console.log("You am the palof", payload);
-        client.join(payload.userId + 'mougnou');
-        server.to(payload.userId + 'mougnou').emit(payload.message);
-=======
-        console.log(payload);
-        client.emit('msgToClient', 'Hey from Server');
->>>>>>> 3793fb4955dd20b4689e9351b32dd40b8fa82c3a
+        const roomId = payload.roomId;
+        client.join(roomId);
+        this.server.to(roomId).emit(payload.message);
     }
 };
 __decorate([
@@ -44,26 +40,15 @@ __decorate([
 __decorate([
     (0, websockets_1.SubscribeMessage)('msgToServer'),
     __metadata("design:type", Function),
-<<<<<<< HEAD
     __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
     __metadata("design:returntype", void 0)
 ], ChatGateway.prototype, "handleMessage", null);
 ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(3003, { cors: {
-            origin: " ",
-            credentials: true
-        }, namespace: 'dm' })
-=======
-    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
-    __metadata("design:returntype", void 0)
-], ChatGateway.prototype, "handleMessage", null);
-ChatGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(3001, { cors: {
             origin: '*',
             credentials: true
         }, namespace: 'dm'
     })
->>>>>>> 3793fb4955dd20b4689e9351b32dd40b8fa82c3a
 ], ChatGateway);
 exports.ChatGateway = ChatGateway;
 //# sourceMappingURL=chat.gateway.js.map
