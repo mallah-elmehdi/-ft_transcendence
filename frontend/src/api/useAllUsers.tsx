@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { GROUP, ALL_USERS } from "../constants";
 import { ChatContext } from "../State/ChatProvider";
-import { GlobalContext } from "../State/GlobalProvider";
+import { GlobalContext } from "../State/Provider";
 
 const useAllUsers = () => {
   const { allUsers, setAllUsers } = React.useContext<any>(ChatContext);

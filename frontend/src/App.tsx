@@ -15,6 +15,7 @@ import { pagesContent } from './constants';
 import { GlobalContext } from './State/Provider';
 import { Loading } from './component/Loading';
 import { AlertCompo } from './component/AlertCompo';
+import LiveMatchPage from './pages/LiveMatchPage';
 
 function App() {
     // CONTEXT
@@ -36,6 +37,7 @@ function App() {
                                 <Route path={pagesContent.chat.url} element={<ChatPage />} />
                                 <Route path={pagesContent.profile.url + '/:user_id'} element={<ProfilePage />} />
                                 <Route path={pagesContent.play.url + '/:speed_mode'} element={<GamePage />} />
+                                <Route path={pagesContent.watch.url + '/:room_name'} element={<LiveMatchPage />} />
                             </Route>
                             <Route path={pagesContent.login.url} element={<SignInPage />} />
                             <Route path="*" element={<PageNotFound />} />

@@ -1,14 +1,17 @@
-import { useMediaQuery, VStack, Grid, GridItem, HStack, Avatar, useTheme, Text, Box, Flex, Spinner } from '@chakra-ui/react';
+import { useMediaQuery, VStack, Grid, GridItem, HStack, Avatar, useTheme, Text, Box, Flex, Spinner, Badge, Icon } from '@chakra-ui/react';
 import React from 'react';
+import { IoEye } from 'react-icons/io5';
 import { useParams, useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { pagesContent, SOCKET } from '../constants';
+import { usePageTitle } from '../hooks/usePageTitle';
 import { newNotification } from '../State/Action';
 import { getUserInfo } from '../State/Api';
 // import GameContextProvider from '../State/GameProvider';
 import { GlobalContext } from '../State/Provider';
 
 export default function GamePage() {
+    usePageTitle(pagesContent.play.url);
     // general
     const theme = useTheme();
     const [isSmallScreen] = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
@@ -17,6 +20,7 @@ export default function GamePage() {
     const navigate = useNavigate();
     // states
     const [speedMode, setSpeedMode] = React.useState(0);
+    const [watcher, setWatcher] = React.useState(0);
     const [play, setPlay] = React.useState(false);
     const [user, setUser] = React.useState({
         username: '',
@@ -60,7 +64,7 @@ export default function GamePage() {
             getUserInfo(dispatch).catch((error) => {
                 navigate(pagesContent.login.url);
             });
-        else {
+        else if (speedMode) {
             setUser({
                 login: userInfo?.user_login,
                 username: userInfo?.user_name,
@@ -105,7 +109,7 @@ export default function GamePage() {
             };
             // ------------------------------------------ socket
             const initGame = () => {
-                socket.emit('data', {
+                socket.emit('init', {
                     login: userInfo?.user_login,
                     username: userInfo?.user_name,
                     avatar: userInfo?.user_avatar,
@@ -113,12 +117,8 @@ export default function GamePage() {
                     speedMode: speedMode,
                 });
             };
-            const startGame = () => {
-                setPlay(true);
-            };
             const opponentDisconnect = () => {
-                setPlay(false);
-                dispatch(newNotification({ type: 'Error', message: 'Profile updated successfuly' }));
+                dispatch(newNotification({ type: 'Info', message: 'Player has left the game' }));
                 // navigate(pagesContent.home.url);
             };
             // ------------------------------------------ game
@@ -131,6 +131,8 @@ export default function GamePage() {
             };
             const update = (data: any) => {
                 render(data.ball, data.players[0].movement, data.players[1].movement);
+                setWatcher(data.watcher.length);
+                setPlay(true);
                 setOpponent({
                     username: data.players[1].username,
                     avatar: data.players[1].avatar,
@@ -144,23 +146,32 @@ export default function GamePage() {
                     score: data.players[0].score,
                 });
             };
+            const moveKey = (event: KeyboardEvent) => {
+                if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                    socket.emit('moveKey', {
+                        key: event.key,
+                        canvas: getCanvasSize(),
+                    });
+                }
+            };
             // ------------------------------------------ game loop
             // emit game
             initGame();
             // on game
             socket.on('opponentDisconnect', opponentDisconnect);
-            socket.on('start', startGame);
-            socket.on('onGameClient', update);
+            socket.on('onGame', update);
+            // move
+            document.addEventListener('keydown', moveKey);
 
             return () => {
                 socket.disconnect();
                 socket.off('opponentDisconnect', opponentDisconnect);
-                socket.off('start', startGame);
-                socket.off('onGameClient', update);
+                socket.off('onGame', update);
+                document.removeEventListener('keydown', moveKey);
             };
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userInfo]);
+    }, [userInfo, speedMode]);
 
     // React.useEffect(() => {
     // const getSocket = () => {
@@ -412,6 +423,14 @@ export default function GamePage() {
                     )}
                     <canvas width="800" height="400" ref={canvasRef}></canvas>
                 </Box>
+                {play && (
+                    <Badge mt={5} borderRadius="full" fontSize="3xl" px={3}>
+                        <HStack alignItems="center" spacing={3}>
+                            <Icon as={IoEye} />
+                            <Text>{watcher}</Text>
+                        </HStack>
+                    </Badge>
+                )}
             </VStack>
         </>
     );

@@ -27,12 +27,14 @@ import { LiveMatch } from '../component/LiveMatch';
 import { usePageTitle } from '../hooks/usePageTitle';
 
 // CONSTANTS
-import { pagesContent } from '../constants';
+import { pagesContent, SOCKET } from '../constants';
 
 // API
 import { GlobalContext } from '../State/Provider';
 import { Link, useNavigate } from 'react-router-dom';
 import { getUserInfo } from '../State/Api';
+import { io } from 'socket.io-client';
+import { updateLiveMatch } from '../State/Action';
 
 const HomePage = () => {
     // page title
@@ -51,6 +53,21 @@ const HomePage = () => {
         getUserInfo(dispatch).catch((error) => {
             navigate(pagesContent.login.url);
         });
+        // socket
+        const socket = io(`${SOCKET}/game`);
+
+        // liveMatch
+        const liveMatch = (data: any) => {
+            dispatch(updateLiveMatch(data));
+        };
+
+        socket.emit('getLiveMatch');
+        // get live match
+        socket.on('liveMatch', liveMatch);
+        return () => {
+            socket.disconnect();
+            socket.on('liveMatch', liveMatch);
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -139,7 +156,7 @@ const HomePage = () => {
                         <Heading fontSize="xl">Live Matches</Heading>
                         <Line maxW="7rem" />
                     </Stack>
-                    {liveMatch.length ? (
+                    {liveMatch && liveMatch.length ? (
                         <Stack p={5}>
                             <List spacing={5}>
                                 {liveMatch.map((item: any, index: number) => {

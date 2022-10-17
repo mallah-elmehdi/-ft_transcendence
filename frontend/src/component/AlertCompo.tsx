@@ -1,7 +1,7 @@
 import { Box, chakra, Flex, Icon, ScaleFade } from '@chakra-ui/react';
 import React from 'react';
 import { BsLightningFill } from 'react-icons/bs';
-import { IoMdCheckmarkCircle } from 'react-icons/io';
+import { IoMdCheckmarkCircle, IoMdAlert } from 'react-icons/io';
 import { resetAlert } from '../State/Action';
 import { GlobalContext } from '../State/Provider';
 
@@ -38,13 +38,22 @@ export const AlertCompo = ({ message, type }: Props) => {
                     rounded="lg"
                     overflow="hidden"
                 >
-                    <Flex justifyContent="center" alignItems="center" w={12} bg={type === 'Error' ? 'red' : 'green'}>
-                        <Icon as={type === 'Error' ? BsLightningFill : IoMdCheckmarkCircle} color="white" boxSize={6} />
+                    <Flex
+                        justifyContent="center"
+                        alignItems="center"
+                        w={12}
+                        bg={type === 'Error' ? 'red' : type === 'Info' ? 'blue.500' : 'green'}
+                    >
+                        <Icon
+                            as={type === 'Error' ? BsLightningFill : type === 'Info' ? IoMdAlert : IoMdCheckmarkCircle}
+                            color="white"
+                            boxSize={6}
+                        />
                     </Flex>
 
                     <Box mx={-3} py={2} px={4}>
                         <Box mx={3}>
-                            <chakra.span color={type === 'Error' ? 'red' : 'green'} fontWeight="bold">
+                            <chakra.span color={type === 'Error' ? 'red' : type === 'Info' ? 'blue.500' : 'green'} fontWeight="bold">
                                 {type}
                             </chakra.span>
                             <chakra.p

@@ -30,6 +30,10 @@ export const pagesContent = {
         url: '/play',
         title: 'PonGame | Play',
     },
+    watch: {
+        url: '/watch',
+        title: 'PonGame | watch',
+    },
 };
 
 export const tabs = [

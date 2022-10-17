@@ -75,17 +75,17 @@ const EditProfile = (props: Props) => {
 
     // submitProfile
     const submitProfile = () => {
-        if (username.length < 2 || username.length > 12 || facebook.length > 12 || discord.length > 12 || instagram.length > 12) {
-            dispatch(newNotification({ type: 'Error', message: 'Input length should be between 2 and 12 characters' }));
+        if (username.length < 2 || username.length > 8 || facebook.length > 32 || discord.length > 32 || instagram.length > 32) {
+            dispatch(newNotification({ type: 'Error', message: 'Input too long' }));
         } else {
-            updatePtofile(dispatch, props.login, {
+            updatePtofile(dispatch, {
                 avatar: props.avatar === avatar ? null : newAvatar,
                 user_name: username,
                 facebook,
                 discord,
                 instagram,
             }).then(() => {
-                onClose()
+                onClose();
             });
         }
     };
