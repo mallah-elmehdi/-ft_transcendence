@@ -41,10 +41,6 @@ let UsersService = class UsersService {
                 friendId: Number(DeletedUser)
             }
         });
-        if (deleted.count == 0)
-            throw "NOT FOUND";
-        console.log(deleted);
-        return deleted;
     }
     async AddToRoom(user, rool, roomId) {
         const update = await this.prisma.members.create({
@@ -66,6 +62,8 @@ let UsersService = class UsersService {
         });
         console.log("Waaaaa3 ", update);
         return update;
+    }
+    async ChangeGroupStatus(id, status) {
     }
     async CreateRooom(RoomInfoDto) {
         const saltRounds = 10;
@@ -153,9 +151,20 @@ let UsersService = class UsersService {
                 userId: login,
             },
         });
+        const other_frineds = await this.prisma.friend.findMany({
+            where: {
+                friendId: login,
+            },
+        });
+        console.log("other");
+        const res = [
+            ...frineds,
+            ...other_frineds,
+        ];
+        console.log("frinds   //", res);
         if (!frineds)
             throw 'NOT FOUND';
-        return frineds;
+        return res;
     }
     async getUser(login) {
         const found = await this.prisma.user.findUnique({

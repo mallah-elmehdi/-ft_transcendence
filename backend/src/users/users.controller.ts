@@ -84,6 +84,22 @@ export class UsersController {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     });
   }
+  // @Patch('group/update/data/:id')
+  // @HttpCode(200)
+  // @UseInterceptors()
+  // async ChangeGroupStatus(
+  //   @Body() status: AddedUsersDto,
+  //   @Param('id') param: Number,
+  //   @Req() req: Request,
+  // ) {
+  //   // GET ID USER FROM JWT;
+
+  //   return this.UsersService.ChangeGroupStatus( param,
+  //     status
+  //   ).catch((err) => {
+  //     throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+  //   });
+  // }
 
   @Post('group/add/:id')
   @HttpCode(201)
@@ -144,6 +160,7 @@ export class UsersController {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     });
   }
+  
 
   @Get('members/:id')
   @HttpCode(200)
@@ -163,7 +180,7 @@ export class UsersController {
     @Req() req: Request,
   ) {
     // here you after succesfully creating room add the creator as the the owner
-    console.log('DTO', RoomInfoDto);
+    // console.log('DTO', RoomInfoDto);
     if (file) {
       const cloud = await this.cloudinary.uploadImage(file);
       if (cloud) {

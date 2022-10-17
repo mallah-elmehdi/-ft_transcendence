@@ -73,7 +73,6 @@ let UsersController = class UsersController {
         });
     }
     async CreateRoom(RoomInfoDto, file, req) {
-        console.log('DTO', RoomInfoDto);
         if (file) {
             const cloud = await this.cloudinary.uploadImage(file);
             if (cloud) {

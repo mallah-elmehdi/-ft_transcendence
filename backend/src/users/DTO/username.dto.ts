@@ -47,5 +47,8 @@ export class MemberStatus {
 	room_id : number;
 	
 	@IsString()
+	room_password? : string;
+	
+	@IsString()
 	room_status : string;
 }

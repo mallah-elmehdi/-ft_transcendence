@@ -9,7 +9,7 @@ export declare class UsersController {
     GetRooms(req: Request): Promise<import(".prisma/client").Members[]>;
     ChangeMemberStatus(status: MemberStatus, param: Number, req: Request): Promise<import(".prisma/client").Prisma.BatchPayload>;
     AddUsersToRoomsbyId(user: AddedUsersDto, param: Number, req: Request): Promise<import(".prisma/client").Members>;
-    BlockUserById(param: Number, req: Request): Promise<import(".prisma/client").Prisma.BatchPayload>;
+    BlockUserById(param: Number, req: Request): Promise<void>;
     BlockUserFromGroupById(room: any, user_id: Number, req: Request): Promise<import(".prisma/client").Prisma.BatchPayload>;
     GetRoomsbyId(param: Number, req: Request): Promise<import(".prisma/client").Room_info>;
     DeleteRoomsbyId(param: Number, req: Request): Promise<import(".prisma/client").Room_info>;

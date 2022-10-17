@@ -5,9 +5,10 @@ export declare class UsersService {
     constructor(prisma: PrismaService);
     friendReq(user: Number, params: Number): Promise<import(".prisma/client").Friend>;
     BlockUserFromGroupById(group_id: any, user_id: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
-    BlockUserById(me: number, DeletedUser: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
+    BlockUserById(me: number, DeletedUser: any): Promise<void>;
     AddToRoom(user: any, rool: any, roomId: any): Promise<import(".prisma/client").Members>;
     ChangeMemberStatus(user: any, rool: any, roomId: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
+    ChangeGroupStatus(id: any, status: any): Promise<void>;
     CreateRooom(RoomInfoDto: RoomInfoDto): Promise<import(".prisma/client").Room_info>;
     check_password(room_password: any, hash: any): boolean;
     getRooms(id: Number): Promise<import(".prisma/client").Members[]>;
