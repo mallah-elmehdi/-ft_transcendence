@@ -17,7 +17,7 @@ export declare class UsersService {
     getMembersbyId(id: Number): Promise<import(".prisma/client").Members[]>;
     getMembersbyIdRoom(id: Number, user: Number): Promise<import(".prisma/client").Members[]>;
     getAllUsers(me: any): Promise<import(".prisma/client").User[]>;
-    getAllFriends(login: number): Promise<import(".prisma/client").Friend[]>;
+    getAllFriends(login: number): Promise<number[]>;
     getUser(login: number): Promise<import(".prisma/client").User>;
     getUserbyLogin(login: string): Promise<import(".prisma/client").User>;
     setUsername(login: string, username: string): Promise<import(".prisma/client").User>;

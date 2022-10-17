@@ -270,17 +270,12 @@ export class UsersService {
 					// friendId : login
 			},
 		})
-		console.log("other");
+		const user_id = frineds.map((friend) => friend.friendId);
+		const other_user_id = other_frineds.map((friend) => friend.userId);
 		
-		const res = [
-			...frineds,
-			...other_frineds,
-		]
-		console.log("frinds   //", res);
-		
-		if (!frineds)
-			throw 'NOT FOUND'
-		return res
+		const frineds_id = [...user_id, ...other_user_id];
+
+		return frineds_id
 	}
 
 	async getUser(login : number)
