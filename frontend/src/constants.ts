@@ -1,9 +1,9 @@
-export const SOCKET = 'http://localhost:3003';
-export const API = 'http://localhost:3001';
+export const SOCKET = 'http://10.11.13.3:3002';
+export const API = 'http://10.11.13.3:3001';
 export const FRIENDS_URL = API + '/user/friends';
 export const USER_URL = API + '/user/';
 export const GROUP = API + '/user/group/';
-export const MY_GROUPS = API + '/user/group/all'
+export const MY_GROUPS = API + '/user/group/member'
 export const MEMBERS = API + '/user/members/';
 export const DELETE_ROOM = API + '/user/group/';
 export const BLOCK_DM = API + '/user/block/';
@@ -12,6 +12,10 @@ export const ALL_USERS = API + '/user/list/all';
 export const ADD_MEMBER = API + '/user/group/add/'
 export const UPDATE_GROUP = API + '/user/group/update/'
 export const BLOCK_MEMBER = API + '/user/group/block/'
+export const ALL_GROUPS = API + '/user/group/all'
+export const DM = API + '/user/dm/'
+export const MESSAGES = API + '/user/msg/'
+
 
 
 export const pagesContent = {

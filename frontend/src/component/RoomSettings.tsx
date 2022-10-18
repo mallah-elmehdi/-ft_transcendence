@@ -14,42 +14,66 @@ import {
   InputRightElement,
   IconButton,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import ChangeAvatar from "./ChangeAvatar";
 import DeleteRoom from "./DeleteRoom";
 import { Radio, RadioGroup } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import axios from "axios";
+import { GROUP, pagesContent } from "../constants";
+import { useNavigate } from "react-router-dom";
+import { ChatContext } from "../State/ChatProvider";
 
 type Props = {
-  toggleSettings: () => void,
-  roomId: string,
+  toggleSettings: () => void;
+  roomId: string;
   oldRoomData: {
-    name: string,
-    type: string,
-    password: string,
-  },
+    name: string;
+    type: string;
+    password: string;
+  };
 };
 
 const RoomSettings = ({ toggleSettings, roomId, oldRoomData }: Props) => {
+  const [roomData, setRoomData] = useState<any>(oldRoomData);
+  const [image, setImage] = useState(null);
+  const [showPassword, setShowPassword] = useState<any>(false);
+  const [showUpload, setShowUpload] = useState<any>(false);
+  const { dispatch, state, setSelectedChat } = useContext<any>(ChatContext);
   const ROOMTYPE = {
     protected: "protected",
     private: "private",
     public: "public",
   };
-  const [roomData, setRoomData] = useState<any>(oldRoomData);
-  const [image, setImage] = useState(null);
-  const [showPassword, setShowPassword] = useState<any>(false);
-  const [showUpload, setShowUpload] = useState<any>(false);
+  const navigate = useNavigate();
+
   const updateRoomNewInfo = () => {
     console.log(roomData);
+    axios
+      .patch(GROUP + roomId, {
+        room_name: roomData.name,
+        room_password: roomData.password,
+        room_type: roomData.type,
+      })
+      .then((res) => {
+        window.location.reload();
+        // dispatch({
+        //   type: "SET_GROUPS",
+        //   data: [],
+        // })
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-  
+
   useEffect(() => {
     if (
       image != null ||
-      JSON.stringify(roomData) !== JSON.stringify(oldRoomData)
+      (JSON.stringify(roomData) !== JSON.stringify(oldRoomData) &&
+        roomData.name.length)
     ) {
       setShowUpload(true);
     } else setShowUpload(false);
@@ -91,7 +115,7 @@ const RoomSettings = ({ toggleSettings, roomId, oldRoomData }: Props) => {
             type="text"
             value={roomData.name}
             onChange={(e: any) =>
-              setRoomData({ ...roomData, name: e.target.value })
+              setRoomData({ ...roomData, name: e.target.value.trim() })
             }
           />
         </FormControl>
@@ -134,7 +158,7 @@ const RoomSettings = ({ toggleSettings, roomId, oldRoomData }: Props) => {
               <FormLabel>Password</FormLabel>
               <InputGroup>
                 <Input
-                  placeholder="Password"
+                  placeholder="New Password"
                   type={showPassword ? "text" : "password"}
                   pr="4.5rem"
                   value={roomData.password}
@@ -163,7 +187,7 @@ const RoomSettings = ({ toggleSettings, roomId, oldRoomData }: Props) => {
             rounded={30}
             onClick={updateRoomNewInfo}
           >
-            <Tooltip label="add Members" openDelay={500}>
+            <Tooltip label="Update Channel" openDelay={500}>
               <IconButton
                 fontSize={24}
                 w={14}

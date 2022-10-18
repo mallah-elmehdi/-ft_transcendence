@@ -27,9 +27,9 @@ function RoomDetails() {
   };
 
   const oldRoomData = {
-    name: "roomName",
-    type: "private",
-    password: "lkjlkjlkj",
+    name: newGroups[searchIndex].name,
+    type: newGroups[searchIndex].type,
+    password: "",
   };
 
   useEffect(() => {

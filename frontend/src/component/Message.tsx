@@ -36,10 +36,11 @@ const Message = ({isSender, content, time}: MsgProps) => {
                     fontFamily={'monospace'}
                     fontWeight={'bold'}
                     color={value}
+                    mb={2}
                 >
                     {content}
                 </Text>
-                <Text
+                {/* <Text
                     fontSize={10}
                     bottom={0}
                     right={3}
@@ -47,7 +48,7 @@ const Message = ({isSender, content, time}: MsgProps) => {
                     color={isSender ? (colorMode === 'dark' ? 'lightGreen' : 'darkGreen') : 'gray'}
                 >
                     {time}
-                </Text>
+                </Text> */}
             </Box>
         </Flex>
     )

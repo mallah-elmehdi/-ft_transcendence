@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useState, createContext, useEffect, useReducer } from "react";
+import { io } from "socket.io-client";
 // // import { API, SOCKET } from "../constants";
 // import socketIOClient, {io} from "socket.io-client";
 // import axios from 'axios';
-import useFriends from "../api/useFriends";
-import { FRIENDS_URL, USER_URL } from "../constants";
+import { FRIENDS_URL, SOCKET, USER_URL } from "../constants";
 import { chatReducer } from "../reducers/chatReducer";
 
 // @ts-ignore
@@ -21,10 +21,18 @@ const ChatProvider = ({ children }: Props) => {
     newGroups: [],
     newMembers: [],
     allGroups: [],
+    messages: [],
+    roomDm: "",
+    // dm: [],
   };
   const [state, dispatch] = useReducer<any>(chatReducer, InitialValues);
 
-  // const socket = io(SOCKET + "dm" );
+  const socket = io(SOCKET + "/dm");
+  useEffect(() => {
+    return () => {
+      socket.disconnect();
+    };
+  });
 
   const [newChannel, setNewChannel] = useState(false);
   const toggleNewChannel = () => {
@@ -121,7 +129,7 @@ const ChatProvider = ({ children }: Props) => {
         toggleNewChannel,
         newChannel,
         friends,
-        // socket,
+        socket,
         setFriends,
         setGroups,
         groups,

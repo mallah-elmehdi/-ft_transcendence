@@ -14,7 +14,6 @@ import { ChatContext } from "../State/ChatProvider";
 import ChangeAvatar from "./ChangeAvatar";
 import axios from "axios";
 import { GROUP } from "../constants";
-import useGroups from "../api/useGroups";
 import { useNavigate } from "react-router-dom";
 import { pagesContent } from "../constants";
 

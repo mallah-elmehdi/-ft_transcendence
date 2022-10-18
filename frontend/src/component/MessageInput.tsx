@@ -2,21 +2,31 @@ import React, { useContext, useEffect, useState } from "react";
 import { HStack, Input, useColorModeValue } from "@chakra-ui/react";
 import { IoSend } from "react-icons/io5";
 import { ChatContext } from "../State/ChatProvider";
+import { SOCKET } from "../constants";
+import { io } from "socket.io-client";
 
 const MessageInput = () => {
-  const [ typingMessage, setTypingMessage ] = useState<any>('');
+  const [typingMessage, setTypingMessage] = useState<any>("");
   const msgInputBg = useColorModeValue("white", "rgb(33,33,33)");
-  const { setMessages } = useContext<any>(ChatContext);
-  const {  socket } = useContext<any>(ChatContext);
-  const {selectedChat} = useContext<any>(ChatContext)
+  const { socket } = useContext<any>(ChatContext);
+  const { selectedChat } = useContext<any>(ChatContext);
+  const { dispatch, state } = useContext<any>(ChatContext);
+  const { newFriends, newGroups, roomDm } = state;
+  const signedUser = 1;
 
   function sendMessageHandler() {
     if (typingMessage.trim()) {
-        // socket.emit("msgToServer", {sender: selectedChat.id, content: typingMessage });
-
-        setMessages((messages: any) => {
-          return [...messages, { isSender: true, content: typingMessage }];
-        });
+      console.log("sendMessage: ", {
+        room_id: roomDm,
+        message: typingMessage.trim(),
+        userId: signedUser,
+      });
+      
+      socket.emit("message", {
+        room_id: roomDm,
+        message: typingMessage.trim(),
+        userId: signedUser,
+      });
     }
     setTypingMessage("");
   }
@@ -27,10 +37,6 @@ const MessageInput = () => {
         event.preventDefault();
         sendMessageHandler();
       }
-      return () => {
-        socket.off('msgToServer')
-        // socket.close();
-      };
     };
 
     document.addEventListener("keydown", keyDownHandler);
@@ -42,12 +48,7 @@ const MessageInput = () => {
 
   return (
     <>
-      <HStack
-        w={"100%"}
-        m={5}
-        h={"3em"}
-        spacing={4}
-      >
+      <HStack w={"100%"} m={5} h={"3em"} spacing={4}>
         <Input
           bg={msgInputBg}
           value={typingMessage}

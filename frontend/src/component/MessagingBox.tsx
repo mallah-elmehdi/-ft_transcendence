@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ChatHeader from "./ChatHeader";
 import MessagesList from "./MessagesList";
 import MessageInput from "./MessageInput";
@@ -6,19 +6,49 @@ import { useColorModeValue, VStack } from "@chakra-ui/react";
 import { ChatContext } from "../State/ChatProvider";
 import FriendMenu from "./FriendMenu";
 import GroupMenu from "./GroupMenu";
+import axios from "axios";
+import { DM, SOCKET } from "../constants";
+import { io } from "socket.io-client";
 
 function MessagingBox() {
-  const { dispatch, state } = useContext<any>(ChatContext);
-  const { newFriends, newGroups } = state;
-  const { data,  groups } = useContext<any>(ChatContext);
-  const { selectedChat, setSelectedChat, toggleOffSelectedChat } = useContext<any>(ChatContext);
+  const { dispatch, state, } = useContext<any>(ChatContext);
+  const { newFriends, newGroups, roomDm} = state;
+  const { selectedChat, setSelectedChat, toggleOffSelectedChat } =
+    useContext<any>(ChatContext);
   const { toggleDetails } = useContext<any>(ChatContext);
-  let searchIndex;
 
+  let searchIndex;
   if (selectedChat.chat === "F")
     searchIndex = newFriends.findIndex((id: any) => selectedChat.id === id.id);
-  else searchIndex = newGroups.findIndex((id: any) => selectedChat.id === id.id);
+  else
+    searchIndex = newGroups.findIndex((id: any) => selectedChat.id === id.id);
   
+  useEffect(() => {
+    console.log("useEffect")
+  const socket = io(SOCKET + "/dm");
+
+    if (selectedChat.chat === "F") {
+      axios.get(DM + selectedChat.id).then((res: any) => {
+        dispatch({
+          type: "ROOM",
+          data: res.data.room_id,
+        });
+        socket.emit('ping', {
+          room_id: res.data.room_id,
+      });
+      }).catch(()=>{})
+    }
+
+    socket.on("recieveMessage", (payload: any)=>{
+      console.log("socket on", payload)
+      dispatch({
+        type: "ADD_MESSAGE",
+        data: payload,
+      })
+    })
+
+  }, [roomDm]);
+
   useEffect(() => {
     const keyDownHandler = (event: any) => {
       if (event.key === "Escape") {
@@ -33,7 +63,7 @@ function MessagingBox() {
     };
   }, []);
 
-  const chatBg = useColorModeValue("red", "green");
+  // const chatBg = useColorModeValue("black", "black");
   return (
     <VStack h={"100%"} w={"100%"}>
       <ChatHeader
@@ -62,7 +92,7 @@ function MessagingBox() {
         maxW={"62em"}
         bgGradient={[
           "linear(to-t, purple.3000, black)",
-          `linear(to-b, pink.900, ${chatBg})`,
+          `linear(to-b, red, black)`,
         ]}
         alignItems={"center"}
         h={"100%"}

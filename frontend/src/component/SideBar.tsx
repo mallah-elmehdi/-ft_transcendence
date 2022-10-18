@@ -6,9 +6,16 @@ import Tabs from "./Tabs";
 import Messaging from "./Messaging";
 import { ChatContext } from "../State/ChatProvider";
 import NewChannel from "./NewChannel";
-import useFriends from "../api/useFriends";
-import { ALL_USERS, API, FRIENDS_URL, GROUP, USER_URL, MY_GROUPS } from "../constants";
-import useGroups from "../api/useGroups";
+import {
+  ALL_USERS,
+  API,
+  FRIENDS_URL,
+  GROUP,
+  USER_URL,
+  MY_GROUPS,
+  ALL_GROUPS,
+  DM,
+} from "../constants";
 // import { GlobalContext } from "../State/GlobalProvider";
 import axios from "axios";
 
@@ -41,12 +48,12 @@ const SideBar = () => {
   const { selectedChat } = useContext<any>(ChatContext);
   const { newChannel } = useContext<any>(ChatContext);
   const { dispatch, state } = useContext<any>(ChatContext);
-  const { newGroups, newFriends } = state;
+  // const { newGroups, newFriends } = state;
 
   React.useEffect(() => {
     axios.get(FRIENDS_URL).then((response: any) => {
       for (var i = 0; i < response.data.length; i++) {
-        axios.get(USER_URL + response.data[i].friendId).then((res: any) => {
+        axios.get(USER_URL + response.data[i]).then((res: any) => {
           const user = {
             id: res.data.user_id,
             name: res.data.user_name,
@@ -72,11 +79,13 @@ const SideBar = () => {
               name: res.data.room_name,
               avatar: res.data.room_avatar,
               type: res.data.room_type,
+              password: res.data.password,
             };
-            dispatch({
-              type: "ADD_GROUP",
-              data: group,
-            });
+            if (group.type != "DM")
+              dispatch({
+                type: "ADD_GROUP",
+                data: group,
+              });
           });
         }
       })
@@ -91,6 +100,24 @@ const SideBar = () => {
         type: "SET_USERS",
         data: response.data,
       });
+    });
+  }, []);
+
+  React.useEffect(() => {
+    axios.get(ALL_GROUPS).then((response: any) => {
+      for (var i = 0; i != response.data.length; i++) {
+        const room = {
+          id: response.data[i].room_id,
+          name: response.data[i].room_name,
+          avatar: response.data[i].room_avatar,
+          password: response.data[i].password,
+          type: response.data[i].room_type,
+        };
+        dispatch({
+          type: "ADD_ALL_GROUPS",
+          data: room,
+        });
+      }
     });
   }, []);
 

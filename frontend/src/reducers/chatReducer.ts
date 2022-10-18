@@ -28,6 +28,14 @@ export const chatReducer = (state: any, action: any) => {
         ...state,
         newGroups: [...state.newGroups, action.data],
       };
+
+    // case "CHANGE_GROUP":
+    //   state.newGroups = state.newGroups.filter( (group: any) => group.id != action.data)
+    //   return {
+    //     ...state,
+    //     newGroups: [...state.newGroups, action.data],
+    //   };
+
     case "REMOVE_GROUP":
       return {
         ...state,
@@ -37,7 +45,6 @@ export const chatReducer = (state: any, action: any) => {
       };
 
     case "SET_USERS":
-      console.log(action.data);
       return {
         ...state,
         users: action.data,
@@ -87,6 +94,23 @@ export const chatReducer = (state: any, action: any) => {
         allGroups: state.allGroups.filter(
           (group: any) => group.id !== action.data
         ),
+      };
+
+    case "SET_MESSAGES":
+      return {
+        ...state,
+        messages: action.data,
+      };
+    case "ADD_MESSAGE":
+      return {
+        ...state,
+        messages: [...state.messages, action.data],
+      };
+
+    case "ROOM":
+      return {
+        ...state,
+        roomDm: action.data,
       };
 
     default:
