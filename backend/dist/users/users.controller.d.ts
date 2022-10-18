@@ -6,6 +6,7 @@ export declare class UsersController {
     private readonly UsersService;
     private cloudinary;
     constructor(UsersService: UsersService, cloudinary: CloudinaryService);
+    CheckUpdatedStatus(req: Request): Promise<import(".prisma/client").Prisma.BatchPayload>;
     GetAllRooms(req: Request): Promise<import(".prisma/client").Room_info[]>;
     GetRooms(req: Request): Promise<import(".prisma/client").Members[]>;
     ChangeMemberStatus(status: MemberStatus, param: Number, req: Request): Promise<import(".prisma/client").Prisma.BatchPayload>;
@@ -27,4 +28,5 @@ export declare class UsersController {
     uploadImageToCloudinary(file: any): Promise<import("cloudinary").UploadApiResponse | import("cloudinary").UploadApiErrorResponse>;
     setUsername(login: string, req: any, usernameDto: usernameDto): Promise<import(".prisma/client").User>;
     setData(login: any, req: any, file: any, userDataDto: userDataDto): Promise<import(".prisma/client").User>;
+    getAllChats(room_id: number): Promise<import(".prisma/client").Chats[]>;
 }

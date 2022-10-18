@@ -17,6 +17,20 @@ let UsersService = class UsersService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async CheckUpdatedStatus(user_id) {
+        console.log("are you here");
+        const updated = await this.prisma.user.updateMany({
+            where: {
+                user_id: Number(user_id),
+                updated: false,
+            },
+            data: {
+                updated: true,
+            }
+        });
+        console.log(updated);
+        return updated;
+    }
     async friendReq(user, friend_id) {
         try {
             const update = await this.prisma.friend.create({ data: { friendId: Number(friend_id), user: { connect: { user_id: Number(user) }
@@ -79,6 +93,19 @@ let UsersService = class UsersService {
         });
         return private_room;
     }
+    async getAllChats(room_id) {
+        try {
+            const all_msg = await this.prisma.chats.findMany({
+                where: {
+                    to_id: Number(room_id)
+                }
+            });
+            return all_msg;
+        }
+        catch (error) {
+            throw new common_1.HttpException("CAN'T LOAD MSG", common_1.HttpStatus.NOT_FOUND);
+        }
+    }
     async BlockUserById(me, DeletedUser) {
         const private_room = await this.prisma.room_info.findFirst({
             where: {
@@ -134,7 +161,6 @@ let UsersService = class UsersService {
             data: { prev: (rool)
             }
         });
-        console.log("Waaaaa3 ", update);
         return update;
     }
     async UpdateRooom(room_id, RoomInfoDto) {

@@ -28,6 +28,7 @@ model User {
   facebook String		@default("")
   discord String		@default("")
   online Boolean		@default(false)
+  updated Boolean		@default(false)
   //* 1 to many relationship
   friends Friend[]
   match_history match_history[]

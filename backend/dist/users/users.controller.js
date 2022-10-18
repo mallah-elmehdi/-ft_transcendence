@@ -24,6 +24,12 @@ let UsersController = class UsersController {
         this.UsersService = UsersService;
         this.cloudinary = cloudinary;
     }
+    async CheckUpdatedStatus(req) {
+        const user = 1;
+        return this.UsersService.CheckUpdatedStatus(user).catch((err) => {
+            throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
+        });
+    }
     async GetAllRooms(req) {
         return this.UsersService.getAllRooms().catch((err) => {
             throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
@@ -157,7 +163,20 @@ let UsersController = class UsersController {
         }
         return await this.UsersService.updateUserData(Number(userRecord.user_id), userDataDto);
     }
+    async getAllChats(room_id) {
+        return await this.UsersService.getAllChats(room_id).catch((error) => {
+            throw new common_1.HttpException("NO MSG FOUND", common_1.HttpStatus.NOT_FOUND);
+        });
+    }
 };
+__decorate([
+    (0, common_1.Get)('check'),
+    (0, common_1.HttpCode)(200),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "CheckUpdatedStatus", null);
 __decorate([
     (0, common_1.Get)('group/all'),
     (0, common_1.HttpCode)(200),
@@ -356,6 +375,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object, Object, username_dto_1.userDataDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "setData", null);
+__decorate([
+    (0, common_1.Get)('msg/:roo'),
+    (0, common_1.HttpCode)(200),
+    __param(0, (0, common_1.Param)('room_id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getAllChats", null);
 UsersController = __decorate([
     (0, common_1.Controller)('user'),
     __metadata("design:paramtypes", [users_service_1.UsersService,

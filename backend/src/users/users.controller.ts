@@ -52,6 +52,19 @@ export class UsersController {
     private cloudinary: CloudinaryService,
   ) {}
 
+  @Get('check')
+  @HttpCode(200)
+  async CheckUpdatedStatus(@Req() req: Request) {
+    // const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+    // const user = user_info.user_id;
+    const user = 1;
+    // here get the room for the current user
+
+    return this.UsersService.CheckUpdatedStatus(user).catch((err) => {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    });
+  }
+
   @Get('group/all')
   @HttpCode(200)
   async GetAllRooms(@Req() req: Request) {
