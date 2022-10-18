@@ -16,6 +16,7 @@ export declare class UsersController {
     DeleteRoomsbyId(param: Number, req: Request): Promise<import(".prisma/client").Room_info>;
     GetMembersbyId(param: Number, req: Request): Promise<import(".prisma/client").Members[]>;
     CreateRoom(RoomInfoDto: RoomInfoDto, file: any, req: Request): Promise<import(".prisma/client").Room_info>;
+    UpdateRoom(room_id: any, RoomInfoDto: RoomInfoDto, file: any, req: Request): Promise<import(".prisma/client").Room_info>;
     AddFriend(param: Number): Promise<import(".prisma/client").Friend>;
     GetAllUsers(): Promise<import(".prisma/client").User[]>;
     getAllFriends(): Promise<number[]>;

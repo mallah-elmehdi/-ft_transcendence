@@ -20,6 +20,12 @@ let UsersService = class UsersService {
     async friendReq(user, params) {
         const update = await this.prisma.friend.create({ data: { friendId: Number(params), user: { connect: { user_id: Number(user) }
                 } } });
+        const room_init = await this.prisma.room_info.create({
+            data: {
+                room_name: user.toString(),
+                room_type: "DM",
+            }
+        });
         return update;
     }
     async BlockUserFromGroupById(group_id, user_id) {
@@ -31,7 +37,6 @@ let UsersService = class UsersService {
         });
         if (blocked.count == 0)
             throw "NOT FOUND";
-        console.log("Heeeeeee from group ", blocked);
         return blocked;
     }
     async BlockUserById(me, DeletedUser) {
@@ -65,14 +70,31 @@ let UsersService = class UsersService {
     }
     async ChangeGroupStatus(id, status) {
     }
-    async CreateRooom(RoomInfoDto) {
+    async UpdateRooom(room_id, RoomInfoDto) {
         const saltRounds = 10;
         var hashed_password = null;
-        console.log("room password ", RoomInfoDto.room_password);
         if (RoomInfoDto.room_password) {
             hashed_password = bcrypt.hashSync(RoomInfoDto.room_password, saltRounds);
         }
-        console.log("Hashed paassiwordi =>", hashed_password);
+        const room_init = await this.prisma.room_info.update({
+            where: {
+                room_id: Number(room_id)
+            },
+            data: {
+                room_name: RoomInfoDto.room_name,
+                room_type: RoomInfoDto.room_type,
+                password: hashed_password,
+                room_avatar: RoomInfoDto.room_avatar,
+            }
+        });
+        return room_init;
+    }
+    async CreateRooom(RoomInfoDto) {
+        const saltRounds = 10;
+        var hashed_password = null;
+        if (RoomInfoDto.room_password) {
+            hashed_password = bcrypt.hashSync(RoomInfoDto.room_password, saltRounds);
+        }
         const room_init = await this.prisma.room_info.create({
             data: {
                 room_name: RoomInfoDto.room_name,

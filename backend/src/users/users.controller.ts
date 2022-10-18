@@ -65,7 +65,10 @@ export class UsersController {
   @HttpCode(200)
   async GetRooms(@Req() req: Request) {
     // here get the room for the current user
-    return this.UsersService.getRooms(1).catch((err) => {
+    const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+    // const user = user_info.user_id;
+    const user = 1;
+    return this.UsersService.getRooms(user).catch((err) => {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     });
   }
@@ -122,6 +125,7 @@ export class UsersController {
     @Param('id') param: Number,
     @Req() req: Request,
   ) {
+    
     if (user.room_password) {
       const room = await this.UsersService.getRoombyId(user.room_id);
       const status = this.UsersService.check_password(
@@ -143,7 +147,10 @@ export class UsersController {
   @HttpCode(201)
   async BlockUserById(@Param('id') param: Number, @Req() req: Request) {
     // get id from user
-    return this.UsersService.BlockUserById(1, param).catch((err) => {
+    const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+    // const user = user_info.user_id;
+    const user = 1;
+    return this.UsersService.BlockUserById(user, param).catch((err) => {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     });
   }
@@ -198,6 +205,9 @@ export class UsersController {
   ) {
     // here you after succesfully creating room add the creator as the the owner
     // console.log('DTO', RoomInfoDto);
+    const user_info = await this.UsersService.getUserbyLogin('aymaatou');
+    // const user = user_info.user_id;
+    const user = 1;
     if (file) {
       const cloud = await this.cloudinary.uploadImage(file);
       if (cloud) {
@@ -206,11 +216,39 @@ export class UsersController {
     }
     const ba = await this.UsersService.CreateRooom(RoomInfoDto);
     if (ba) {
-      const val = await this.UsersService.AddToRoom(1, 'owner', ba.room_id);
+      const val = await this.UsersService.AddToRoom(user, 'owner', ba.room_id);
     }
     return ba;
   }
 
+  @Patch('group/:room_id')
+  @HttpCode(200)
+  @UseInterceptors(FileInterceptor('avatar'))
+  async UpdateRoom(
+    @Param('room_id') room_id,
+    @Body() RoomInfoDto: RoomInfoDto,
+    @UploadedFile() file,
+    @Req() req: Request,
+  ) {
+    // here you after succesfully creating room add the creator as the the owner
+    // console.log('DTO', RoomInfoDto);
+    // const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+    // const user = user_info.user_id;
+    const user = 1;
+    if (file) {
+      const cloud = await this.cloudinary.uploadImage(file);
+      if (cloud) {
+        RoomInfoDto.room_avatar = cloud['url'];
+      }
+    }
+    const room_updated = await this.UsersService.UpdateRooom(room_id , RoomInfoDto).catch(
+      (erro) => {
+        throw new HttpException("CANT UPDATE DATA", HttpStatus.UNAUTHORIZED)
+      }
+    );
+  
+    return room_updated;
+  }
   @Post('add/:id')
   @HttpCode(201)
   async AddFriend(@Param('id') param: Number) {
@@ -287,8 +325,6 @@ export class UsersController {
       fileSize : 	10000000,
     }
   }
-    
-  
   )) //https://docs.nestjs.com/techniques/file-upload
   async setData(
     @Param('login') login: any,

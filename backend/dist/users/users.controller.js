@@ -30,7 +30,9 @@ let UsersController = class UsersController {
         });
     }
     async GetRooms(req) {
-        return this.UsersService.getRooms(1).catch((err) => {
+        const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+        const user = 1;
+        return this.UsersService.getRooms(user).catch((err) => {
             throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
         });
     }
@@ -54,7 +56,9 @@ let UsersController = class UsersController {
         });
     }
     async BlockUserById(param, req) {
-        return this.UsersService.BlockUserById(1, param).catch((err) => {
+        const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+        const user = 1;
+        return this.UsersService.BlockUserById(user, param).catch((err) => {
             throw new common_1.HttpException('NOT FOUND', common_1.HttpStatus.NOT_FOUND);
         });
     }
@@ -79,6 +83,8 @@ let UsersController = class UsersController {
         });
     }
     async CreateRoom(RoomInfoDto, file, req) {
+        const user_info = await this.UsersService.getUserbyLogin('aymaatou');
+        const user = 1;
         if (file) {
             const cloud = await this.cloudinary.uploadImage(file);
             if (cloud) {
@@ -87,9 +93,22 @@ let UsersController = class UsersController {
         }
         const ba = await this.UsersService.CreateRooom(RoomInfoDto);
         if (ba) {
-            const val = await this.UsersService.AddToRoom(1, 'owner', ba.room_id);
+            const val = await this.UsersService.AddToRoom(user, 'owner', ba.room_id);
         }
         return ba;
+    }
+    async UpdateRoom(room_id, RoomInfoDto, file, req) {
+        const user = 1;
+        if (file) {
+            const cloud = await this.cloudinary.uploadImage(file);
+            if (cloud) {
+                RoomInfoDto.room_avatar = cloud['url'];
+            }
+        }
+        const room_updated = await this.UsersService.UpdateRooom(room_id, RoomInfoDto).catch((erro) => {
+            throw new common_1.HttpException("CANT UPDATE DATA", common_1.HttpStatus.UNAUTHORIZED);
+        });
+        return room_updated;
     }
     async AddFriend(param) {
         const user_info = await this.UsersService.getUserbyLogin('aymaatou');
@@ -233,6 +252,18 @@ __decorate([
     __metadata("design:paramtypes", [username_dto_1.RoomInfoDto, Object, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "CreateRoom", null);
+__decorate([
+    (0, common_1.Patch)('group/:room_id'),
+    (0, common_1.HttpCode)(200),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar')),
+    __param(0, (0, common_1.Param)('room_id')),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.UploadedFile)()),
+    __param(3, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, username_dto_1.RoomInfoDto, Object, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "UpdateRoom", null);
 __decorate([
     (0, common_1.Post)('add/:id'),
     (0, common_1.HttpCode)(201),

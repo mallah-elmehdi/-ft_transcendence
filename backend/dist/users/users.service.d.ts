@@ -9,6 +9,7 @@ export declare class UsersService {
     AddToRoom(user: any, rool: any, roomId: any): Promise<import(".prisma/client").Members>;
     ChangeMemberStatus(user: any, rool: any, roomId: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
     ChangeGroupStatus(id: any, status: any): Promise<void>;
+    UpdateRooom(room_id: any, RoomInfoDto: RoomInfoDto): Promise<import(".prisma/client").Room_info>;
     CreateRooom(RoomInfoDto: RoomInfoDto): Promise<import(".prisma/client").Room_info>;
     check_password(room_password: any, hash: any): boolean;
     getRooms(id: Number): Promise<import(".prisma/client").Members[]>;
