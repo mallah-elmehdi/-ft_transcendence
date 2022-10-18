@@ -30,7 +30,7 @@ let AuthController = class AuthController {
         this.AuthService.createAccount(req.user.username, req.user.avatar);
         const accessToken = this.AuthService.signToken(req.user.username);
         res.cookie('jwt', accessToken, { httpOnly: false });
-        return res.redirect('http://192.168.100.31:3000');
+        return res.redirect('http://10.30.238.174:3000');
     }
     test(req) {
         const user = req.user;
@@ -102,7 +102,8 @@ __decorate([
 ], AuthController.prototype, "logout", null);
 AuthController = __decorate([
     (0, common_1.Controller)('42'),
-    __metadata("design:paramtypes", [auth_service_1.AuthService, jwt_1.JwtService])
+    __metadata("design:paramtypes", [auth_service_1.AuthService,
+        jwt_1.JwtService])
 ], AuthController);
 exports.AuthController = AuthController;
 //# sourceMappingURL=auth.controller.js.map

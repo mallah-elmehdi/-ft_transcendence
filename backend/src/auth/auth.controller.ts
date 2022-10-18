@@ -20,15 +20,16 @@ import { join } from 'path';
 import { write } from 'fs';
 import { TwoFactDto } from './DTOs/2fa.dto';
 
-
 @Controller('42')
 export class AuthController {
-  constructor(private readonly AuthService: AuthService, private JwtService : JwtService) {}
+  constructor(
+    private readonly AuthService: AuthService,
+    private JwtService: JwtService,
+  ) {}
 
   @Get()
   @UseGuards(AuthGuard('42'))
   async FortyTwoAuth(@Req() req) {
-
     // console.log('MY current user:   => ', req.user);
     return { message: 'You are logged in' };
   }
@@ -36,15 +37,17 @@ export class AuthController {
   @Get('redirect')
   // @UseGuards(AuthGuard('jwt'))
   @UseGuards(AuthGuard('42'))
-  async FortyTwoAuthRedirect(@Req() req, @Res({ passthrough: true }) res, @Query('code') code) {
-
-		//console.log('MY current user:   => ', req.user);
-		this.AuthService.createAccount(req.user.username, req.user.avatar);
-		const accessToken = this.AuthService.signToken(req.user.username);
-		res.cookie('jwt', accessToken, { httpOnly: false });
-		return res.redirect('http://192.168.100.31:3000');
-	}
-
+  async FortyTwoAuthRedirect(
+    @Req() req,
+    @Res({ passthrough: true }) res,
+    @Query('code') code,
+  ) {
+    //console.log('MY current user:   => ', req.user);
+    this.AuthService.createAccount(req.user.username, req.user.avatar);
+    const accessToken = this.AuthService.signToken(req.user.username);
+    res.cookie('jwt', accessToken, { httpOnly: false });
+    return res.redirect('http://10.30.238.174:3000');
+  }
 
   @Get('test')
   @UseGuards(AuthGuard('jwt')) //'jwt' is what we named our strategy in accessJwtStrategy.ts Guard used to get Payload JWT
@@ -53,27 +56,29 @@ export class AuthController {
     console.log(user['userLogin']);
     return 'TEST inSIDE HAHA  ';
   }
-  
+
   @Get('2fa')
   @UseGuards(AuthGuard('jwt')) //'jwt' is what we named our strategy in accessJwtStrategy.ts Guard used to get Payload JWT
   async TwoFactor(@Req() req: Request) {
     const user = req.user;
     var result = await this.AuthService.generate2fa(user['userLogin']);
-      return result;  
+    return result;
   }
 
   @Post('2fa')
-  async TwoFAcheck( @Body() body : TwoFactDto,) {
+  async TwoFAcheck(@Body() body: TwoFactDto) {
     // after check push secrect to db
-    var res = await this.AuthService.verify2fa(body.userToken, body.base32secret);
-      return {message: res};
-  }  
+    var res = await this.AuthService.verify2fa(
+      body.userToken,
+      body.base32secret,
+    );
+    return { message: res };
+  }
 
   @Post('signout')
   @UseGuards(AuthGuard('jwt'))
-  logout(@Res({ passthrough: true }) res)
-  {
+  logout(@Res({ passthrough: true }) res) {
     res.clearCookie('jwt');
-    return {message: 'Logged out'};
+    return { message: 'Logged out' };
   }
 }

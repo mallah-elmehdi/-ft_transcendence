@@ -1,9 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
 
-@Controller('play')
+@Controller('live-match')
 export class GameController {
   @Get()
-  game() {
+  liveMatch() {
     return 'Welcome User';
   }
 }

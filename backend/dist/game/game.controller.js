@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GameController = void 0;
 const common_1 = require("@nestjs/common");
 let GameController = class GameController {
-    game() {
+    liveMatch() {
         return 'Welcome User';
     }
 };
@@ -21,9 +21,9 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], GameController.prototype, "game", null);
+], GameController.prototype, "liveMatch", null);
 GameController = __decorate([
-    (0, common_1.Controller)('play')
+    (0, common_1.Controller)('live-match')
 ], GameController);
 exports.GameController = GameController;
 //# sourceMappingURL=game.controller.js.map

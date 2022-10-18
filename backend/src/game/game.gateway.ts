@@ -8,15 +8,14 @@ import {
   WebSocketServer,
   ConnectedSocket,
 } from '@nestjs/websockets';
-import { Socket, Namespace } from 'socket.io';
+import { Socket, Server, Namespace } from 'socket.io';
 import {
   uniqueNamesGenerator,
   adjectives,
   colors,
   animals,
 } from 'unique-names-generator';
-
-//https://gabrieltanner.org/blog/nestjs-realtime-chat/
+import { threadId } from 'worker_threads';
 
 @WebSocketGateway(3003, {
   cors: {
@@ -28,26 +27,56 @@ import {
 export class GameGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  private logger: Logger = new Logger('GameGateway');
-
-  //   starter variable / socket
   @WebSocketServer()
   io: Namespace;
-  room_name: string;
-  rooms: any;
+  rooms: any[];
   PLAYER_HEIGHT = 80;
   PLAYER_WIDTH = 10;
   BALL_RADIUS = 7;
   FRAME_PER_SEC = 50;
-
-  //=========================================== UTILS
-  // create new room
-  newRoom() {
-    this.room_name = uniqueNamesGenerator({
-      dictionaries: [adjectives, colors, animals],
-    });
-    this.rooms[this.room_name] = {
-      players_size: 0,
+  STEP = 20;
+  canvas: any;
+  //   util func
+  isRoomFull(room_name: string) {
+    return (
+      this.io.adapter.rooms.get(room_name) &&
+      this.io.adapter.rooms.get(room_name).size >= 2
+    );
+  }
+  playerExist(room: any, login: string) {
+    for (let i = 0; i < room.players.length; i++) {
+      if (room.players[i].login === login) {
+        return true;
+      }
+    }
+    return false;
+  }
+  socketExist(room: any, socket_id: string) {
+    for (let i = 0; i < room.players.length; i++) {
+      if (room.players[i].socket_id === socket_id) {
+        return true;
+      }
+    }
+    return false;
+  }
+  watcherExist(room: any, socket_id: string) {
+    for (let i = 0; i < room.watcher.length; i++) {
+      if (room.watcher[i] === socket_id) {
+        return true;
+      }
+    }
+    return false;
+  }
+  newRoom(speedMode: number, canvas: any) {
+    this.rooms.push({
+      name: uniqueNamesGenerator({
+        dictionaries: [adjectives, colors, animals],
+      }),
+      speedMode: speedMode,
+      players: [],
+      watcher: [],
+      canvas: canvas,
+      intervalID: 0,
       ball: {
         x: 0,
         y: 0,
@@ -61,249 +90,325 @@ export class GameGateway
         left: 0,
         right: 0,
       },
-      players: [],
+    });
+  }
+  getMove(canvas: any, player_num: number) {
+    if (player_num)
+      return {
+        x: canvas.w - this.PLAYER_WIDTH * (3 / 2),
+        y: (canvas.h - this.PLAYER_HEIGHT) / 2,
+        w: this.PLAYER_WIDTH,
+        h: this.PLAYER_HEIGHT,
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+      };
+    return {
+      x: this.PLAYER_WIDTH / 2,
+      y: (canvas.h - this.PLAYER_HEIGHT) / 2,
+      w: this.PLAYER_WIDTH,
+      h: this.PLAYER_HEIGHT,
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
     };
   }
-  //   check if the room is full
-  islastRoomFull() {
-    return (
-      this.rooms[this.room_name] && this.rooms[this.room_name].players_size == 2
-    );
-  }
-  //   add a player to the room
-  addPlayer(id: string, login: string, username: string, avatar: string) {
-    if (this.rooms[this.room_name]) {
-      this.rooms[this.room_name].players.push({
-        login: login,
-        username: username,
-        avatar: avatar,
-        room_name: this.room_name,
-        socket_id: id,
-        score: 0,
-        movement: {
-          x: 0,
-          y: 0,
-          w: 0,
-          h: 0,
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-        },
-      });
-      this.rooms[this.room_name].players_size++;
-    }
-  }
-  //   get the room name by the id
-  getRoomById(id: string) {
-    var ret_room: string;
-    for (const room in this.rooms) {
-      this.rooms[room].players.forEach((player) => {
-        if (player.socket_id === id) {
-          ret_room = room;
-        }
-      });
-    }
-    return ret_room;
-  }
-  //   romove a room
-  removeRoomById(id: string) {
-    var room = this.getRoomById(id);
-    if (this.rooms[room]) {
-      if (this.rooms[room].players[0].socket_id !== id)
-        this.io
-          .to(this.rooms[room].players[0].socket_id)
-          .emit('opponentDisconnect');
-      else
-        this.io
-          .to(this.rooms[room].players[1].socket_id)
-          .emit('opponentDisconnect');
-      delete this.rooms[room];
-    }
-  }
-
-  //   init the players coordianete
-  initPlayers(room: string, canvas: any) {
-    if (this.rooms[room]) {
-      // uset data
-      this.rooms[room].players[0].movement.x = this.PLAYER_WIDTH / 2;
-      this.rooms[room].players[0].movement.y =
-        (canvas.h - this.PLAYER_HEIGHT) / 2;
-      this.rooms[room].players[0].movement.w = this.PLAYER_WIDTH;
-      this.rooms[room].players[0].movement.h = this.PLAYER_HEIGHT;
-      this.rooms[room].players[0].movement.top = 0;
-      this.rooms[room].players[0].movement.bottom = 0;
-      this.rooms[room].players[0].movement.left = 0;
-      this.rooms[room].players[0].movement.right = 0;
-
-      // opponent data
-      this.rooms[room].players[1].movement.x =
-        canvas.w - this.PLAYER_WIDTH * (3 / 2);
-      this.rooms[room].players[1].movement.y =
-        (canvas.h - this.PLAYER_HEIGHT) / 2;
-      this.rooms[room].players[1].movement.w = this.PLAYER_WIDTH;
-      this.rooms[room].players[1].movement.h = this.PLAYER_HEIGHT;
-      this.rooms[room].players[1].movement.top = 0;
-      this.rooms[room].players[1].movement.bottom = 0;
-      this.rooms[room].players[1].movement.left = 0;
-      this.rooms[room].players[1].movement.right = 0;
-    }
-  }
-  //   init the ball coordianete
-  initBall(room: string, canvas: any, speedMode: number) {
+  initBall(room_index: number) {
     const START_DIRECTION = Math.random() - 1;
     const PLAYER_STARTER = Math.random() > 0.5 ? 1 : -1;
-    if (this.rooms[room]) {
-      // ball data
-      this.rooms[room].ball.x = canvas.w / 2;
-      this.rooms[room].ball.y = canvas.h / 2;
-      this.rooms[room].ball.r = this.BALL_RADIUS;
-      this.rooms[room].ball.d.x =
-        PLAYER_STARTER * speedMode * Math.cos(START_DIRECTION * (Math.PI / 4));
-      this.rooms[room].ball.d.y =
-        PLAYER_STARTER * speedMode * Math.sin(START_DIRECTION * (Math.PI / 4));
-      this.rooms[room].ball.top = 0;
-      this.rooms[room].ball.bottom = 0;
-      this.rooms[room].ball.left = 0;
-      this.rooms[room].ball.right = 0;
+    // ball data
+    this.rooms[room_index].ball.x = this.rooms[room_index].canvas.w / 2;
+    this.rooms[room_index].ball.y = this.rooms[room_index].canvas.h / 2;
+    this.rooms[room_index].ball.r = this.BALL_RADIUS;
+    this.rooms[room_index].ball.d.x =
+      PLAYER_STARTER *
+      this.rooms[room_index].speedMode *
+      Math.cos(START_DIRECTION * (Math.PI / 4));
+    this.rooms[room_index].ball.d.y =
+      PLAYER_STARTER *
+      this.rooms[room_index].speedMode *
+      Math.sin(START_DIRECTION * (Math.PI / 4));
+    this.rooms[room_index].ball.top = 0;
+    this.rooms[room_index].ball.bottom = 0;
+    this.rooms[room_index].ball.left = 0;
+    this.rooms[room_index].ball.right = 0;
+  }
+  collision(room_index: number, player_index: number) {
+    this.rooms[room_index].ball.top =
+      this.rooms[room_index].ball.y - this.rooms[room_index].ball.r;
+    this.rooms[room_index].ball.bottom =
+      this.rooms[room_index].ball.y + this.rooms[room_index].ball.r;
+    this.rooms[room_index].ball.left =
+      this.rooms[room_index].ball.x - this.rooms[room_index].ball.r;
+    this.rooms[room_index].ball.right =
+      this.rooms[room_index].ball.x + this.rooms[room_index].ball.r;
+    this.rooms[room_index].players[player_index].movement.top =
+      this.rooms[room_index].players[player_index].movement.y;
+    this.rooms[room_index].players[player_index].movement.bottom =
+      this.rooms[room_index].players[player_index].movement.y +
+      this.rooms[room_index].players[player_index].movement.h;
+    this.rooms[room_index].players[player_index].movement.left =
+      this.rooms[room_index].players[player_index].movement.x;
+    this.rooms[room_index].players[player_index].movement.right =
+      this.rooms[room_index].players[player_index].movement.x +
+      this.rooms[room_index].players[player_index].movement.w;
+    return (
+      this.rooms[room_index].ball.bottom >
+        this.rooms[room_index].players[player_index].movement.top &&
+      this.rooms[room_index].ball.right >
+        this.rooms[room_index].players[player_index].movement.left &&
+      this.rooms[room_index].ball.left <
+        this.rooms[room_index].players[player_index].movement.right &&
+      this.rooms[room_index].ball.top <
+        this.rooms[room_index].players[player_index].movement.bottom
+    );
+  }
+  update(room_index: number) {
+    if (this.rooms[room_index]) {
+      this.rooms[room_index].ball.x += this.rooms[room_index].ball.d.x;
+      this.rooms[room_index].ball.y += this.rooms[room_index].ball.d.y;
+      //   check score
+      if (
+        this.rooms[room_index].players[0].score === 5 ||
+        this.rooms[room_index].players[1].score === 5
+      ) {
+        // update match history
+        this.io
+          .to(this.rooms[room_index].name)
+          .emit('matchDone', this.rooms[room_index]);
+
+        // this.io
+        //   .in(this.rooms[room_index].name)
+        //   .disconnectSockets()
+        return;
+      }
+      // bouce on bottom and top
+      if (
+        this.rooms[room_index].ball.y + this.rooms[room_index].ball.r >
+          this.rooms[room_index].canvas.h ||
+        this.rooms[room_index].ball.y - this.rooms[room_index].ball.r < 0
+      ) {
+        this.rooms[room_index].ball.d.y *= -1;
+      }
+      // bouce on right and left
+      if (
+        this.rooms[room_index].ball.x + this.rooms[room_index].ball.r >
+        this.rooms[room_index].canvas.w
+      ) {
+        this.rooms[room_index].players[0].score++;
+        this.initBall(room_index);
+      } else if (
+        this.rooms[room_index].ball.x - this.rooms[room_index].ball.r <
+        0
+      ) {
+        this.rooms[room_index].players[1].score++;
+        this.initBall(room_index);
+      }
+      // bouce the player
+      const player_index =
+        this.rooms[room_index].ball.x < this.rooms[room_index].canvas.w / 2
+          ? 0
+          : 1;
+      if (this.collision(room_index, player_index)) {
+        const angle =
+          ((this.rooms[room_index].ball.y -
+            (this.rooms[room_index].players[player_index].movement.y +
+              this.rooms[room_index].players[player_index].movement.h / 2)) /
+            (this.rooms[room_index].players[player_index].movement.h / 2)) *
+          (Math.PI / 4);
+        const direction =
+          this.rooms[room_index].ball.x < this.rooms[room_index].canvas.w / 2
+            ? 1
+            : -1;
+        this.rooms[room_index].ball.d.x =
+          direction * this.rooms[room_index].speedMode * Math.cos(angle);
+        this.rooms[room_index].ball.d.y =
+          direction * this.rooms[room_index].speedMode * Math.sin(angle);
+      }
     }
   }
-  collision(room: string, player: number) {
-    if (this.rooms[room]) {
-      this.rooms[room].ball.top =
-        this.rooms[room].ball.y - this.rooms[room].ball.r;
-      this.rooms[room].ball.bottom =
-        this.rooms[room].ball.y + this.rooms[room].ball.r;
-      this.rooms[room].ball.left =
-        this.rooms[room].ball.x - this.rooms[room].ball.r;
-      this.rooms[room].ball.right =
-        this.rooms[room].ball.x + this.rooms[room].ball.r;
+  liveMatch() {
+    var matchs = [];
+    for (let i = 0; i < this.rooms.length; i++) {
+      if (this.isRoomFull(this.rooms[i].name)) {
+        matchs.push({
+          room_name: this.rooms[i].name,
+          p0: {
+            username: this.rooms[i].players[0].username,
+            avatar: this.rooms[i].players[0].avatar,
+          },
+          p1: {
+            username: this.rooms[i].players[1].username,
+            avatar: this.rooms[i].players[1].avatar,
+          },
+        });
+      }
+    }
+    this.io.emit('liveMatch', matchs);
+  }
+  addPlayer(
+    client: Socket,
+    payload: any,
+    room_index: number,
+    player_num: number,
+  ) {
+    this.rooms[room_index].players[player_num] = {
+      socket_id: client.id,
+      username: payload.username,
+      avatar: payload.avatar,
+      login: payload.login,
+      score: 0,
+      movement: this.getMove(this.rooms[room_index].canvas, player_num),
+    };
+    client.join(this.rooms[room_index].name);
+  }
+  getPlayerIndex(players: any, socket_id: string) {
+    for (let i = 0; i < players.length; i++) {
+      if (players[i].socket_id === socket_id) {
+        return i;
+      }
+    }
+    return -1;
+  }
+  emitToClient(room_index: number) {
+    if (
+      this.rooms[room_index] &&
+      this.isRoomFull(this.rooms[room_index].name)
+    ) {
+      this.update(room_index);
+      if (this.rooms[room_index])
+        this.io
+          .to(this.rooms[room_index].name)
+          .emit('onGame', this.rooms[room_index]);
+    }
+  }
+  onGame(room_index: number) {
+    const intervalID = setInterval(
+      () => this.emitToClient(room_index),
+      1000 / this.FRAME_PER_SEC,
+    );
 
-      this.rooms[room].players[player].top = this.rooms[room].players[player].y;
-      this.rooms[room].players[player].bottom =
-        this.rooms[room].players[player].y + this.rooms[room].players[player].h;
-      this.rooms[room].players[player].left =
-        this.rooms[room].players[player].x;
-      this.rooms[room].players[player].right =
-        this.rooms[room].players[player].x + this.rooms[room].players[player].w;
-
-      return (
-        this.rooms[room].ball.bottom > this.rooms[room].players[player].top &&
-        this.rooms[room].ball.right > this.rooms[room].players[player].left &&
-        this.rooms[room].ball.left < this.rooms[room].players[player].right &&
-        this.rooms[room].ball.top < this.rooms[room].players[player].bottom
-      );
+    this.rooms[room_index].intervalID = intervalID;
+  }
+  getRoomIndex(socket_id: string) {
+    for (let i = 0; i < this.rooms.length; i++) {
+      if (
+        this.socketExist(this.rooms[i], socket_id) ||
+        this.watcherExist(this.rooms[i], socket_id)
+      ) {
+        return i;
+      }
+    }
+    return -1;
+  }
+  getRoomIndexByNmae(name: string) {
+    for (let i = 0; i < this.rooms.length; i++) {
+      if (this.rooms[i].name === name) {
+        return i;
+      }
+    }
+    return -1;
+  }
+  newCanvas(room_index: number, canvas: any) {
+    if (
+      this.rooms[room_index].canvas &&
+      this.rooms[room_index].canvas.w > canvas.w
+    ) {
+      this.rooms[room_index].canvas = canvas;
+    }
+  }
+  roomByMode(client: Socket, payload: any) {
+    for (let i = 0; i < this.rooms.length; i++) {
+      if (
+        !this.isRoomFull(this.rooms[i].name) &&
+        this.rooms[i].speedMode === payload.speedMode &&
+        !this.playerExist(this.rooms[i], payload.login)
+      ) {
+        this.newCanvas(i, payload.canvas);
+        this.addPlayer(client, payload, i, 1);
+        this.initBall(i);
+        this.onGame(i);
+        this.liveMatch();
+        return true;
+      }
     }
     return false;
   }
-
-  //   update the game
-  update(room: string, canvas: any, speedMode: number) {
-    if (this.rooms[room]) {
-      this.rooms[room].ball.x += this.rooms[room].ball.d.x;
-      this.rooms[room].ball.y += this.rooms[room].ball.d.y;
-      // bouce on bottom and top
-      if (
-        this.rooms[room].ball.y + this.rooms[room].ball.r > canvas.h ||
-        this.rooms[room].ball.y - this.rooms[room].ball.r < 0
-      ) {
-        this.rooms[room].ball.d.y *= -1;
-      }
-      // bouce on right and left
-      if (this.rooms[room].ball.x + this.rooms[room].ball.r > canvas.w) {
-        this.rooms[room].players[0].score++;
-        this.initBall(room, canvas, speedMode);
-      } else if (this.rooms[room].ball.x - this.rooms[room].ball.r < 0) {
-        this.rooms[room].players[1].score++;
-        this.initBall(room, canvas, speedMode);
-      }
-      // bouce the player
-      const player = this.rooms[room].ball.x < canvas.w / 2 ? 0 : 1;
-      if (this.collision(room, player)) {
-        const angle =
-          ((this.rooms[room].ball.y -
-            (this.rooms[room].players[player].y +
-              this.rooms[room].players[player].h / 2)) /
-            (this.rooms[room].players[player].h / 2)) *
-          (Math.PI / 4);
-        const direction = this.rooms[room].ball.x < canvas.w / 2 ? 1 : -1;
-        this.rooms[room].ball.d.x = direction * speedMode * Math.cos(angle);
-        this.rooms[room].ball.d.y = direction * speedMode * Math.sin(angle);
-      }
-    }
+  //   handle connect and disconnect
+  afterInit(server: any) {
+    this.rooms = [];
+    this.canvas = null;
   }
-  //   game loop
-  gameLoop(room: string, canvas: any, speedMode: number) {
-    if (this.rooms[room]) {
-      this.update(room, canvas, speedMode);
-      this.io
-        .to(this.rooms[room].players[0].socket_id)
-        .to(this.rooms[room].players[1].socket_id)
-        .emit('onGameClient', this.rooms[room]);
-    }
-  }
-
-  //   start the game for a room
-  start(id: string, canvas: any, speedMode: number) {
-    if (this.islastRoomFull()) {
-      var room = this.getRoomById(id);
-      if (this.rooms[room]) {
-        this.initPlayers(room, canvas);
-        this.initBall(room, canvas, speedMode);
-        setInterval(() => {
-          this.gameLoop(room, canvas, speedMode);
-        }, 1000 / this.FRAME_PER_SEC);
-      }
-    }
-  }
-
-  //=========================================== EVENTS
-  //   init
-  afterInit() {
-    this.rooms = {};
-    this.newRoom();
-  }
-  //   connection
   handleConnection(client: Socket) {}
-  //   disconnection
   handleDisconnect(client: Socket) {
-    this.removeRoomById(client.id);
-  }
+    var room_index = this.getRoomIndex(client.id);
+    if (room_index !== -1) {
+      var watcher_index = this.rooms[room_index].watcher.indexOf(client.id);
 
-  //=========================================== EVENTS
-  // start a room
-  @SubscribeMessage('data')
-  data(client: Socket, payload: any) {
-    if (!this.islastRoomFull()) {
-      this.addPlayer(
-        client.id,
-        payload.login,
-        payload.username,
-        payload.avatar,
-      );
-    } else {
-      this.newRoom();
-      this.addPlayer(
-        client.id,
-        payload.login,
-        payload.username,
-        payload.avatar,
-      );
+      if (watcher_index !== -1) {
+        this.rooms[room_index].watcher.splice(room_index, 1);
+        client.leave(this.rooms[room_index].name);
+      } else {
+        clearInterval(this.rooms[room_index].intervalID);
+        this.io
+          .to(this.rooms[room_index].name)
+          .emit('opponentDisconnect', this.rooms[room_index]);
+        this.rooms.splice(room_index, 1);
+      }
+      this.liveMatch();
     }
-
-    this.start(client.id, payload.canvas, payload.speedMode);
+  }
+  // events
+  @SubscribeMessage('init')
+  initGame(client: Socket, payload: any) {
+    if (!this.roomByMode(client, payload)) {
+      this.newRoom(payload.speedMode, payload.canvas);
+      this.addPlayer(client, payload, this.rooms.length - 1, 0);
+    }
   }
 
-  // on game
-  //   @SubscribeMessage('onGameServer')
-  //   onGame(client: Socket, payload: any) {
-  //     // console.log(payload);
+  @SubscribeMessage('moveKey')
+  moveKey(client: Socket, payload: any) {
+    var room_index = this.getRoomIndex(client.id);
+    if (room_index !== -1) {
+      var player_index = this.getPlayerIndex(
+        this.rooms[room_index].players,
+        client.id,
+      );
+      if (
+        this.rooms[room_index].players[player_index].socket_id === client.id
+      ) {
+        if (payload.key === 'ArrowUp') {
+          if (this.rooms[room_index].players[player_index].movement.y > 0)
+            this.rooms[room_index].players[player_index].movement.y -=
+              this.STEP;
+        } else if (payload.key === 'ArrowDown') {
+          if (
+            this.rooms[room_index].players[player_index].movement.y +
+              this.rooms[room_index].players[player_index].movement.h <
+            payload.canvas.h
+          )
+            this.rooms[room_index].players[player_index].movement.y +=
+              this.STEP;
+        }
+      }
+    }
+  }
 
-  //     var room = this.getRoomById(client.id);
-  //     this.update(room, payload.canvas, payload.speedMode);
-  //     this.io
-  //       .to(this.rooms[room].players[0].socket_id)
-  //       .to(this.rooms[room].players[1].socket_id)
-  //       .emit('onGameClient', this.rooms[room]);
-  //   }
+  @SubscribeMessage('watcher')
+  watcher(client: Socket, payload: any) {
+    var room_index = this.getRoomIndexByNmae(payload.room_name);
+    if (this.rooms[room_index]) {
+      client.join(payload.room_name);
+      this.rooms[room_index].watcher.push(client.id);
+    } else {
+      client.emit('roomNotfound');
+    }
+  }
+  @SubscribeMessage('getLiveMatch')
+  getLiveMatch() {
+    this.liveMatch();
+  }
 }
