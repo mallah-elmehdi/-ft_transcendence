@@ -1,5 +1,5 @@
-export const SOCKET = 'http://192.168.100.31:3003';
-export const API = 'http://192.168.100.31:3001';
+export const SOCKET = 'http://10.30.238.174:3003';
+export const API = 'http://10.30.238.174:3001';
 export const FRIENDS_URL = API + '/user/friends';
 export const USER_URL = API + '/user/';
 export const GROUP = API + '/user/group/';

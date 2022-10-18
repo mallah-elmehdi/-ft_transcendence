@@ -15,7 +15,6 @@ export const Card = ({ children, ...props }: Props) => {
             _light={{ boxShadow: 'md' }}
             borderRadius="2xl"
             boxShadow="2xl"
-            maxH="78vh"
             h="100%"
             {...props}
         >

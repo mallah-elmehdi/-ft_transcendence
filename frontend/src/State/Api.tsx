@@ -16,6 +16,7 @@ export const getUserInfo = async (dispatch: any) => {
     try {
         const response = await axios.get(URLS.LOGIN);
         dispatch(storeUserInfo(response.data));
+        return response.data;
     } catch (error: any) {
         throw error.message;
     } finally {

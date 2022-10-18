@@ -1,22 +1,32 @@
 import React from 'react';
-import { Flex, Spacer, Text } from '@chakra-ui/react';
+import { Flex, Spacer, Stack, Text } from '@chakra-ui/react';
 import ToggleMode from '../component/toggleMode';
 import Logo from '../component/logo';
 import { Link } from 'react-router-dom';
+import { pagesContent } from '../constants';
+import notfoundGif from '../assets/404.gif';
 
 export default function PageNotFound() {
     return (
-        <>
-            <Flex mb={5} px={10} justifyContent={'right'} alignItems={'center'} overflow={'hideen'}>
-                <Link to={'/home'}>
+        <Stack h="100%">
+            <Flex mb={5} px={10} alignItems="center" overflow={'hideen'}>
+                <Link to={pagesContent.home.url}>
                     <Logo />
                 </Link>
                 <Spacer />
                 <ToggleMode />
             </Flex>
-            <Flex h={'98%'} alignItems={'center'} justifyContent={'center'} w={'100%'}>
-                <Text fontSize={40}>Opps, Page Not Found</Text>
-            </Flex>
-        </>
+            <Stack flexGrow={1} alignItems="center" justifyContent="center">
+                <img
+                    alt="loading"
+                    style={{
+                        maxWidth: '12rem',
+                        width: '100%',
+                    }}
+                    src={notfoundGif}
+                />
+                <Text textAlign="center" fontSize="4xl">Opps, Page Not Found</Text>
+            </Stack>
+        </Stack>
     );
 }

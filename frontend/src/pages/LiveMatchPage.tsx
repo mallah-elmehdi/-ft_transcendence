@@ -11,7 +11,7 @@ import { getUserInfo } from '../State/Api';
 import { GlobalContext } from '../State/Provider';
 
 export default function LiveMatchPage() {
-    usePageTitle(pagesContent.watch.url);
+    usePageTitle(pagesContent.watch.title);
     // general
     const theme = useTheme();
     const [isSmallScreen] = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
@@ -31,10 +31,10 @@ export default function LiveMatchPage() {
         login: '',
         score: 0,
     });
+    const [canvasNewWidth, setNewCanvasWidth] = React.useState(0);
     const [watcher, setWatcher] = React.useState(0);
     // canvas
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
-    const containerRef = React.useRef<HTMLDivElement>(null);
     // context
     const { data, dispatch } = React.useContext<any>(GlobalContext);
     const { userInfo } = data;
@@ -127,6 +127,7 @@ export default function LiveMatchPage() {
                     login: data.players[0].login,
                     score: data.players[0].score,
                 });
+                setNewCanvasWidth(data.canvas.w);
             };
             socket.emit('watcher', {
                 room_name: params?.room_name,
@@ -149,7 +150,7 @@ export default function LiveMatchPage() {
 
     return (
         <>
-            <VStack alignContent="center" justifyContent="center" ref={containerRef}>
+            <VStack alignContent="center" justifyContent="center">
                 <Grid h="100%" templateColumns="repeat(8, 1fr)" gap={10}>
                     <GridItem colSpan={4}>
                         <HStack justifyContent="flex-end" spacing={10}>
@@ -170,8 +171,8 @@ export default function LiveMatchPage() {
                         </HStack>
                     </GridItem>
                 </Grid>
-                <Box w="fit-content" h="fit-content">
-                    <canvas width="800" height="400" ref={canvasRef}></canvas>
+                <Box w="100%" flexDirection="column" display="flex" alignItems="center" justifyContent="center">
+                    <canvas width={canvasNewWidth} height="400" ref={canvasRef}></canvas>
                 </Box>
                 <Badge mt={5} borderRadius="full" fontSize="3xl" px={3}>
                     <HStack alignItems="center" spacing={3}>

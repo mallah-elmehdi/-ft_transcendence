@@ -1,21 +1,21 @@
-import React from 'react';
 import { Box, Center, ChakraProvider } from '@chakra-ui/react';
+import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Navbar from './component/Navbar';
 import ChatPage from './pages/ChatPage';
-import HomePage from './pages/HomePage';
-import SignInPage from './pages/SignInPage';
 import GamePage from './pages/GamePage';
-import theme from './style/theme';
+import HomePage from './pages/HomePage';
 import PageNotFound from './pages/PageNotFound';
 import ProfilePage from './pages/ProfilePage';
+import SignInPage from './pages/SignInPage';
+import theme from './style/theme';
 
 // CONSTANTS
-import { pagesContent } from './constants';
-import { GlobalContext } from './State/Provider';
-import { Loading } from './component/Loading';
 import { AlertCompo } from './component/AlertCompo';
+import { Loading } from './component/Loading';
+import { pagesContent } from './constants';
 import LiveMatchPage from './pages/LiveMatchPage';
+import { GlobalContext } from './State/Provider';
 
 function App() {
     // CONTEXT

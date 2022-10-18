@@ -17,7 +17,7 @@ export const Loading = () => {
             }}
         >
             <img
-                alt="ok"
+                alt="loading"
                 style={{
                     maxWidth: '15rem',
                     width: '100%',

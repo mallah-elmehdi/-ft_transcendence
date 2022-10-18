@@ -31,6 +31,7 @@ type Props = {
     facebook: string;
     discord: string;
     instagram: string;
+    updateProfile: boolean;
     [other: string]: any;
 };
 
@@ -50,7 +51,10 @@ const EditProfile = (props: Props) => {
     // update profile
     const changeAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            if (e.target.files[0].size > 1024 * 1000) {
+            console.log();
+            if (e.target.files[0].type.split('/')[0] !== 'image') {
+                dispatch(newNotification({ type: 'Error', message: 'Wrong avatar image type' }));
+            } else if (e.target.files[0].size > 2000000) {
                 dispatch(newNotification({ type: 'Error', message: 'Avatar image is too large' }));
             } else {
                 const objectUrl = URL.createObjectURL(e.target.files[0]);
@@ -71,6 +75,8 @@ const EditProfile = (props: Props) => {
         setFacebook(props.facebook);
         setDiscord(props.discord);
         setInstagram(props.instagram);
+        if (props.updateProfile) onOpen();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props]);
 
     // submitProfile
