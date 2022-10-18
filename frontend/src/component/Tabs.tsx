@@ -32,34 +32,13 @@ function Tabs() {
   const { friends, setFriends, groups } = useContext<any>(ChatContext);
   const { allUsers, setAllUsers } = React.useContext<any>(ChatContext);
   const { dispatch, state } = useContext<any>(ChatContext);
-  const { newFriends, users } = state;
-//   useEffect(() => {
-//     axios.get(FRIENDS_URL).then((response: any) => {
-//       for (var i = 0; i < response.data.length; i++) {
-//         axios.get(USER_URL + response.data[i].friendId).then((res: any) => {
-//           dispatch({
-//             type: "ADD_FRIEND",
-//             data: {
-//               id: res.data.user_id,
-//               name: res.data.user_name,
-//               avatar: res.data.user_avatar,
-//             },
-//           });
-//         });
-//       }
-//     });
-//   }, []);
-
-//   useFriends();
-  useGroups();
-  useAllUsers();
+  const { newFriends, users, newGroups } = state;
 
   function isFriend(id: any) {
     return newFriends.findIndex((f: any) => f.id == id) == -1 ? false : true;
   }
 
   function sendFriendReq(id: any) {
-    //   console.log("user", users)
     const user = users.find((element:any) => element.user_id == id)
     axios
       .post(FRIEND_REQ + id)
@@ -103,6 +82,9 @@ function Tabs() {
         <Tab _selected={{ color: "red" }}>
           <Text fontSize={20}>All Users</Text>
         </Tab>
+        <Tab _selected={{ color: "red" }}>
+          <Text fontSize={20}>All Groups</Text>
+        </Tab>
       </TabList>
       <TabPanels h={"100%"} p={2}>
         <TabPanel overflow={"auto"} h={"100%"} w={"100%"} m={0} p={0}>
@@ -142,8 +124,8 @@ function Tabs() {
         </TabPanel>
         <TabPanel h={"100%"} w={"100%"} m={0} p={0} overflow={"auto"}>
           <VStack pb={10} spacing={0} w={"100%"}>
-            {groups.length ? (
-              groups.map((group: any, index: any) => (
+            {newGroups.length ? (
+              newGroups.map((group: any, index: any) => (
                 <HStack
                   onClick={() => {
                     setSelectedChat({ chat: "G", id: group.id });
@@ -181,10 +163,6 @@ function Tabs() {
               users.map((user: any, index: any) =>
                 !isFriend(user.user_id) ? (
                   <HStack
-                    // onClick={() => {
-                    //     setSelectedChat({ chat: 'G', id: user.user_id });
-                    // }}
-                    // as={'button'}
                     p={5}
                     alignItems={"center"}
                     _hover={{ bg: value }}
@@ -206,16 +184,6 @@ function Tabs() {
                       <IconButton
                         onClick={() => {
                           sendFriendReq(user.user_id);
-                          setFriends((old: any) => {
-                            return [
-                              ...old,
-                              {
-                                id: user.user_id,
-                                name: user.user_name,
-                                avatar: user.user_avatar,
-                              },
-                            ];
-                          });
                         }}
                         fontSize={18}
                         rounded={30}

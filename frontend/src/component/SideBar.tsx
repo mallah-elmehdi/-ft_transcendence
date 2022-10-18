@@ -7,9 +7,9 @@ import Messaging from "./Messaging";
 import { ChatContext } from "../State/ChatProvider";
 import NewChannel from "./NewChannel";
 import useFriends from "../api/useFriends";
-import { ALL_USERS, API, FRIENDS_URL, USER_URL } from "../constants";
+import { ALL_USERS, API, FRIENDS_URL, GROUP, USER_URL, MY_GROUPS } from "../constants";
 import useGroups from "../api/useGroups";
-import { GlobalContext } from "../State/GlobalProvider";
+// import { GlobalContext } from "../State/GlobalProvider";
 import axios from "axios";
 
 const ChatTabs = () => {
@@ -40,11 +40,11 @@ const ChatTabs = () => {
 const SideBar = () => {
   const { selectedChat } = useContext<any>(ChatContext);
   const { newChannel } = useContext<any>(ChatContext);
-
   const { dispatch, state } = useContext<any>(ChatContext);
+  const { newGroups, newFriends } = state;
+
   React.useEffect(() => {
     axios.get(FRIENDS_URL).then((response: any) => {
-      console.log(response.data.length);
       for (var i = 0; i < response.data.length; i++) {
         axios.get(USER_URL + response.data[i].friendId).then((res: any) => {
           const user = {
@@ -60,6 +60,31 @@ const SideBar = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    axios
+      .get(MY_GROUPS)
+      .then((res: any) => {
+        for (var i = 0; i < res.data.length; i++) {
+          axios.get(GROUP + res.data[i].roomId).then((res: any) => {
+            const group = {
+              id: res.data.room_id,
+              name: res.data.room_name,
+              avatar: res.data.room_avatar,
+              type: res.data.room_type,
+            };
+            dispatch({
+              type: "ADD_GROUP",
+              data: group,
+            });
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   React.useEffect(() => {
     axios.get(ALL_USERS).then((response: any) => {
       dispatch({

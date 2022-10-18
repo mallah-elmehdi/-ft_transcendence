@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import {
   Button,
@@ -30,23 +30,27 @@ import {
 import { MdDelete } from "react-icons/md";
 import { ChatContext } from "../State/ChatProvider";
 import axios from "axios";
-import { DELETE_ROOM } from "../constants";
+import { BLOCK_MEMBER, DELETE_ROOM } from "../constants";
 
 const GroupMenu = () => {
   const value = useColorModeValue("white", "lightBlack");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { selectedChat, setSelectedChat } = useContext<any>(ChatContext);
+  const { dispatch, state } = useContext<any>(ChatContext);
+  const [signedUser, setSignedUser] = useState<any>(1)
 
   const leaveChannelHandler = () => {
-    console.log("LEAVE ROOM: ", selectedChat.id);
-    axios.post(DELETE_ROOM + selectedChat.id)
-    .then((response) => {
-    //   console.log(response);
-      setSelectedChat(null);
-    })
-    .catch((error) =>{
-        // console.log(error)
-    })
+    axios
+      .post(BLOCK_MEMBER + signedUser, {
+        room_id: selectedChat.id
+      })
+      .then((res) => {
+        dispatch({
+          type: "REMOVE_GROUP",
+          data: selectedChat.id,
+        });
+        setSelectedChat(null);
+      })
   };
   return (
     <>

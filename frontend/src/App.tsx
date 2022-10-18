@@ -12,10 +12,14 @@ import theme from './style/theme';
 
 // CONSTANTS
 import { AlertCompo } from './component/AlertCompo';
+<<<<<<< HEAD
 import { Loading } from './component/Loading';
 import { pagesContent } from './constants';
 import LiveMatchPage from './pages/LiveMatchPage';
 import { GlobalContext } from './State/Provider';
+=======
+import LiveMatchPage from './pages/LiveMatchPage';
+>>>>>>> 289ba629fa7522342b74493ed787a22ea37b383d
 
 function App() {
     // CONTEXT

@@ -9,7 +9,7 @@ import GroupMenu from "./GroupMenu";
 
 function MessagingBox() {
   const { dispatch, state } = useContext<any>(ChatContext);
-  const { newFriends } = state;
+  const { newFriends, newGroups } = state;
   const { data,  groups } = useContext<any>(ChatContext);
   const { selectedChat, setSelectedChat, toggleOffSelectedChat } = useContext<any>(ChatContext);
   const { toggleDetails } = useContext<any>(ChatContext);
@@ -17,7 +17,7 @@ function MessagingBox() {
 
   if (selectedChat.chat === "F")
     searchIndex = newFriends.findIndex((id: any) => selectedChat.id === id.id);
-  else searchIndex = groups.findIndex((id: any) => selectedChat.id === id.id);
+  else searchIndex = newGroups.findIndex((id: any) => selectedChat.id === id.id);
   
   useEffect(() => {
     const keyDownHandler = (event: any) => {
@@ -39,17 +39,17 @@ function MessagingBox() {
       <ChatHeader
         avatarName={
           selectedChat.chat === "G"
-            ? groups[searchIndex].name.toString()
+            ? newGroups[searchIndex].name.toString()
             : newFriends[searchIndex].name.toString()
         }
         chatName={
           selectedChat.chat === "G"
-            ? groups[searchIndex].name.toString()
+            ? newGroups[searchIndex].name.toString()
             : newFriends[searchIndex].name.toString()
         }
         avatarSrc={
           selectedChat.chat === "G"
-            ? groups[searchIndex].avatar
+            ? newGroups[searchIndex].avatar
             : newFriends[searchIndex].avatar
         }
         isGroup={selectedChat.chat === "F" ? false : true}

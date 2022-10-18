@@ -6,10 +6,10 @@ import { GlobalContext } from "../State/Provider";
 
 const useAllUsers = () => {
   const { allUsers, setAllUsers } = React.useContext<any>(ChatContext);
-  const { setUserMatchHistory, setLoader } = React.useContext<any>(GlobalContext);
+  // const { setUserMatchHistory, setLoader } = React.useContext<any>(GlobalContext);
 
   useEffect(() => {
-    setLoader(true);
+    // setLoader(true);
     axios
       .get(ALL_USERS)
       .then((res: any) => {
@@ -18,7 +18,7 @@ const useAllUsers = () => {
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => setLoader(false));
+      // .finally(() => setLoader(false));
   }, []);
 };
 

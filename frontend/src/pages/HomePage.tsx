@@ -59,7 +59,7 @@ const HomePage = () => {
         getUserInfo(dispatch)
             .then((info: any) => {
                 if (!info?.updated) {
-                    // navigate(`${pagesContent.profile.url}/me`);
+                    navigate(`${pagesContent.profile.url}/me`);
                 }
             })
             .catch((error) => {

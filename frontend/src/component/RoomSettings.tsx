@@ -23,26 +23,24 @@ import { Radio, RadioGroup } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 type Props = {
-  toggleSettings: () => void;
-  roomId: string;
+  toggleSettings: () => void,
+  roomId: string,
+  oldRoomData: {
+    name: string,
+    type: string,
+    password: string,
+  },
 };
 
-const RoomSettings = ({ toggleSettings, roomId }: Props) => {
+const RoomSettings = ({ toggleSettings, roomId, oldRoomData }: Props) => {
   const ROOMTYPE = {
     protected: "protected",
     private: "private",
     public: "public",
   };
-  const oldRoomData = {
-    name: "roomName",
-    type: ROOMTYPE.protected,
-    password: "lkjlkjlkj",
-  };
   const [roomData, setRoomData] = useState<any>(oldRoomData);
   const [image, setImage] = useState(null);
-
   const [showPassword, setShowPassword] = useState<any>(false);
-
   const [showUpload, setShowUpload] = useState<any>(false);
   const updateRoomNewInfo = () => {
     console.log(roomData);
