@@ -99,7 +99,7 @@ export class UsersService {
 			const all_msg = await this.prisma.chats.findMany({
 				where:
 				{
-					to_id : room_id
+					to_id : Number(room_id)
 				}
 			})
 			
