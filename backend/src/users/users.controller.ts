@@ -365,9 +365,9 @@ export class UsersController {
 
   //! SHOUD BE MOVED TO CHAT CONTROLER
 
-  @Get('match')
+  @Get('msg/:roo')
   @HttpCode(200)
-  async getAllChats(@Req() room_id: number) {
+  async getAllChats(@Param('room_id') room_id: number) {
     
     return await this.UsersService.getAllChats(room_id).catch(
       (error) => 
