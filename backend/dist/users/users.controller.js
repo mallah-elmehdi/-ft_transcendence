@@ -44,6 +44,11 @@ let UsersController = class UsersController {
             throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
         });
     }
+    async GetDmRoomId(friend_id, req) {
+        return await this.UsersService.getDmRoom(1, friend_id).catch(() => {
+            throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
+        });
+    }
     async AddUsersToRoomsbyId(user, param, req) {
         if (user.room_password) {
             const room = await this.UsersService.getRoombyId(user.room_id);
@@ -56,7 +61,6 @@ let UsersController = class UsersController {
         });
     }
     async BlockUserById(param, req) {
-        const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
         const user = 1;
         return this.UsersService.BlockUserById(user, param).catch((err) => {
             throw new common_1.HttpException('NOT FOUND', common_1.HttpStatus.NOT_FOUND);
@@ -110,10 +114,10 @@ let UsersController = class UsersController {
         });
         return room_updated;
     }
-    async AddFriend(param) {
+    async AddFriend(friend_id) {
         const user_info = await this.UsersService.getUserbyLogin('aymaatou');
         const user = 1;
-        return await this.UsersService.friendReq(user, param);
+        return await this.UsersService.friendReq(user, friend_id);
     }
     async GetAllUsers() {
         return await this.UsersService.getAllUsers(1);
@@ -182,6 +186,14 @@ __decorate([
         Number, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "ChangeMemberStatus", null);
+__decorate([
+    (0, common_1.Get)('/dm/:friend_id'),
+    __param(0, (0, common_1.Param)('friend_id')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "GetDmRoomId", null);
 __decorate([
     (0, swagger_1.ApiTags)('Add User to Room {AddedUsersDto}'),
     (0, common_1.Post)('group/add/:id'),

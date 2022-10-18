@@ -115,6 +115,15 @@ export class UsersController {
   //   });
   // }
 
+  @Get('/dm/:friend_id')
+  async GetDmRoomId(@Param('friend_id') friend_id: Number, @Req() req) {
+  
+    //get user from JWT
+    return await this.UsersService.getDmRoom(1, friend_id).catch(()=> {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+
+    });
+  }
 
   @ApiTags('Add User to Room {AddedUsersDto}')
   @Post('group/add/:id')
@@ -147,7 +156,7 @@ export class UsersController {
   @HttpCode(201)
   async BlockUserById(@Param('id') param: Number, @Req() req: Request) {
     // get id from user
-    const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+    // const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
     // const user = user_info.user_id;
     const user = 1;
     return this.UsersService.BlockUserById(user, param).catch((err) => {
@@ -231,7 +240,6 @@ export class UsersController {
     @Req() req: Request,
   ) {
     // here you after succesfully creating room add the creator as the the owner
-    // console.log('DTO', RoomInfoDto);
     // const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
     // const user = user_info.user_id;
     const user = 1;
@@ -251,11 +259,11 @@ export class UsersController {
   }
   @Post('add/:id')
   @HttpCode(201)
-  async AddFriend(@Param('id') param: Number) {
+  async AddFriend(@Param('id') friend_id: Number) {
     const user_info = await this.UsersService.getUserbyLogin('aymaatou');
     // const user = user_info.user_id;
     const user = 1;
-    return await this.UsersService.friendReq(user, param);
+    return await this.UsersService.friendReq(user, friend_id);
   }
 
   @Get('list/all')

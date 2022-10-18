@@ -3,12 +3,12 @@ import { userDataDto, RoomInfoDto } from './DTO/username.dto';
 export declare class UsersService {
     private readonly prisma;
     constructor(prisma: PrismaService);
-    friendReq(user: Number, params: Number): Promise<import(".prisma/client").Friend>;
+    friendReq(user: Number, friend_id: Number): Promise<import(".prisma/client").Friend>;
     BlockUserFromGroupById(group_id: any, user_id: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
-    BlockUserById(me: number, DeletedUser: any): Promise<void>;
+    getDmRoom(me: any, friend_id: any): Promise<import(".prisma/client").Room_info>;
+    BlockUserById(me: number, DeletedUser: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
     AddToRoom(user: any, rool: any, roomId: any): Promise<import(".prisma/client").Members>;
     ChangeMemberStatus(user: any, rool: any, roomId: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
-    ChangeGroupStatus(id: any, status: any): Promise<void>;
     UpdateRooom(room_id: any, RoomInfoDto: RoomInfoDto): Promise<import(".prisma/client").Room_info>;
     CreateRooom(RoomInfoDto: RoomInfoDto): Promise<import(".prisma/client").Room_info>;
     check_password(room_password: any, hash: any): boolean;

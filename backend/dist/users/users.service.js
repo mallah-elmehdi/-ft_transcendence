@@ -17,16 +17,36 @@ let UsersService = class UsersService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async friendReq(user, params) {
-        const update = await this.prisma.friend.create({ data: { friendId: Number(params), user: { connect: { user_id: Number(user) }
-                } } });
-        const room_init = await this.prisma.room_info.create({
-            data: {
-                room_name: user.toString(),
-                room_type: "DM",
-            }
-        });
-        return update;
+    async friendReq(user, friend_id) {
+        try {
+            const update = await this.prisma.friend.create({ data: { friendId: Number(friend_id), user: { connect: { user_id: Number(user) }
+                    } } });
+            const roomName = user.toString() + '_' + friend_id.toString();
+            const room_init = await this.prisma.room_info.create({
+                data: {
+                    room_name: roomName,
+                    room_type: "DM",
+                }
+            });
+            const membership = await await this.prisma.members.create({
+                data: {
+                    roomId: Number(room_init.room_id),
+                    userId: Number(user),
+                    prev: "DM"
+                },
+            });
+            const joine = await await this.prisma.members.create({
+                data: {
+                    roomId: Number(room_init.room_id),
+                    userId: Number(friend_id),
+                    prev: "DM"
+                },
+            });
+            return update;
+        }
+        catch (err) {
+            throw new common_1.HttpException("Error", common_1.HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
     async BlockUserFromGroupById(group_id, user_id) {
         const blocked = await this.prisma.members.deleteMany({
@@ -35,17 +55,66 @@ let UsersService = class UsersService {
                 userId: Number(user_id)
             }
         });
-        if (blocked.count == 0)
-            throw "NOT FOUND";
+        if (blocked.count == 0) {
+            throw new common_1.HttpException("NOT FOUND", common_1.HttpStatus.NOT_FOUND);
+        }
         return blocked;
     }
+    async getDmRoom(me, friend_id) {
+        const private_room = await this.prisma.room_info.findFirst({
+            where: {
+                OR: [
+                    {
+                        room_name: {
+                            contains: me.toString() + '_' + friend_id.toString()
+                        },
+                    },
+                    {
+                        room_name: {
+                            contains: friend_id.toString() + '_' + me.toString()
+                        }
+                    }
+                ]
+            }
+        });
+        return private_room;
+    }
     async BlockUserById(me, DeletedUser) {
+        const private_room = await this.prisma.room_info.findFirst({
+            where: {
+                OR: [
+                    {
+                        room_name: {
+                            contains: me.toString() + '_' + DeletedUser.toString()
+                        },
+                    },
+                    {
+                        room_name: {
+                            contains: DeletedUser.toString() + '_' + me.toString()
+                        }
+                    }
+                ]
+            }
+        });
+        const delete_membership = await this.prisma.members.deleteMany({
+            where: {
+                roomId: private_room.room_id
+            }
+        });
+        const delete_room = await this.prisma.room_info.delete({
+            where: {
+                room_id: private_room.room_id
+            }
+        });
         const deleted = await this.prisma.friend.deleteMany({
             where: {
                 userId: Number(me),
                 friendId: Number(DeletedUser)
             }
         });
+        if (deleted.count == 0)
+            throw "NOT FOUND";
+        return deleted;
     }
     async AddToRoom(user, rool, roomId) {
         const update = await this.prisma.members.create({
@@ -67,8 +136,6 @@ let UsersService = class UsersService {
         });
         console.log("Waaaaa3 ", update);
         return update;
-    }
-    async ChangeGroupStatus(id, status) {
     }
     async UpdateRooom(room_id, RoomInfoDto) {
         const saltRounds = 10;

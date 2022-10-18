@@ -9,15 +9,16 @@ export declare class UsersController {
     GetAllRooms(req: Request): Promise<import(".prisma/client").Room_info[]>;
     GetRooms(req: Request): Promise<import(".prisma/client").Members[]>;
     ChangeMemberStatus(status: MemberStatus, param: Number, req: Request): Promise<import(".prisma/client").Prisma.BatchPayload>;
+    GetDmRoomId(friend_id: Number, req: any): Promise<import(".prisma/client").Room_info>;
     AddUsersToRoomsbyId(user: AddedUsersDto, param: Number, req: Request): Promise<import(".prisma/client").Members>;
-    BlockUserById(param: Number, req: Request): Promise<void>;
+    BlockUserById(param: Number, req: Request): Promise<import(".prisma/client").Prisma.BatchPayload>;
     BlockUserFromGroupById(room: any, user_id: Number, req: Request): Promise<import(".prisma/client").Prisma.BatchPayload>;
     GetRoomsbyId(param: Number, req: Request): Promise<import(".prisma/client").Room_info>;
     DeleteRoomsbyId(param: Number, req: Request): Promise<import(".prisma/client").Room_info>;
     GetMembersbyId(param: Number, req: Request): Promise<import(".prisma/client").Members[]>;
     CreateRoom(RoomInfoDto: RoomInfoDto, file: any, req: Request): Promise<import(".prisma/client").Room_info>;
     UpdateRoom(room_id: any, RoomInfoDto: RoomInfoDto, file: any, req: Request): Promise<import(".prisma/client").Room_info>;
-    AddFriend(param: Number): Promise<import(".prisma/client").Friend>;
+    AddFriend(friend_id: Number): Promise<import(".prisma/client").Friend>;
     GetAllUsers(): Promise<import(".prisma/client").User[]>;
     getAllFriends(): Promise<number[]>;
     getMe(req: Request): Promise<import(".prisma/client").User>;

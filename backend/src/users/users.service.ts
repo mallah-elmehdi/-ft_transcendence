@@ -1,4 +1,4 @@
-import { HttpCode, Injectable } from '@nestjs/common';
+import { HttpCode, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import { Http2ServerRequest } from 'http2';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -12,23 +12,44 @@ export class UsersService {
 
 
 	// inserting to a table with Foreing keys
-	async  friendReq(user :Number, params:Number) {
-		
-		const update = await this.prisma.friend.create({ data: 
-			{ friendId: Number(params) , user: { connect: { user_id: Number(user) } 
-		} } })
-		
-		const room_init = await this.prisma.room_info.create(
-			{
-				data: {
-					room_name: user.toString(),
-					room_type: "DM",
+	async  friendReq(user :Number, friend_id:Number) {
+		try
+		{
+
+			const update = await this.prisma.friend.create({ data: 
+				{ friendId: Number(friend_id) , user: { connect: { user_id: Number(user) } 
+			} } })
+			const roomName = user.toString() + '_' + friend_id.toString()
+			const room_init = await this.prisma.room_info.create(
+				{
+					data: {
+						room_name: roomName ,
+						room_type: "DM",
+					}
 				}
+				)
+				const membership = await await this.prisma.members.create({
+					data :
+					{
+						roomId: Number(room_init.room_id),
+						userId: Number(user),
+						prev: "DM" 
+					},
+				})
+				const joine = await await this.prisma.members.create({
+					data :
+					{
+						roomId: Number(room_init.room_id),
+						userId: Number(friend_id),
+						prev: "DM" 
+					},
+				})
+			return update
+		}
+		catch(err)
+			{
+				throw new HttpException("Error", HttpStatus.UNPROCESSABLE_ENTITY)
 			}
-		)
-		// chedck
-		
-		return update
 	}
 
 	async BlockUserFromGroupById(group_id, user_id)
@@ -43,22 +64,67 @@ export class UsersService {
 			}
 		)
 		if (blocked.count == 0)
-			throw "NOT FOUND"
+			{
+				throw new HttpException("NOT FOUND", HttpStatus.NOT_FOUND)
+			}
 		return blocked
+	}
+	async getDmRoom (me , friend_id)
+	{
+		const private_room = await this.prisma.room_info.findFirst({
+			where : {
+				OR:[
+					{
+						room_name: {
+							contains: me.toString() + '_' + friend_id.toString()
+						},
+					},
+					{
+						room_name: {
+							contains: friend_id.toString() + '_' + me.toString()
+						}
+						
+					}
+				]
+			}
+		})
+		return private_room
 	}
 	async BlockUserById(me: number, DeletedUser )
 	{
-
-		// const user_data = await this.prisma.friend.findMany(
-		// 	{
-		// 		where: {
-		// 			userId : Number(me),
-		// 			friendId: Number(DeletedUser)
-		// 		}
-		// 	}
-		// )
-		// console.log(user_data);
-		// const status  = user_data.isBl
+		const private_room = await this.prisma.room_info.findFirst({
+			where : {
+				OR:[
+					{
+						room_name: {
+							contains: me.toString() + '_' + DeletedUser.toString()
+						},
+					},
+					{
+						room_name: {
+							contains: DeletedUser.toString() + '_' + me.toString()
+						}
+						
+					}
+				]
+			}
+		})
+		const delete_membership = await this.prisma.members.deleteMany(
+			{
+				where:
+				{
+					roomId:private_room.room_id
+				}
+			}
+		)
+		const delete_room = await this.prisma.room_info.delete(
+			{
+				where:
+				{
+					room_id:private_room.room_id
+				}
+			}
+		)
 		const deleted = await this.prisma.friend.deleteMany(
 			{
 				where :
@@ -69,28 +135,10 @@ export class UsersService {
 				}
 			}
 		)
-		// const deleted = await this.prisma.user.update(
-		// 	{	
-		// 		where:
-		// 		{
-		// 			user_id: me,
-		// 		},
-		// 			data : {
-		// 				friends :
-		// 				{
-		// 					disconnect : [ { id: Number(DeletedUser) } ],
-		// 				},
-		// 			},
-		// 			select:
-		// 			{
-		// 				friends: true,
-		// 			}
-		// 	}
-		// )
-		// if (deleted.count == 0)
-			// throw "NOT FOUND"
-		// console.log(deleted)
-		// return deleted;
+		if (deleted.count == 0)
+			throw "NOT FOUND"
+
+		return deleted;
 	}
 
 	async AddToRoom(user, rool, roomId)
@@ -102,7 +150,6 @@ export class UsersService {
 				user: { connect: { user_id: Number(user) } }
 		 }
 		 })
-		//  console.log("Waaaaa3 ",update)
 		 return update;
 		}
 	async ChangeMemberStatus(user, rool, roomId)
@@ -120,24 +167,6 @@ export class UsersService {
 		console.log("Waaaaa3 ",update)
 		 return update;
 		}
-	async ChangeGroupStatus(id , status)
-	{
-		// const update = await this.prisma.room_info.updateMany(
-		// 	{
-		// 		where :
-		// 		{
-
-		// 			room_id : Number(id),
-				
-		// 		},
-		// 		data :{
-		// 			room_name : status.room_name,
-		// 			room_type : status.room_g,
-
-		// 		}
-		// 	}
-		// )
-	}
 
 	async UpdateRooom(room_id, RoomInfoDto: RoomInfoDto)
 	{
