@@ -288,6 +288,7 @@ export class UsersController {
     return await this.UsersService.getUserbyLogin(req.user['userLogin']);
   }
 
+  
   @Get('match')
   @HttpCode(200)
   async getMachHistory() {
@@ -360,5 +361,22 @@ export class UsersController {
       Number(userRecord.user_id),
       userDataDto,
     );
+  }
+
+  //! SHOUD BE MOVED TO CHAT CONTROLER
+
+  @Get('match')
+  @HttpCode(200)
+  async getAllChats(@Req() room_id: number) {
+    
+    return await this.UsersService.getAllChats(room_id).catch(
+      (error) => 
+      {
+        throw new HttpException("NO MSG FOUND", HttpStatus.NOT_FOUND)
+      }
+    )
+    // console.log("HHHHHHHHHHH")
+    // return await this.UsersService.GetMatchHistory("aymaatou");
+    // console.log(value)
   }
 }

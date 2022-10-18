@@ -1,6 +1,7 @@
 import { HttpCode, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import { Http2ServerRequest } from 'http2';
+import { throwError } from 'rxjs';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { userDataDto, RoomInfoDto} from './DTO/username.dto'
 const bcrypt = require('bcrypt');
@@ -90,6 +91,26 @@ export class UsersService {
 		})
 		return private_room
 	}
+
+	//! SHOULD BE MOVED TO CHAT SERVICES
+	async getAllChats (room_id:number)
+	{
+		try {
+			const all_msg = await this.prisma.chats.findMany({
+				where:
+				{
+					to_id : room_id
+				}
+			})
+			
+			return all_msg
+		} catch (error) {
+			throw new HttpException("CAN'T LOAD MSG", HttpStatus.NOT_FOUND)
+		}
+
+	}
+
+
 	async BlockUserById(me: number, DeletedUser )
 	{
 		const private_room = await this.prisma.room_info.findFirst({
@@ -164,7 +185,6 @@ export class UsersService {
 			{ prev: (rool) 
 		 }
 		 })
-		console.log("Waaaaa3 ",update)
 		 return update;
 		}
 
