@@ -22,29 +22,30 @@ export class AuthService {
 	}
 
 	async createAccount(id: string, avatar: string) {
-		try {
+		try 
+		{
 			const found = await this.prisma.user.findUnique({
 				where: {
 					user_login: id,
 				},
 			});
 
-
-			if (!found) {
+			if (!found) 
+			{
 				const User = await this.prisma.user.create({
 					data: {
 						user_login: id,
 						user_name: id,
 						user_avatar: avatar,
 					},
-				});
-				// const Account = await this.prisma.,
-				
+				});				
 				console.log('User Created ', id);
-		return;
 			}
 			console.log('User Exists ', id);
-		} catch (err: any) {
+			return found;
+		} 
+		catch (err: any) 
+		{
 			console.log('error ', err);
 		}
 	}

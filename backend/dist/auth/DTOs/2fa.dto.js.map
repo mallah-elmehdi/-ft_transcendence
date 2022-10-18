@@ -1,1 +1,1 @@
-{"version":3,"file":"2fa.dto.js","sourceRoot":"","sources":["../../../src/auth/DTOs/2fa.dto.ts"],"names":[],"mappings":";;;AAAA,MAAa,UAAU;CAGtB;AAHD,gCAGC"}
+{"version":3,"file":"2fa.dto.js","sourceRoot":"","sources":["../../../src/auth/DTOs/2fa.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,6CAA8C;AAE9C,MAAa,UAAU;CAMtB;AAJG;IADC,IAAA,qBAAW,GAAE;;gDACO;AAGrB;IADC,IAAA,qBAAW,GAAE;;6CACI;AALtB,gCAMC"}

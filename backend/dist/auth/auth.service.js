@@ -44,9 +44,9 @@ let AuthService = class AuthService {
                     },
                 });
                 console.log('User Created ', id);
-                return;
             }
             console.log('User Exists ', id);
+            return found;
         }
         catch (err) {
             console.log('error ', err);

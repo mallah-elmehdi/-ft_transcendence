@@ -11,6 +11,7 @@ datasource db {
 }
 
 /// Schema needs updating for relationships
+//? https://www.cockroachlabs.com/blog/what-is-a-foreign-key/#:~:text=A%20foreign%20key%20column%20in,'foreign'%20column%20it%20references.
 //?https://www.prisma.io/docs/guides/general-guides/database-workflows/foreign-keys/postgresql
 model User {
   user_id        Int        @default(autoincrement()) @id
@@ -27,6 +28,7 @@ model User {
   facebook String		@default("")
   discord String		@default("")
   online Boolean		@default(false)
+  updated Boolean		@default(false)
   //* 1 to many relationship
   friends Friend[]
   match_history match_history[]
@@ -41,8 +43,9 @@ model User {
 model Friend {
   id       Int @id @default(autoincrement())
   userId   Int
-  friendId Int 
-  user User? @relation(fields: [userId], references: [user_id])
+  friendId Int
+  blocked Boolean @default(false)
+  user User @relation(fields: [userId], references: [user_id])
 }
 
 model match_history {
@@ -60,7 +63,7 @@ model match_history {
 model Chats {
   chat_id Int @default(autoincrement()) @id
   userId Int @default(0)
-  to_id Int @default(0)
+  to_id Int
   // chat_type String
   // i_delivered Boolean @default(false)
   message String @default("")
@@ -80,7 +83,6 @@ model Room_info {
   room Members[]
   chat Chats []
   
-  
   // @@map("Chat")
 }
 model Members {
@@ -91,6 +93,5 @@ model Members {
   created_at DateTime @default(now())
   room Room_info @relation(fields: [roomId], references: [room_id])
   user User @relation(fields: [userId], references: [user_id])
-  
   // @@map("Chat")
 }

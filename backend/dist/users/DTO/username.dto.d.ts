@@ -14,3 +14,12 @@ export declare class RoomInfoDto {
     room_password?: string;
     room_avatar?: string;
 }
+export declare class AddedUsersDto {
+    room_id: number;
+    room_password?: string;
+}
+export declare class MemberStatus {
+    room_id: number;
+    room_password?: string;
+    room_status: string;
+}

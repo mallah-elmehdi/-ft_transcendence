@@ -12,6 +12,7 @@ import { Socket, Server } from 'socket.io';
 
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
 
+<<<<<<< HEAD
 @WebSocketGateway(3003, {
   cors: {
     origin: '*',
@@ -23,6 +24,16 @@ export class ChatGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   private logger: Logger = new Logger('ChatGateway BRRRR');
+=======
+@WebSocketGateway(3002, {cors: {
+	origin: '*',
+	credentials: true
+	},	namespace : 'dm'
+})
+export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect { 
+ 
+	private logger: Logger = new Logger('ChatGateway BRRRR');
+>>>>>>> c82febc1e64c081d0f809f864148fe128d267b36
 
   @WebSocketServer()
   server: Server;
@@ -35,6 +46,7 @@ export class ChatGateway
     this.logger.log(`Client connected: ${client.id}`);
   }
 
+<<<<<<< HEAD
   handleDisconnect(client: any) {
     this.logger.log(`Client disconnected: ${client.id}`);
   }
@@ -46,6 +58,28 @@ export class ChatGateway
     //console.log(`Message from ${client.id}: ${payloadJson.name} or ${payload}`);
     //client.emit('msgToClient', payload);
   }
+=======
+	handleDisconnect(client: any) {
+		this.logger.log(`Client disconnected: ${client.id}`);
+	}
+  
+	@SubscribeMessage('msgToServer') // Equivalent to socket.on('msgToServer') listening to any 'msgToServer' event
+	handleMessage(client: Socket, payload) {
+		console.log("You am the palof", payload)
+
+		
+		//const token = client.handshake.query.token.toString();
+		//const payload = verifyAccessToken(token);
+		const roomId = payload.roomId;
+		
+		//const user = payload && (await this.prismaService.findOne(payload.id));
+		//const room = user?.room;
+		client.join(roomId);
+		this.server.to(roomId).emit(payload.message);
+		//console.log(`Message from ${client.id}: ${payloadJson.name} or ${payload}`);
+		//client.emit('msgToClient', payload);
+	}
+>>>>>>> c82febc1e64c081d0f809f864148fe128d267b36
 }
 
 //!https://wanago.io/2021/01/25/api-nestjs-chat-websockets/
