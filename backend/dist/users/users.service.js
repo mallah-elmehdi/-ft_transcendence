@@ -17,10 +17,36 @@ let UsersService = class UsersService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async friendReq(user, params) {
-        const update = await this.prisma.friend.create({ data: { friendId: Number(params), user: { connect: { user_id: Number(user) }
-                } } });
-        return update;
+    async friendReq(user, friend_id) {
+        try {
+            const update = await this.prisma.friend.create({ data: { friendId: Number(friend_id), user: { connect: { user_id: Number(user) }
+                    } } });
+            const roomName = user.toString() + '_' + friend_id.toString();
+            const room_init = await this.prisma.room_info.create({
+                data: {
+                    room_name: roomName,
+                    room_type: "DM",
+                }
+            });
+            const membership = await await this.prisma.members.create({
+                data: {
+                    roomId: Number(room_init.room_id),
+                    userId: Number(user),
+                    prev: "DM"
+                },
+            });
+            const joine = await await this.prisma.members.create({
+                data: {
+                    roomId: Number(room_init.room_id),
+                    userId: Number(friend_id),
+                    prev: "DM"
+                },
+            });
+            return update;
+        }
+        catch (err) {
+            throw new common_1.HttpException("Error", common_1.HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
     async BlockUserFromGroupById(group_id, user_id) {
         const blocked = await this.prisma.members.deleteMany({
@@ -29,12 +55,66 @@ let UsersService = class UsersService {
                 userId: Number(user_id)
             }
         });
-        if (blocked.count == 0)
-            throw "NOT FOUND";
-        console.log("Heeeeeee from group ", blocked);
+        if (blocked.count == 0) {
+            throw new common_1.HttpException("NOT FOUND", common_1.HttpStatus.NOT_FOUND);
+        }
         return blocked;
     }
+    async getDmRoom(me, friend_id) {
+        const private_room = await this.prisma.room_info.findFirst({
+            where: {
+                OR: [
+                    {
+                        room_name: {
+                            contains: me.toString() + '_' + friend_id.toString()
+                        },
+                    },
+                    {
+                        room_name: {
+                            contains: friend_id.toString() + '_' + me.toString()
+                        }
+                    }
+                ]
+            }
+        });
+        return private_room;
+    }
+    async getAllChats(room_id) {
+        const all_msg = await this.prisma.chats.findMany({
+            where: {
+                to_id: Number(room_id),
+            },
+        });
+        console.log("MSG", all_msg);
+        return all_msg;
+    }
     async BlockUserById(me, DeletedUser) {
+        const private_room = await this.prisma.room_info.findFirst({
+            where: {
+                OR: [
+                    {
+                        room_name: {
+                            contains: me.toString() + '_' + DeletedUser.toString()
+                        },
+                    },
+                    {
+                        room_name: {
+                            contains: DeletedUser.toString() + '_' + me.toString()
+                        }
+                    }
+                ]
+            }
+        });
+        const delete_membership = await this.prisma.members.deleteMany({
+            where: {
+                roomId: private_room.room_id
+            }
+        });
+        const delete_room = await this.prisma.room_info.delete({
+            where: {
+                room_id: private_room.room_id
+            }
+        });
         const deleted = await this.prisma.friend.deleteMany({
             where: {
                 userId: Number(me),
@@ -43,7 +123,6 @@ let UsersService = class UsersService {
         });
         if (deleted.count == 0)
             throw "NOT FOUND";
-        console.log(deleted);
         return deleted;
     }
     async AddToRoom(user, rool, roomId) {
@@ -64,17 +143,33 @@ let UsersService = class UsersService {
             data: { prev: (rool)
             }
         });
-        console.log("Waaaaa3 ", update);
         return update;
+    }
+    async UpdateRooom(room_id, RoomInfoDto) {
+        const saltRounds = 10;
+        var hashed_password = null;
+        if (RoomInfoDto.room_password) {
+            hashed_password = bcrypt.hashSync(RoomInfoDto.room_password, saltRounds);
+        }
+        const room_init = await this.prisma.room_info.update({
+            where: {
+                room_id: Number(room_id)
+            },
+            data: {
+                room_name: RoomInfoDto.room_name,
+                room_type: RoomInfoDto.room_type,
+                password: hashed_password,
+                room_avatar: RoomInfoDto.room_avatar,
+            }
+        });
+        return room_init;
     }
     async CreateRooom(RoomInfoDto) {
         const saltRounds = 10;
         var hashed_password = null;
-        console.log("room password ", RoomInfoDto.room_password);
         if (RoomInfoDto.room_password) {
             hashed_password = bcrypt.hashSync(RoomInfoDto.room_password, saltRounds);
         }
-        console.log("Hashed paassiwordi =>", hashed_password);
         const room_init = await this.prisma.room_info.create({
             data: {
                 room_name: RoomInfoDto.room_name,
@@ -107,6 +202,25 @@ let UsersService = class UsersService {
         if (!room)
             throw "NOT FOUND";
         return room;
+    }
+    async getAllRooms() {
+        const all_rooms = await this.prisma.room_info.findMany({
+            where: {
+                OR: [
+                    {
+                        room_type: {
+                            contains: "public",
+                        },
+                    },
+                    {
+                        room_type: {
+                            contains: "protected",
+                        },
+                    },
+                ]
+            }
+        });
+        return all_rooms;
     }
     async DeleteRoombyId(id) {
         const removed = await this.prisma.members.deleteMany({
@@ -154,9 +268,15 @@ let UsersService = class UsersService {
                 userId: login,
             },
         });
-        if (!frineds)
-            throw 'NOT FOUND';
-        return frineds;
+        const other_frineds = await this.prisma.friend.findMany({
+            where: {
+                friendId: login,
+            },
+        });
+        const user_id = frineds.map((friend) => friend.friendId);
+        const other_user_id = other_frineds.map((friend) => friend.userId);
+        const frineds_id = [...user_id, ...other_user_id];
+        return frineds_id;
     }
     async getUser(login) {
         const found = await this.prisma.user.findUnique({

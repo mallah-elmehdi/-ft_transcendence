@@ -36,6 +36,9 @@ import {
 } from './DTO/username.dto';
 import { CloudinaryService } from './clodinary/clodinary.service';
 import { get } from 'http';
+import { ApiProperty, ApiTags  } from '@nestjs/swagger';
+import { IsMimeType } from 'class-validator';
+
 
 // ! Before End, Check if the user is extracted from JWT, and remove static User (1)
 
@@ -51,17 +54,28 @@ export class UsersController {
 
   @Get('group/all')
   @HttpCode(200)
-  async GetRooms(@Req() req: Request) {
+  async GetAllRooms(@Req() req: Request) {
     // here get the room for the current user
 
-    return this.UsersService.getRooms(1).catch((err) => {
+    return this.UsersService.getAllRooms().catch((err) => {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    });
+  }
+  @Get('group/member')
+  @HttpCode(200)
+  async GetRooms(@Req() req: Request) {
+    // here get the room for the current user
+    // const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+    // const user = user_info.user_id;
+    const user = 1;
+    return this.UsersService.getRooms(user).catch((err) => {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     });
   }
 
   @Patch('group/update/:id')
+  @ApiTags("Change Member status")
   @HttpCode(200)
-  @UseInterceptors()
   async ChangeMemberStatus(
     @Body() status: MemberStatus,
     @Param('id') param: Number,
@@ -84,7 +98,34 @@ export class UsersController {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     });
   }
+  // @Patch('group/update/data/:id')
+  // @HttpCode(200)
+  // @UseInterceptors()
+  // async ChangeGroupStatus(
+  //   @Body() status: AddedUsersDto,
+  //   @Param('id') param: Number,
+  //   @Req() req: Request,
+  // ) {
+  //   // GET ID USER FROM JWT;
 
+  //   return this.UsersService.ChangeGroupStatus( param,
+  //     status
+  //   ).catch((err) => {
+  //     throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+  //   });
+  // }
+
+  @Get('/dm/:friend_id')
+  async GetDmRoomId(@Param('friend_id') friend_id: Number, @Req() req) {
+  
+    //get user from JWT
+    return await this.UsersService.getDmRoom(1, friend_id).catch(()=> {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+
+    });
+  }
+
+  @ApiTags('Add User to Room {AddedUsersDto}')
   @Post('group/add/:id')
   @HttpCode(201)
   @UseInterceptors()
@@ -93,6 +134,7 @@ export class UsersController {
     @Param('id') param: Number,
     @Req() req: Request,
   ) {
+    
     if (user.room_password) {
       const room = await this.UsersService.getRoombyId(user.room_id);
       const status = this.UsersService.check_password(
@@ -109,11 +151,15 @@ export class UsersController {
     );
   }
 
+
   @Post('block/:id')
   @HttpCode(201)
   async BlockUserById(@Param('id') param: Number, @Req() req: Request) {
     // get id from user
-    return this.UsersService.BlockUserById(1, param).catch((err) => {
+    // const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+    // const user = user_info.user_id;
+    const user = 1;
+    return this.UsersService.BlockUserById(user, param).catch((err) => {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     });
   }
@@ -126,6 +172,8 @@ export class UsersController {
     });
   }
 
+
+
   @Get('group/:id')
   @HttpCode(200)
   async GetRoomsbyId(@Param('id') param: Number, @Req() req: Request) {
@@ -134,6 +182,7 @@ export class UsersController {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     });
   }
+
 
   @Post('group/:id')
   @HttpCode(201)
@@ -144,6 +193,7 @@ export class UsersController {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     });
   }
+  
 
   @Get('members/:id')
   @HttpCode(200)
@@ -163,7 +213,10 @@ export class UsersController {
     @Req() req: Request,
   ) {
     // here you after succesfully creating room add the creator as the the owner
-    console.log('DTO', RoomInfoDto);
+    // console.log('DTO', RoomInfoDto);
+    const user_info = await this.UsersService.getUserbyLogin('aymaatou');
+    // const user = user_info.user_id;
+    const user = 1;
     if (file) {
       const cloud = await this.cloudinary.uploadImage(file);
       if (cloud) {
@@ -172,18 +225,45 @@ export class UsersController {
     }
     const ba = await this.UsersService.CreateRooom(RoomInfoDto);
     if (ba) {
-      const val = await this.UsersService.AddToRoom(1, 'owner', ba.room_id);
+      const val = await this.UsersService.AddToRoom(user, 'owner', ba.room_id);
     }
     return ba;
   }
 
-  @Post('add/:id')
-  @HttpCode(201)
-  async AddFriend(@Param('id') param: Number) {
-    const user_info = await this.UsersService.getUserbyLogin('ynoam'); //! get User who sent the request using JWT
+  @Patch('group/:room_id')
+  @HttpCode(200)
+  @UseInterceptors(FileInterceptor('avatar'))
+  async UpdateRoom(
+    @Param('room_id') room_id,
+    @Body() RoomInfoDto: RoomInfoDto,
+    @UploadedFile() file,
+    @Req() req: Request,
+  ) {
+    // here you after succesfully creating room add the creator as the the owner
+    // const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
     // const user = user_info.user_id;
     const user = 1;
-    return await this.UsersService.friendReq(user, param);
+    if (file) {
+      const cloud = await this.cloudinary.uploadImage(file);
+      if (cloud) {
+        RoomInfoDto.room_avatar = cloud['url'];
+      }
+    }
+    const room_updated = await this.UsersService.UpdateRooom(room_id , RoomInfoDto).catch(
+      (erro) => {
+        throw new HttpException("CANT UPDATE DATA", HttpStatus.UNAUTHORIZED)
+      }
+    );
+  
+    return room_updated;
+  }
+  @Post('add/:id')
+  @HttpCode(201)
+  async AddFriend(@Param('id') friend_id: Number) {
+    const user_info = await this.UsersService.getUserbyLogin('aymaatou');
+    // const user = user_info.user_id;
+    const user = 1;
+    return await this.UsersService.friendReq(user, friend_id);
   }
 
   @Get('list/all')
@@ -208,6 +288,7 @@ export class UsersController {
     return await this.UsersService.getUserbyLogin(req.user['userLogin']);
   }
 
+  
   @Get('match')
   @HttpCode(200)
   async getMachHistory() {
@@ -245,7 +326,15 @@ export class UsersController {
   //! Add Validators to Upload
   @Post('update/profile')
   @HttpCode(201)
-  @UseInterceptors(FileInterceptor('avatar')) //https://docs.nestjs.com/techniques/file-upload
+  @UseInterceptors(FileInterceptor('avatar',
+  {
+    limits :
+    {
+      files : 1,
+      fileSize : 	10000000,
+    }
+  }
+  )) //https://docs.nestjs.com/techniques/file-upload
   async setData(
     @Param('login') login: any,
     @Req() req,
@@ -258,6 +347,8 @@ export class UsersController {
 
     if (file) 
     {
+
+      
       const cloud = await this.cloudinary.uploadImage(file);
       if (cloud) {
         userDataDto.user_avatar = cloud['url'];
@@ -270,5 +361,23 @@ export class UsersController {
       Number(userRecord.user_id),
       userDataDto,
     );
+  }
+
+  //! SHOUD BE MOVED TO CHAT CONTROLER
+
+  @Get('/msg/:room_id')
+  @HttpCode(200)
+  async getAllChats(@Param('room_id') room_id: number) {
+    
+    return await this.UsersService.getAllChats(room_id)
+    .catch(
+      (error) => 
+      {
+        throw new HttpException("NO MSG FOUND", HttpStatus.NOT_FOUND)
+      }
+    )
+    // console.log("HHHHHHHHHHH")
+    // return await this.UsersService.GetMatchHistory("aymaatou");
+    // console.log(value)
   }
 }

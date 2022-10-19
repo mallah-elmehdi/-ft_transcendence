@@ -8,7 +8,7 @@ export declare class AuthService {
         message: string;
         user: any;
     };
-    createAccount(id: string, avatar: string): Promise<void>;
+    createAccount(id: string, avatar: string): Promise<import(".prisma/client").User>;
     generate2fa(id: string): Promise<string>;
     verify2fa(userToken: string, base32secret: string): Promise<any>;
     findUserId(login: string): Promise<import(".prisma/client").User>;

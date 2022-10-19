@@ -26,27 +26,38 @@ let ChatGateway = class ChatGateway {
     handleDisconnect(client) {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
-    handleMessage(client, payload) {
-        console.log("You am the palof", payload);
-        client.join(payload.userId + 'mougnou');
-        this.server.to(payload.userId + 'mougnou').emit(payload.message);
+    ping(client, payload) {
+        console.log('ping(): ', payload);
+        client.join(payload.room_id);
+    }
+    message(client, payload) {
+        console.log(payload);
+        this.io.to(payload.room_id).emit('recieveMessage', payload);
     }
 };
 __decorate([
     (0, websockets_1.WebSocketServer)(),
-    __metadata("design:type", socket_io_1.Server)
-], ChatGateway.prototype, "server", void 0);
+    __metadata("design:type", socket_io_1.Namespace)
+], ChatGateway.prototype, "io", void 0);
 __decorate([
-    (0, websockets_1.SubscribeMessage)('msgToServer'),
+    (0, websockets_1.SubscribeMessage)('ping'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
     __metadata("design:returntype", void 0)
-], ChatGateway.prototype, "handleMessage", null);
+], ChatGateway.prototype, "ping", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('message'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
+    __metadata("design:returntype", void 0)
+], ChatGateway.prototype, "message", null);
 ChatGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(3002, { cors: {
+    (0, websockets_1.WebSocketGateway)(3002, {
+        cors: {
             origin: '*',
-            credentials: true
-        }, namespace: 'dm'
+            credentials: true,
+        },
+        namespace: 'dm',
     })
 ], ChatGateway);
 exports.ChatGateway = ChatGateway;

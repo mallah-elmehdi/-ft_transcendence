@@ -1,6 +1,7 @@
-import { HttpCode, Injectable } from '@nestjs/common';
+import { HttpCode, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import { Http2ServerRequest } from 'http2';
+import { throwError } from 'rxjs';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { userDataDto, RoomInfoDto} from './DTO/username.dto'
 const bcrypt = require('bcrypt');
@@ -12,13 +13,44 @@ export class UsersService {
 
 
 	// inserting to a table with Foreing keys
-	async  friendReq(user :Number, params:Number) {
-		
-		// check here if the user has already friended the person
-		const update = await this.prisma.friend.create({ data: 
-			{ friendId: Number(params) , user: { connect: { user_id: Number(user) } 
-		} } })
-		return update
+	async  friendReq(user :Number, friend_id:Number) {
+		try
+		{
+
+			const update = await this.prisma.friend.create({ data: 
+				{ friendId: Number(friend_id) , user: { connect: { user_id: Number(user) } 
+			} } })
+			const roomName = user.toString() + '_' + friend_id.toString()
+			const room_init = await this.prisma.room_info.create(
+				{
+					data: {
+						room_name: roomName ,
+						room_type: "DM",
+					}
+				}
+				)
+				const membership = await await this.prisma.members.create({
+					data :
+					{
+						roomId: Number(room_init.room_id),
+						userId: Number(user),
+						prev: "DM" 
+					},
+				})
+				const joine = await await this.prisma.members.create({
+					data :
+					{
+						roomId: Number(room_init.room_id),
+						userId: Number(friend_id),
+						prev: "DM" 
+					},
+				})
+			return update
+		}
+		catch(err)
+			{
+				throw new HttpException("Error", HttpStatus.UNPROCESSABLE_ENTITY)
+			}
 	}
 
 	async BlockUserFromGroupById(group_id, user_id)
@@ -33,29 +65,88 @@ export class UsersService {
 			}
 		)
 		if (blocked.count == 0)
-			throw "NOT FOUND"
-		console.log("Heeeeeee from group ", blocked)
+			{
+				throw new HttpException("NOT FOUND", HttpStatus.NOT_FOUND)
+			}
 		return blocked
 	}
+	async getDmRoom (me , friend_id)
+	{
+		const private_room = await this.prisma.room_info.findFirst({
+			where : {
+				OR:[
+					{
+						room_name: {
+							contains: me.toString() + '_' + friend_id.toString()
+						},
+					},
+					{
+						room_name: {
+							contains: friend_id.toString() + '_' + me.toString()
+						}
+						
+					}
+				]
+			}
+		})
+		return private_room
+	}
+
+	//! SHOULD BE MOVED TO CHAT SERVICES
+	async getAllChats (room_id:number)
+	{
+		// try {
+			const all_msg = await this.prisma.chats.findMany({
+        where: {
+          to_id: Number(room_id),
+        },
+      });
+			
+			console.log("MSG",all_msg);
+			
+			return all_msg
+		// } catch (error) {
+		// 	throw new HttpException("CAN'T LOAD MSG", HttpStatus.NOT_FOUND)
+		// }
+
+	}
+
+
 	async BlockUserById(me: number, DeletedUser )
 	{
-		// const id = await this.prisma.user.findMany(
-		// 	{
-		// 		where:
-		// 		{
-		// 			user_id : Number(DeletedUser),
-		// 			friends:
-		// 			{
-		// 			connect: {
-
-		// 				: Number(me),
-		// 			}	
-
-		// 			}
-		// 		}
-				
-		// 	}
-		// )
+		const private_room = await this.prisma.room_info.findFirst({
+			where : {
+				OR:[
+					{
+						room_name: {
+							contains: me.toString() + '_' + DeletedUser.toString()
+						},
+					},
+					{
+						room_name: {
+							contains: DeletedUser.toString() + '_' + me.toString()
+						}
+						
+					}
+				]
+			}
+		})
+		const delete_membership = await this.prisma.members.deleteMany(
+			{
+				where:
+				{
+					roomId:private_room.room_id
+				}
+			}
+		)
+		const delete_room = await this.prisma.room_info.delete(
+			{
+				where:
+				{
+					room_id:private_room.room_id
+				}
+			}
+		)
 		const deleted = await this.prisma.friend.deleteMany(
 			{
 				where :
@@ -66,27 +157,9 @@ export class UsersService {
 				}
 			}
 		)
-		// const deleted = await this.prisma.user.update(
-		// 	{	
-		// 		where:
-		// 		{
-		// 			user_id: me,
-		// 		},
-		// 			data : {
-		// 				friends :
-		// 				{
-		// 					disconnect : [ { id: Number(DeletedUser) } ],
-		// 				},
-		// 			},
-		// 			select:
-		// 			{
-		// 				friends: true,
-		// 			}
-		// 	}
-		// )
 		if (deleted.count == 0)
 			throw "NOT FOUND"
-		console.log(deleted)
+
 		return deleted;
 	}
 
@@ -99,7 +172,6 @@ export class UsersService {
 				user: { connect: { user_id: Number(user) } }
 		 }
 		 })
-		//  console.log("Waaaaa3 ",update)
 		 return update;
 		}
 	async ChangeMemberStatus(user, rool, roomId)
@@ -114,21 +186,47 @@ export class UsersService {
 			{ prev: (rool) 
 		 }
 		 })
-		console.log("Waaaaa3 ",update)
 		 return update;
+		}
+
+	async UpdateRooom(room_id, RoomInfoDto: RoomInfoDto)
+	{
+		const saltRounds = 10;
+		var hashed_password  = null
+		// console.log("room password ",RoomInfoDto.room_password);
+		
+		if (RoomInfoDto.room_password)
+		{
+			hashed_password = bcrypt.hashSync(RoomInfoDto.room_password, saltRounds);
+		}
+		const room_init = await this.prisma.room_info.update(
+			{
+				where :
+				{
+					room_id : Number(room_id)
+				},
+				data: {
+					room_name: RoomInfoDto.room_name,
+					room_type: RoomInfoDto.room_type,
+					password: hashed_password,
+					room_avatar: RoomInfoDto.room_avatar,
+				}
+			}
+			)	
+			return room_init;
 		}
 
 	async CreateRooom(RoomInfoDto: RoomInfoDto)
 	{
 		const saltRounds = 10;
 		var hashed_password  = null
-		console.log("room password ",RoomInfoDto.room_password);
+		// console.log("room password ",RoomInfoDto.room_password);
 		
 		if (RoomInfoDto.room_password)
 		{
 			hashed_password = bcrypt.hashSync(RoomInfoDto.room_password, saltRounds);
 		}
-		console.log("Hashed paassiwordi =>",hashed_password);
+		// console.log("Hashed paassiwordi =>",hashed_password);
 		
 		// console.log(status)
 		const room_init = await this.prisma.room_info.create(
@@ -143,7 +241,7 @@ export class UsersService {
 			)	
 			return room_init;
 		}
-		check_password(room_password, hash) : boolean
+	check_password(room_password, hash) : boolean
 		{
 			return  bcrypt.compareSync(room_password, hash);	
 		}
@@ -168,6 +266,7 @@ export class UsersService {
 				{
 					where :
 					{
+					
 						room_id : Number(id),
 					},
 				})
@@ -175,7 +274,32 @@ export class UsersService {
 					throw "NOT FOUND"
 				return room		
 	}
+	async getAllRooms()
+	{
+		const all_rooms = await this.prisma.room_info.findMany (
+			{
+				where:
+				{
+					OR:
+					[
+						{
+							room_type: {
+								contains : "public",
+							},
+						},
+						{
+							room_type :
+							{
+								contains : "protected",
+							},
+						},
+					]
+				}
+			}
+		)
 
+		return all_rooms
+	}
 	async DeleteRoombyId (id: Number)
 	{
 		// before deletion check if the user has the right to delete
@@ -249,11 +373,22 @@ export class UsersService {
 			where :
 			{
 				userId : login,
+					// friendId : login
 			},
 		})
-		if (!frineds)
-			throw 'NOT FOUND'
-		return frineds
+		const other_frineds = await this.prisma.friend.findMany ( {
+			where :
+			{
+				friendId : login,
+					// friendId : login
+			},
+		})
+		const user_id = frineds.map((friend) => friend.friendId);
+		const other_user_id = other_frineds.map((friend) => friend.userId);
+		
+		const frineds_id = [...user_id, ...other_user_id];
+
+		return frineds_id
 	}
 
 	async getUser(login : number)
