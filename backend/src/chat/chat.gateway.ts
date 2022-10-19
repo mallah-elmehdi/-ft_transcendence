@@ -12,19 +12,6 @@ import { Socket, Server } from 'socket.io';
 
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
 
-<<<<<<< HEAD
-@WebSocketGateway(3003, {
-  cors: {
-    origin: '*',
-    credentials: true,
-  },
-  namespace: 'dm',
-})
-export class ChatGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
-{
-  private logger: Logger = new Logger('ChatGateway BRRRR');
-=======
 @WebSocketGateway(3002, {cors: {
 	origin: '*',
 	credentials: true
@@ -33,7 +20,6 @@ export class ChatGateway
 export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect { 
  
 	private logger: Logger = new Logger('ChatGateway BRRRR');
->>>>>>> c82febc1e64c081d0f809f864148fe128d267b36
 
   @WebSocketServer()
   server: Server;
@@ -46,19 +32,6 @@ export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatew
     this.logger.log(`Client connected: ${client.id}`);
   }
 
-<<<<<<< HEAD
-  handleDisconnect(client: any) {
-    this.logger.log(`Client disconnected: ${client.id}`);
-  }
-
-  @SubscribeMessage('msgToServer') // Equivalent to socket.on('msgToServer') listening to any 'msgToServer' event
-  handleMessage(client: Socket, payload: string) {
-    console.log('You am the palof', payload);
-
-    //console.log(`Message from ${client.id}: ${payloadJson.name} or ${payload}`);
-    //client.emit('msgToClient', payload);
-  }
-=======
 	handleDisconnect(client: any) {
 		this.logger.log(`Client disconnected: ${client.id}`);
 	}
@@ -79,7 +52,6 @@ export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatew
 		//console.log(`Message from ${client.id}: ${payloadJson.name} or ${payload}`);
 		//client.emit('msgToClient', payload);
 	}
->>>>>>> c82febc1e64c081d0f809f864148fe128d267b36
 }
 
 //!https://wanago.io/2021/01/25/api-nestjs-chat-websockets/

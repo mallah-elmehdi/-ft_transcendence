@@ -27,7 +27,10 @@ let ChatGateway = class ChatGateway {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     handleMessage(client, payload) {
-        console.log('You am the palof', payload);
+        console.log("You am the palof", payload);
+        const roomId = payload.roomId;
+        client.join(roomId);
+        this.server.to(roomId).emit(payload.message);
     }
 };
 __decorate([
@@ -37,16 +40,14 @@ __decorate([
 __decorate([
     (0, websockets_1.SubscribeMessage)('msgToServer'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
     __metadata("design:returntype", void 0)
 ], ChatGateway.prototype, "handleMessage", null);
 ChatGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(3003, {
-        cors: {
+    (0, websockets_1.WebSocketGateway)(3002, { cors: {
             origin: '*',
-            credentials: true,
-        },
-        namespace: 'dm',
+            credentials: true
+        }, namespace: 'dm'
     })
 ], ChatGateway);
 exports.ChatGateway = ChatGateway;
