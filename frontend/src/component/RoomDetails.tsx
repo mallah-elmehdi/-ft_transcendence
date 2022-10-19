@@ -5,6 +5,7 @@ import RoomSettings from "./RoomSettings";
 import { ChatContext } from "../State/ChatProvider";
 import axios from "axios";
 import { MEMBERS } from "../constants";
+import { GlobalContext } from "../State/Provider";
 
 function RoomDetails() {
   const { dispatch, state } = useContext<any>(ChatContext);
@@ -16,7 +17,9 @@ function RoomDetails() {
   const { selectedChat } = useContext<any>(ChatContext);
   let searchIndex = newGroups.findIndex((id: any) => selectedChat.id === id.id);
   const [settings, setSettings] = useState<any>(false);
-  const [signedUser, setSigned] = useState<any>(1); // FIXME: add current user id here as default
+// FIXME: add current user id here as default
+const { data } = React.useContext<any>(GlobalContext);
+const { userInfo } = data;
 
   const toggleNewMembers = () => {
     setNewMembers(!newMembersDash);
@@ -35,9 +38,9 @@ function RoomDetails() {
   useEffect(() => {
     axios.get(MEMBERS + selectedChat.id).then((response: any) => {
       for (var j = 0; j < response.data.length; j++) {
-        if (response.data[j].userId == signedUser && response.data[j].prev == "owner")
+        if (response.data[j].userId == userInfo.user_id && response.data[j].prev == "owner")
           setIsOwner(true)
-        if (response.data[j].userId == signedUser && response.data[j].prev == "admin")
+        if (response.data[j].userId == userInfo.user_id && response.data[j].prev == "admin")
           setIsAdmin(true)
       }
 

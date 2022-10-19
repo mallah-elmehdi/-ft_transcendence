@@ -31,17 +31,19 @@ import { MdDelete } from "react-icons/md";
 import { ChatContext } from "../State/ChatProvider";
 import axios from "axios";
 import { BLOCK_MEMBER, DELETE_ROOM } from "../constants";
+import { GlobalContext } from "../State/Provider";
 
 const GroupMenu = () => {
   const value = useColorModeValue("white", "lightBlack");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { selectedChat, setSelectedChat } = useContext<any>(ChatContext);
   const { dispatch, state } = useContext<any>(ChatContext);
-  const [signedUser, setSignedUser] = useState<any>(1)
+  const { data } = React.useContext<any>(GlobalContext);
+  const { userInfo } = data;
 
   const leaveChannelHandler = () => {
     axios
-      .post(BLOCK_MEMBER + signedUser, {
+      .post(BLOCK_MEMBER + userInfo.user_id, {
         room_id: selectedChat.id
       })
       .then((res) => {

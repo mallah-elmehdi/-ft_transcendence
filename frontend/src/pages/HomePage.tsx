@@ -1,7 +1,5 @@
 import {
-    Badge,
-    Box,
-    Button,
+    Badge, Button,
     Flex,
     Heading,
     List,
@@ -18,7 +16,7 @@ import {
     SliderTrack,
     Stack,
     Text,
-    useDisclosure,
+    useDisclosure
 } from '@chakra-ui/react';
 import React from 'react';
 

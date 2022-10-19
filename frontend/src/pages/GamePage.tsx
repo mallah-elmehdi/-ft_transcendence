@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { pagesContent, SOCKET } from '../constants';
 import { usePageTitle } from '../hooks/usePageTitle';
+import useWindowWidth from '../hooks/useWidth';
 import { newNotification } from '../State/Action';
 import { getUserInfo } from '../State/Api';
 // import GameContextProvider from '../State/GameProvider';
@@ -36,6 +37,7 @@ export default function GamePage() {
         login: '?',
         score: 0,
     });
+    const width = useWindowWidth();
     // canvas
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
     const containerRef = React.useRef<HTMLDivElement>(null);
@@ -113,6 +115,7 @@ export default function GamePage() {
             const initGame = () => {
                 socket.emit('init', {
                     login: userInfo?.user_login,
+                    user_id: userInfo?.user_id,
                     username: userInfo?.user_name,
                     avatar: userInfo?.user_avatar,
                     canvas: getCanvasSize(),
@@ -131,8 +134,8 @@ export default function GamePage() {
                 } else if (data.players[1].login === userInfo?.user_login) {
                     if (data.players[1].score > data.players[0].score)
                         dispatch(newNotification({ type: 'Success', message: '🎉🎉 Congratulation !! you have won the game 🎉🎉' }));
-                        else dispatch(newNotification({ type: 'Info', message: '🤷🤷 You have lost the game... Try again 💪💪' }));
-                    }
+                    else dispatch(newNotification({ type: 'Info', message: '🤷🤷 You have lost the game... Try again 💪💪' }));
+                }
                 navigate(pagesContent.home.url);
             };
             // ------------------------------------------ game
@@ -191,11 +194,18 @@ export default function GamePage() {
     }, [userInfo, speedMode]);
 
     React.useEffect(() => {
+        //
         const containerTag = containerRef?.current;
         if (containerTag) {
-            setCanvasWidth(containerTag.offsetWidth);
+            if (containerTag.offsetWidth > 800) {
+                setCanvasWidth(800);
+            } else {
+                setCanvasWidth(containerTag.offsetWidth);
+            }
         }
-    }, [containerRef]);
+        //
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [containerRef, width]);
     return (
         <>
             <VStack alignContent="center" justifyContent="center">
@@ -225,7 +235,7 @@ export default function GamePage() {
                             <Spinner></Spinner>
                         </Flex>
                     )}
-                    <canvas width={canvasNewWidth !== 0 ? canvasNewWidth : canvasWidth} height="400" ref={canvasRef}></canvas>
+                    <canvas width={canvasNewWidth === 0 ? canvasWidth : canvasNewWidth} height="400" ref={canvasRef}></canvas>
                 </Box>
                 {play && (
                     <Badge mt={5} borderRadius="full" fontSize="3xl" px={3}>

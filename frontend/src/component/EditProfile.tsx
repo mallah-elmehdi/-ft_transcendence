@@ -50,8 +50,7 @@ const EditProfile = (props: Props) => {
 
     // update profile
     const changeAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            console.log();
+        if (e.target.files && e.target.files[0]) {
             if (e.target.files[0].type.split('/')[0] !== 'image') {
                 dispatch(newNotification({ type: 'Error', message: 'Wrong avatar image type' }));
             } else if (e.target.files[0].size > 2000000) {
@@ -75,14 +74,14 @@ const EditProfile = (props: Props) => {
         setFacebook(props.facebook);
         setDiscord(props.discord);
         setInstagram(props.instagram);
-        if (props.updateProfile) onOpen();
+        if (!props.updateProfile) onOpen();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props]);
 
     // submitProfile
     const submitProfile = () => {
         if (username.length < 2 || username.length > 8 || facebook.length > 32 || discord.length > 32 || instagram.length > 32) {
-            dispatch(newNotification({ type: 'Error', message: 'Input too long' }));
+            dispatch(newNotification({ type: 'Error', message: 'Input too long / too short' }));
         } else {
             updatePtofile(dispatch, {
                 avatar: props.avatar === avatar ? null : newAvatar,

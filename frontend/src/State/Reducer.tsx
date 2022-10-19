@@ -34,6 +34,12 @@ export const GlobalReducer = (state: any, action: any) => {
         case 'LIVE_MATCH':
             newState.liveMatch = payload;
             break;
+        case 'UPDATED_PROFILE':
+            newState.userInfo = { ...newState, updated: true };
+            break;
+        case 'UPDATE_MATCH_HISTORY':
+            newState.matchHistory = payload;
+            break;
 
         default:
             break;

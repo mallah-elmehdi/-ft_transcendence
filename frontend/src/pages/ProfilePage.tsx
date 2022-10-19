@@ -33,9 +33,8 @@ import { usePageTitle } from '../hooks/usePageTitle';
 import { pagesContent } from '../constants';
 
 // Context
-// import { useRedirect } from '../hooks/useRedirect';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getFriendInfo, getUserInfo, signOut, updatedProfile } from '../State/Api';
+import { getFriendInfo, getMatchHistory, getUserInfo, signOut, updatedProfile } from '../State/Api';
 import { GlobalContext } from '../State/Provider';
 
 const ProfilePage = () => {
@@ -58,11 +57,11 @@ const ProfilePage = () => {
     // which user
     const params = useParams();
     const [me, setMe] = React.useState(false);
-    const [updateProfile, setUpdateProfile] = React.useState(false);
     // context
     const { data, dispatch } = React.useContext<any>(GlobalContext);
     // ex
-    const { userInfo } = data;
+    const { userInfo, matchHistory } = data;
+    const [updated, setUpdated] = React.useState(true);
 
     // useEffect
     React.useEffect(() => {
@@ -70,9 +69,12 @@ const ProfilePage = () => {
             getUserInfo(dispatch)
                 .then((info: any) => {
                     setMe(params?.user_id === 'me');
+                    setUpdated(info?.updated);
                     if (!info?.updated) {
-                        setUpdateProfile(true);
-                        updatedProfile(dispatch)
+                        setUpdated(false);
+                        updatedProfile(dispatch).then(() => {
+                            setUpdated(true);
+                        });
                     }
                 })
                 .catch(() => {
@@ -90,6 +92,12 @@ const ProfilePage = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params?.user_id]);
 
+    React.useEffect(() => {
+        if (userInfo) getMatchHistory(dispatch);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userInfo]);
+
     return (
         <>
             <Grid h="100%" templateColumns="repeat(12, 1fr)" gap={6}>
@@ -104,7 +112,7 @@ const ProfilePage = () => {
                                     facebook={userInfo?.facebook}
                                     discord={userInfo?.discord}
                                     instagram={userInfo?.instagram}
-                                    updateProfile={updateProfile}
+                                    updateProfile={updated}
                                 />
                             )}
                             <Stack spacing={5} alignItems="center" h="100%">
@@ -215,7 +223,7 @@ const ProfilePage = () => {
                                 <Heading fontSize="2xl">Matches History</Heading>
                                 <Line maxW="7rem" />
                                 <Stack maxH="25rem" overflow="auto" w="100%" alignItems="center">
-                                    <MatchesHistory history={[]} login={userInfo?.user_login} avatar={userInfo?.user_avatar} />
+                                    <MatchesHistory history={matchHistory} />
                                 </Stack>
                             </Stack>
                         </Stack>

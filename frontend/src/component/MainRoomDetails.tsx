@@ -24,6 +24,7 @@ import { ArrowBackIcon } from "@chakra-ui/icons";
 // import useMembers from "../api/useMembers";
 import axios from "axios";
 import { MEMBERS, USER_URL } from "../constants";
+import { GlobalContext } from "../State/Provider";
 
 type Props = {
   toggleNewMembers: () => void;
@@ -40,14 +41,16 @@ export default function MainRoomDetails({
   const { dispatch, state } = useContext<any>(ChatContext);
   const { newMembers, newGroups, newFriends } = state;
   const { toggleDetails } = useContext<any>(ChatContext);
-  const { data, friends, groups, roomMembers, setMembers } =
-    useContext<any>(ChatContext);
+//   const { data, friends, groups, roomMembers, setMembers } =
+//     useContext<any>(ChatContext);
   const { selectedChat } = useContext<any>(ChatContext);
   let searchIndex = newGroups.findIndex((id: any) => selectedChat.id === id.id);
   const [member, setMember] = useState<any>([]);
   const { isMuteOpen, onMuteOpen, onMuteClose } = useMute();
   const { isBlockOpen, onBlockOpen, onBlockClose } = useBlock();
-  const [signedUser, setSigned] = useState<any>(1); // FIXME: add current user id here as default
+ // FIXME: add current user id here as default
+ const { data } = React.useContext<any>(GlobalContext);
+ const { userInfo } = data;
 
   function isFriend(id: any) {
     return newFriends.findIndex((f: any) => f.id == id) == -1 ? false : true;
@@ -85,7 +88,7 @@ export default function MainRoomDetails({
             avatar: res.data.user_avatar,
             role: mems[j],
           };
-          if (res.data.user_id != signedUser) {
+          if (res.data.user_id != userInfo.user_id) {
             dispatch({
               type: "ADD_MEMBER",
               data: member,

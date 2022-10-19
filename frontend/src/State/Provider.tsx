@@ -14,7 +14,7 @@ const GlobalContextProvider = ({ children }: Props) => {
         loader: false,
         notification: null,
         userInfo: null,
-        matchHistory: null,
+        matchHistory: [],
         liveMatch: [],
     };
 

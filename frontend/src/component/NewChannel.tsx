@@ -40,6 +40,8 @@ function NewChannel() {
             type: res.data.room_type,
             password: res.data.room_password,
           };
+          console.log("group", group);
+          
           dispatch({
             type: "ADD_GROUP",
             data: group,

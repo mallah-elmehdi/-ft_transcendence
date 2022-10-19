@@ -33,3 +33,12 @@ export const updateLiveMatch = (data: any) => ({
     type: 'LIVE_MATCH',
     payload: data,
 });
+export const setUpdatedProfile = () => ({
+    type: 'UPDATED_PROFILE',
+});
+
+export const setMatchHistory = (data:any) => ({
+    type: 'UPDATE_MATCH_HISTORY',
+    payload: data,
+});
+

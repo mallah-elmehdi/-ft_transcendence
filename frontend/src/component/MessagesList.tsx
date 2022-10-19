@@ -4,6 +4,7 @@ import { ChatContext } from "../State/ChatProvider";
 import { Box } from "@chakra-ui/react";
 import axios from "axios";
 import { MESSAGES } from "../constants";
+import { GlobalContext } from "../State/Provider";
 
 const AlwaysScrollToBottom = () => {
   const elementRef = useRef();
@@ -17,7 +18,8 @@ function MessagesList() {
   const { selectedChat } = useContext<any>(ChatContext);
   const { dispatch, state } = useContext<any>(ChatContext);
   const { newFriends, newGroups, roomDm, messages } = state;
-  const signedUSer = 1;
+  const { data } = React.useContext<any>(GlobalContext);
+  const { userInfo } = data;
 
   useEffect(() => {
     axios
@@ -39,7 +41,7 @@ function MessagesList() {
       {messages.map((item: any, id: any) => (
         <Message
           key={id.toString()}
-          isSender={item.userId == signedUSer}
+          isSender={item.userId == userInfo.user_id}
           content={item.message}
           time={"12:00"}
         />
