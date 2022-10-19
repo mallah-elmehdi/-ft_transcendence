@@ -2,19 +2,20 @@ import * as React from 'react';
 import { HStack, Avatar, Text, Button, Grid, GridItem } from '@chakra-ui/react';
 import { useMediaQuery, useTheme } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
+import { pagesContent } from '../constants';
 
 // type
 type Props = {
     match: {
-        opponenOneName: string;
-        opponenOnePhoto: string;
-        opponenOneUsername: string;
-
-        opponenTwoName: string;
-        opponenTwoPhoto: string;
-        opponenTwoUsername: string;
-
-        link: string;
+        room_name: string;
+        p0: {
+            username: string;
+            avatar: string;
+        };
+        p1: {
+            username: string;
+            avatar: string;
+        };
     };
 };
 
@@ -26,7 +27,7 @@ export const LiveMatch = ({ match }: Props) => {
         <Grid h="100%" templateColumns="repeat(9, 1fr)" gap={isSmallScreen ? 5 : 3}>
             <GridItem colSpan={2} h="fit-content" my="auto">
                 <HStack justifyContent="flex-end" alignItems="center">
-                    <Link to={match.link}>
+                    <Link to={`${pagesContent.watch.url}/${match.room_name}`}>
                         <Button
                             variant="solid"
                             bg="red"
@@ -51,8 +52,8 @@ export const LiveMatch = ({ match }: Props) => {
             </GridItem>
             <GridItem colSpan={3}>
                 <HStack justifyContent="flex-end">
-                    {isSmallScreen && <Text fontSize="xl">{match.opponenOneUsername}</Text>}
-                    <Avatar name={match.opponenOneName} src={match.opponenOnePhoto} size="md" />
+                    {isSmallScreen && <Text fontSize="xl">{match.p0.username}</Text>}
+                    <Avatar name={match.p0.username} src={match.p0.avatar} size="md" />
                 </HStack>
             </GridItem>
             <GridItem colSpan={1} h="fit-content" my="auto">
@@ -62,8 +63,8 @@ export const LiveMatch = ({ match }: Props) => {
             </GridItem>
             <GridItem colSpan={3}>
                 <HStack justifyContent="flex-start">
-                    <Avatar name={match.opponenTwoName} src={match.opponenTwoPhoto} size="md" />
-                    {isSmallScreen && <Text fontSize="xl">{match.opponenTwoUsername}</Text>}
+                    <Avatar name={match.p1.username} src={match.p1.avatar} size="md" />
+                    {isSmallScreen && <Text fontSize="xl">{match.p1.username}</Text>}
                 </HStack>
             </GridItem>
         </Grid>

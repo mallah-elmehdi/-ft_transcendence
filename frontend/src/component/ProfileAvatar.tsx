@@ -8,7 +8,7 @@ type Props = {
     isOnline: boolean;
 };
 
-export const ProfileAvatar = ({ name, avatar, isOnline }: Props) => {
+export const ProfileAvatar = ({ name, avatar, isOnline }: Props) => {    
     return (
         <Stack alignItems="center">
             <Avatar name={name} src={avatar} size="xl">

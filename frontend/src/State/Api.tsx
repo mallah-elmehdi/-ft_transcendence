@@ -8,7 +8,7 @@ const URLS = {
     LOGIN: API + '/user/me',
     USER: API + '/user',
     SIGNOUT: API + '/42/signout',
-    UPDATE_PROFILE: API + '/user/update',
+    UPDATE_PROFILE: API + '/user/update/profile',
 };
 
 export const getUserInfo = async (dispatch: any) => {
@@ -16,6 +16,7 @@ export const getUserInfo = async (dispatch: any) => {
     try {
         const response = await axios.get(URLS.LOGIN);
         dispatch(storeUserInfo(response.data));
+        return response.data;
     } catch (error: any) {
         throw error.message;
     } finally {
@@ -51,7 +52,6 @@ export const signOut = async (dispatch: any) => {
 
 export const updatePtofile = async (
     dispatch: any,
-    login: string,
     data: {
         avatar: File | null | undefined;
         user_name: string;
@@ -63,7 +63,7 @@ export const updatePtofile = async (
     dispatch(inProgress());
     try {
         const response = await axios.post(
-            `${URLS.UPDATE_PROFILE}/${login}`,
+            URLS.UPDATE_PROFILE,
             data.avatar
                 ? data
                 : {

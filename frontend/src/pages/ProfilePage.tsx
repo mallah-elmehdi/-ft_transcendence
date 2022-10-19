@@ -6,6 +6,7 @@ import {
     HStack,
     IconButton,
     Link as ChakraLink,
+    Spacer,
     Stack,
     useBreakpointValue,
     useMediaQuery,
@@ -57,6 +58,7 @@ const ProfilePage = () => {
     // which user
     const params = useParams();
     const [me, setMe] = React.useState(false);
+    const [updateProfile, setUpdateProfile] = React.useState(false);
     // context
     const { data, dispatch } = React.useContext<any>(GlobalContext);
     // ex
@@ -66,8 +68,11 @@ const ProfilePage = () => {
     React.useEffect(() => {
         if (params?.user_id === 'me') {
             getUserInfo(dispatch)
-                .then(() => {
+                .then((info: any) => {
                     setMe(params?.user_id === 'me');
+                    if (!info?.updated) {
+                        setUpdateProfile(true);
+                    }
                 })
                 .catch(() => {
                     navigate(pagesContent.login.url);
@@ -78,7 +83,7 @@ const ProfilePage = () => {
                     setMe(params?.user_id === 'me');
                 })
                 .catch(() => {
-                    navigate(pagesContent.profile.url);
+                    navigate(pagesContent.home.url);
                 });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -98,9 +103,10 @@ const ProfilePage = () => {
                                     facebook={userInfo?.facebook}
                                     discord={userInfo?.discord}
                                     instagram={userInfo?.instagram}
+                                    updateProfile={updateProfile}
                                 />
                             )}
-                            <Stack spacing={5} alignItems="center">
+                            <Stack spacing={5} alignItems="center" h="100%">
                                 <ProfileAvatar name={userInfo?.user_name} avatar={userInfo?.user_avatar} isOnline={userInfo?.online} />
 
                                 <Line maxW="10rem" />
@@ -153,14 +159,18 @@ const ProfilePage = () => {
                                         2-Factor Auth
                                     </Button>
                                 )}
+
                                 <Line maxW="10rem" />
+                                <Spacer />
                                 <StatusProfile
                                     rate={
                                         userInfo?.games_played === 0 ? 0 : Math.round((userInfo?.games_won / userInfo?.games_played) * 100)
                                     }
                                 />
+
                                 {me && (
                                     <>
+                                        <Spacer />
                                         <Line maxW="10rem" />
                                         <Button
                                             bg="red"

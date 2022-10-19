@@ -1,7 +1,7 @@
-import { useMediaQuery, VStack, Grid, GridItem, HStack, Avatar, useTheme, Text, Box, Flex, Spinner, Badge, Icon } from '@chakra-ui/react';
+import { Avatar, Badge, Box, Grid, GridItem, HStack, Icon, Text, useMediaQuery, useTheme, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { IoEye } from 'react-icons/io5';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { pagesContent, SOCKET } from '../constants';
 import { usePageTitle } from '../hooks/usePageTitle';
@@ -10,8 +10,8 @@ import { getUserInfo } from '../State/Api';
 // import GameContextProvider from '../State/GameProvider';
 import { GlobalContext } from '../State/Provider';
 
-export default function GamePage() {
-    usePageTitle(pagesContent.play.title);
+export default function LiveMatchPage() {
+    usePageTitle(pagesContent.watch.title);
     // general
     const theme = useTheme();
     const [isSmallScreen] = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
@@ -19,11 +19,6 @@ export default function GamePage() {
     const params = useParams();
     const navigate = useNavigate();
     // states
-    const [speedMode, setSpeedMode] = React.useState(0);
-    const [watcher, setWatcher] = React.useState(0);
-    const [canvasWidth, setCanvasWidth] = React.useState(800);
-    const [canvasNewWidth, setNewCanvasWidth] = React.useState(0);
-    const [play, setPlay] = React.useState(false);
     const [user, setUser] = React.useState({
         username: '',
         avatar: '',
@@ -31,14 +26,15 @@ export default function GamePage() {
         score: 0,
     });
     const [opponent, setOpponent] = React.useState({
-        username: '?',
-        avatar: '?',
-        login: '?',
+        username: '',
+        avatar: '',
+        login: '',
         score: 0,
     });
+    const [canvasNewWidth, setNewCanvasWidth] = React.useState(0);
+    const [watcher, setWatcher] = React.useState(0);
     // canvas
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
-    const containerRef = React.useRef<HTMLDivElement>(null);
     // context
     const { data, dispatch } = React.useContext<any>(GlobalContext);
     const { userInfo } = data;
@@ -51,22 +47,12 @@ export default function GamePage() {
         const canvasTag = canvasRef?.current;
         const canvasContext = canvasRef?.current?.getContext('2d');
 
-        // ge the speeed
-        const getTheSpeedMode = () => {
-            const mode = params.speed_mode?.toLowerCase();
-            if (mode === 'easy') setSpeedMode(10);
-            else if (mode === 'normal') setSpeedMode(15);
-            else if (mode === 'hard') setSpeedMode(20);
-            else navigate(pagesContent.home.url);
-        };
-
-        getTheSpeedMode();
         // check for data
         if (!userInfo)
             getUserInfo(dispatch).catch((error) => {
                 navigate(pagesContent.login.url);
             });
-        else if (speedMode) {
+        else if (params?.room_name) {
             setUser({
                 login: userInfo?.user_login,
                 username: userInfo?.user_name,
@@ -110,29 +96,12 @@ export default function GamePage() {
                 canvasContext?.fill();
             };
             // ------------------------------------------ socket
-            const initGame = () => {
-                socket.emit('init', {
-                    login: userInfo?.user_login,
-                    username: userInfo?.user_name,
-                    avatar: userInfo?.user_avatar,
-                    canvas: getCanvasSize(),
-                    speedMode: speedMode,
-                });
-            };
             const opponentDisconnect = () => {
-                dispatch(newNotification({ type: 'Info', message: 'Player has left the game' }));
+                dispatch(newNotification({ type: 'Info', message: 'Match has finished' }));
                 navigate(pagesContent.home.url);
             };
-            const matchDone = (data: any) => {
-                if (data.players[0].login === userInfo?.user_login) {
-                    if (data.players[0].score > data.players[1].score)
-                        dispatch(newNotification({ type: 'Success', message: '🎉🎉 Congratulation !! you have won the game 🎉🎉' }));
-                    else dispatch(newNotification({ type: 'Info', message: '🤷🤷 You have lost the game... Try again 💪💪' }));
-                } else if (data.players[1].login === userInfo?.user_login) {
-                    if (data.players[1].score > data.players[0].score)
-                        dispatch(newNotification({ type: 'Success', message: '🎉🎉 Congratulation !! you have won the game 🎉🎉' }));
-                        else dispatch(newNotification({ type: 'Info', message: '🤷🤷 You have lost the game... Try again 💪💪' }));
-                    }
+            const notFound = () => {
+                dispatch(newNotification({ type: 'Error', message: 'Room not found' }));
                 navigate(pagesContent.home.url);
             };
             // ------------------------------------------ game
@@ -144,9 +113,8 @@ export default function GamePage() {
                 drawPlayer(opponent.x, opponent.y, opponent.w, opponent.h);
             };
             const update = (data: any) => {
-                render(data.ball, data.players[0].movement, data.players[1].movement);
                 setWatcher(data.watcher.length);
-                setPlay(true);
+                render(data.ball, data.players[0].movement, data.players[1].movement);
                 setOpponent({
                     username: data.players[1].username,
                     avatar: data.players[1].avatar,
@@ -161,41 +129,25 @@ export default function GamePage() {
                 });
                 setNewCanvasWidth(data.canvas.w);
             };
-            const moveKey = (event: KeyboardEvent) => {
-                if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-                    socket.emit('moveKey', {
-                        key: event.key,
-                        canvas: getCanvasSize(),
-                    });
-                }
-            };
+            socket.emit('watcher', {
+                room_name: params?.room_name,
+            });
             // ------------------------------------------ game loop
-            // emit game
-            initGame();
             // on game
             socket.on('opponentDisconnect', opponentDisconnect);
-            socket.on('matchDone', matchDone);
             socket.on('onGame', update);
-            // move
-            document.addEventListener('keydown', moveKey);
+            socket.on('roomNotfound', notFound);
 
             return () => {
                 socket.disconnect();
                 socket.off('opponentDisconnect', opponentDisconnect);
-                socket.off('onGame', update);
-                socket.off('matchDone', matchDone);
-                document.removeEventListener('keydown', moveKey);
+                socket.off('onWatch', update);
+                socket.off('roomNotfound', notFound);
             };
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userInfo, speedMode]);
+    }, [userInfo, params?.room_name]);
 
-    React.useEffect(() => {
-        const containerTag = containerRef?.current;
-        if (containerTag) {
-            setCanvasWidth(containerTag.offsetWidth);
-        }
-    }, [containerRef]);
     return (
         <>
             <VStack alignContent="center" justifyContent="center">
@@ -219,22 +171,15 @@ export default function GamePage() {
                         </HStack>
                     </GridItem>
                 </Grid>
-                <Box w="100%" ref={containerRef} flexDirection="column" display="flex" alignItems="center" justifyContent="center">
-                    {!play && (
-                        <Flex w="100%" alignItems="center" h="10rem" justifyContent="center">
-                            <Spinner></Spinner>
-                        </Flex>
-                    )}
-                    <canvas width={canvasNewWidth !== 0 ? canvasNewWidth : canvasWidth} height="400" ref={canvasRef}></canvas>
+                <Box w="100%" flexDirection="column" display="flex" alignItems="center" justifyContent="center">
+                    <canvas width={canvasNewWidth} height="400" ref={canvasRef}></canvas>
                 </Box>
-                {play && (
-                    <Badge mt={5} borderRadius="full" fontSize="3xl" px={3}>
-                        <HStack alignItems="center" spacing={3}>
-                            <Icon as={IoEye} />
-                            <Text>{watcher}</Text>
-                        </HStack>
-                    </Badge>
-                )}
+                <Badge mt={5} borderRadius="full" fontSize="3xl" px={3}>
+                    <HStack alignItems="center" spacing={3}>
+                        <Icon as={IoEye} />
+                        <Text>{watcher}</Text>
+                    </HStack>
+                </Badge>
             </VStack>
         </>
     );

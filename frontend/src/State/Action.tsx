@@ -28,3 +28,8 @@ export const newNotification = (data: any) => ({
     type: 'SET_NOTIFICATION',
     payload: data,
 });
+
+export const updateLiveMatch = (data: any) => ({
+    type: 'LIVE_MATCH',
+    payload: data,
+});

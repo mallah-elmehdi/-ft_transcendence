@@ -1,20 +1,25 @@
-import React from 'react';
 import { Box, Center, ChakraProvider } from '@chakra-ui/react';
+import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Navbar from './component/Navbar';
 import ChatPage from './pages/ChatPage';
-import HomePage from './pages/HomePage';
-import SignInPage from './pages/SignInPage';
 import GamePage from './pages/GamePage';
-import theme from './style/theme';
+import HomePage from './pages/HomePage';
 import PageNotFound from './pages/PageNotFound';
 import ProfilePage from './pages/ProfilePage';
+import SignInPage from './pages/SignInPage';
+import theme from './style/theme';
 
 // CONSTANTS
-import { pagesContent } from './constants';
-import { GlobalContext } from './State/Provider';
-import { Loading } from './component/Loading';
 import { AlertCompo } from './component/AlertCompo';
+<<<<<<< HEAD
+import { Loading } from './component/Loading';
+import { pagesContent } from './constants';
+import LiveMatchPage from './pages/LiveMatchPage';
+import { GlobalContext } from './State/Provider';
+=======
+import LiveMatchPage from './pages/LiveMatchPage';
+>>>>>>> 289ba629fa7522342b74493ed787a22ea37b383d
 
 function App() {
     // CONTEXT
@@ -36,6 +41,7 @@ function App() {
                                 <Route path={pagesContent.chat.url} element={<ChatPage />} />
                                 <Route path={pagesContent.profile.url + '/:user_id'} element={<ProfilePage />} />
                                 <Route path={pagesContent.play.url + '/:speed_mode'} element={<GamePage />} />
+                                <Route path={pagesContent.watch.url + '/:room_name'} element={<LiveMatchPage />} />
                             </Route>
                             <Route path={pagesContent.login.url} element={<SignInPage />} />
                             <Route path="*" element={<PageNotFound />} />
