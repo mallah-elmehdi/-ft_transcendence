@@ -45,15 +45,17 @@ let UsersController = class UsersController {
         });
     }
     async ChangeMemberStatus(status, param, req) {
-        const member = await this.UsersService.getMembersbyIdRoom(status.room_id, 1);
-        if (member[0].prev != ('owner' || 'admin'))
-            throw new common_1.HttpException('Password Invalid', common_1.HttpStatus.UNAUTHORIZED);
+        const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+        const user = user_info.user_id;
+        const member = await this.UsersService.getMembersbyIdRoom(status.room_id, user);
         return this.UsersService.ChangeMemberStatus(param, status.room_status, status.room_id).catch((err) => {
             throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
         });
     }
     async GetDmRoomId(friend_id, req) {
-        return await this.UsersService.getDmRoom(1, friend_id).catch(() => {
+        const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+        const user = user_info.user_id;
+        return await this.UsersService.getDmRoom(user, friend_id).catch(() => {
             throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
         });
     }
@@ -111,7 +113,8 @@ let UsersController = class UsersController {
         return ba;
     }
     async UpdateRoom(room_id, RoomInfoDto, file, req) {
-        const user = 1;
+        const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+        const user = user_info.user_id;
         if (file) {
             const cloud = await this.cloudinary.uploadImage(file);
             if (cloud) {
@@ -123,16 +126,20 @@ let UsersController = class UsersController {
         });
         return room_updated;
     }
-    async AddFriend(friend_id) {
-        const user_info = await this.UsersService.getUserbyLogin('aymaatou');
-        const user = 1;
+    async AddFriend(friend_id, req) {
+        const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+        const user = user_info.user_id;
         return await this.UsersService.friendReq(user, friend_id);
     }
-    async GetAllUsers() {
-        return await this.UsersService.getAllUsers(1);
+    async GetAllUsers(req) {
+        const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+        const user = user_info.user_id;
+        return await this.UsersService.getAllUsers(user);
     }
-    async getAllFriends() {
-        return await this.UsersService.getAllFriends(1).catch((err) => {
+    async getAllFriends(req) {
+        const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+        const user = user_info.user_id;
+        return await this.UsersService.getAllFriends(user).catch((err) => {
             throw new common_1.BadRequestException(err);
         });
     }
@@ -305,22 +312,25 @@ __decorate([
     (0, common_1.Post)('add/:id'),
     (0, common_1.HttpCode)(201),
     __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "AddFriend", null);
 __decorate([
     (0, common_1.Get)('list/all'),
     (0, common_1.HttpCode)(200),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "GetAllUsers", null);
 __decorate([
     (0, common_1.Get)('friends'),
     (0, common_1.HttpCode)(200),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getAllFriends", null);
 __decorate([

@@ -21,6 +21,7 @@ let ChatGateway = class ChatGateway {
     }
     afterInit(server) {
         this.logger.log('Init');
+        this.muted = [];
     }
     handleConnection(client, ...args) {
         this.logger.log(`Client connected: ${client.id}`);
@@ -28,15 +29,41 @@ let ChatGateway = class ChatGateway {
     handleDisconnect(client) {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
+    isMuted(client, user_id) {
+        console.log(this.muted, user_id);
+        for (let i = 0; i < this.muted.length; i++) {
+            const item = this.muted[i];
+            if (item.user_id === user_id) {
+                if (Date.now() - item.time < parseInt(item.period) * 1000 * 60) {
+                    client.emit('imMuted', {
+                        time: ((parseInt(item.period) * 1000 * 60 - (Date.now() - item.time)) /
+                            (1000 * 60)).toFixed(2),
+                    });
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     ping(client, payload) {
         console.log('ping(): ', payload);
         client.join(payload.room_id);
     }
     async message(client, payload) {
-        this.io.to(payload.room_id).emit('recieveMessage', payload);
-        console.log("payload ", payload);
-        const check = await this.ChatService.pushMsg(payload);
-        console.log("check :", check);
+        if (!this.isMuted(client, payload.userId)) {
+            this.io.to(payload.room_id).emit('recieveMessage', payload);
+            console.log('payload ', payload);
+            const check = await this.ChatService.pushMsg(payload);
+            console.log('check :', check);
+        }
+    }
+    async mute(client, payload) {
+        console.log('mute:  ', payload);
+        this.muted.push(payload);
+    }
+    async block(client, payload) {
+        console.log('mute:  ', payload);
+        this.io.emit("blocked");
     }
 };
 __decorate([
@@ -55,6 +82,18 @@ __decorate([
     __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "message", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('muteUser'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
+    __metadata("design:returntype", Promise)
+], ChatGateway.prototype, "mute", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('blockUser'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
+    __metadata("design:returntype", Promise)
+], ChatGateway.prototype, "block", null);
 ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(3003, {
         cors: {

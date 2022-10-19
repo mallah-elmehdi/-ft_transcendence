@@ -19,9 +19,9 @@ export declare class UsersController {
     GetMembersbyId(param: Number, req: Request): Promise<import(".prisma/client").Members[]>;
     CreateRoom(RoomInfoDto: RoomInfoDto, file: any, req: Request): Promise<import(".prisma/client").Room_info>;
     UpdateRoom(room_id: any, RoomInfoDto: RoomInfoDto, file: any, req: Request): Promise<import(".prisma/client").Room_info>;
-    AddFriend(friend_id: Number): Promise<import(".prisma/client").Friend>;
-    GetAllUsers(): Promise<import(".prisma/client").User[]>;
-    getAllFriends(): Promise<number[]>;
+    AddFriend(friend_id: Number, req: any): Promise<import(".prisma/client").Friend>;
+    GetAllUsers(req: any): Promise<import(".prisma/client").User[]>;
+    getAllFriends(req: any): Promise<number[]>;
     getMe(req: Request): Promise<import(".prisma/client").User>;
     getMachHistory(req: any): Promise<import(".prisma/client").match_history[]>;
     getUser(login: number): Promise<import(".prisma/client").User>;
