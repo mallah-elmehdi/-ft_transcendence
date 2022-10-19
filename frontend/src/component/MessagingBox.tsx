@@ -11,8 +11,8 @@ import { DM, SOCKET } from "../constants";
 import { io } from "socket.io-client";
 
 function MessagingBox() {
-  const { dispatch, state, } = useContext<any>(ChatContext);
-  const { newFriends, newGroups, roomDm} = state;
+  const { dispatch, state } = useContext<any>(ChatContext);
+  const { newFriends, newGroups, roomDm } = state;
   const { selectedChat, setSelectedChat, toggleOffSelectedChat } =
     useContext<any>(ChatContext);
   const { toggleDetails } = useContext<any>(ChatContext);
@@ -22,31 +22,41 @@ function MessagingBox() {
     searchIndex = newFriends.findIndex((id: any) => selectedChat.id === id.id);
   else
     searchIndex = newGroups.findIndex((id: any) => selectedChat.id === id.id);
-  
-  useEffect(() => {
-    console.log("useEffect")
-  const socket = io(SOCKET + "/dm");
 
+  useEffect(() => {
+    const socket = io(SOCKET + "/dm");
+
+    console.log("roomoDm", roomDm);
     if (selectedChat.chat === "F") {
-      axios.get(DM + selectedChat.id).then((res: any) => {
-        dispatch({
-          type: "ROOM",
-          data: res.data.room_id,
-        });
-        socket.emit('ping', {
-          room_id: res.data.room_id,
+      console.log("FRIEND");
+      axios
+        .get(DM + selectedChat.id)
+        .then((res: any) => {
+          dispatch({
+            type: "ROOM",
+            data: res.data.room_id,
+          });
+          if (roomDm !== "") {
+            socket.emit("ping", {
+              room_id: res.data.room_id,
+            });
+          }
+        })
+        .catch(() => {});
+    } else {
+      console.log("GROUP");
+      socket.emit("ping", {
+        room_id: selectedChat.id,
       });
-      }).catch(()=>{})
     }
 
-    socket.on("recieveMessage", (payload: any)=>{
-      console.log("socket on", payload)
+    socket.on("recieveMessage", (payload: any) => {
+      console.log("socket on", payload);
       dispatch({
         type: "ADD_MESSAGE",
         data: payload,
-      })
-    })
-
+      });
+    });
   }, [roomDm]);
 
   useEffect(() => {

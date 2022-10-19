@@ -8,7 +8,7 @@ import { io } from "socket.io-client";
 const MessageInput = () => {
   const [typingMessage, setTypingMessage] = useState<any>("");
   const msgInputBg = useColorModeValue("white", "rgb(33,33,33)");
-  const { socket } = useContext<any>(ChatContext);
+  // const { socket } = useContext<any>(ChatContext);
   const { selectedChat } = useContext<any>(ChatContext);
   const { dispatch, state } = useContext<any>(ChatContext);
   const { newFriends, newGroups, roomDm } = state;
@@ -16,35 +16,42 @@ const MessageInput = () => {
 
   function sendMessageHandler() {
     if (typingMessage.trim()) {
-      console.log("sendMessage: ", {
-        room_id: roomDm,
+      // let newDate = Date.now();
+      // console.log(newDate);
+      // console.log("sendMessage: ", {
+      //   room_id: selectedChat.chat === "F" ? roomDm : selectedChat.id,
+      //   message: typingMessage.trim(),
+      //   userId: signedUser,
+      //   // currentTime: newDate,
+      // });
+      const payload = {
+        room_id: selectedChat.chat === "F" ? roomDm : selectedChat.id,
         message: typingMessage.trim(),
         userId: signedUser,
-      });
-      
-      socket.emit("message", {
-        room_id: roomDm,
-        message: typingMessage.trim(),
-        userId: signedUser,
-      });
+      }
+
+      console.log("sendMessage: ", payload)
+
+      const socket = io(SOCKET + "/dm");
+      socket.emit("message", payload);
     }
     setTypingMessage("");
   }
 
-  useEffect(() => {
-    const keyDownHandler = (event: any) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        sendMessageHandler();
-      }
-    };
+  // useEffect(() => {
+  //   const keyDownHandler = (event: any) => {
+  //     if (event.key === "Enter") {
+  //       event.preventDefault();
+  //       sendMessageHandler();
+  //     }
+  //   };
 
-    document.addEventListener("keydown", keyDownHandler);
+  //   document.addEventListener("keydown", keyDownHandler);
 
-    return () => {
-      document.removeEventListener("keydown", keyDownHandler);
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener("keydown", keyDownHandler);
+  //   };
+  // }, []);
 
   return (
     <>
