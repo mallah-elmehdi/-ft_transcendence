@@ -13,8 +13,10 @@ exports.ChatGateway = void 0;
 const common_1 = require("@nestjs/common");
 const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
+const chat_service_1 = require("./chat.service");
 let ChatGateway = class ChatGateway {
-    constructor() {
+    constructor(ChatService) {
+        this.ChatService = ChatService;
         this.logger = new common_1.Logger('ChatGateway BRRRR');
     }
     afterInit(server) {
@@ -30,9 +32,11 @@ let ChatGateway = class ChatGateway {
         console.log('ping(): ', payload);
         client.join(payload.room_id);
     }
-    message(client, payload) {
-        console.log(payload);
+    async message(client, payload) {
         this.io.to(payload.room_id).emit('recieveMessage', payload);
+        console.log("payload ", payload);
+        const check = await this.ChatService.pushMsg(payload);
+        console.log("check :", check);
     }
 };
 __decorate([
@@ -49,7 +53,7 @@ __decorate([
     (0, websockets_1.SubscribeMessage)('message'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "message", null);
 ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(3003, {
@@ -58,7 +62,8 @@ ChatGateway = __decorate([
             credentials: true,
         },
         namespace: 'dm',
-    })
+    }),
+    __metadata("design:paramtypes", [chat_service_1.ChatService])
 ], ChatGateway);
 exports.ChatGateway = ChatGateway;
 //# sourceMappingURL=chat.gateway.js.map

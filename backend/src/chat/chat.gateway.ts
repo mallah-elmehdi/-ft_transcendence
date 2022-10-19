@@ -1,3 +1,4 @@
+import { chatController } from './chat.controller';
 import { Logger } from '@nestjs/common';
 import {
   OnGatewayInit,
@@ -10,7 +11,7 @@ import {
 } from '@nestjs/websockets';
 // <<<<<<< HEAD
 import { Socket, Server, Namespace } from 'socket.io';
-
+import { ChatService } from './chat.service'
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
 
 // @WebSocketGateway(3002, {
@@ -31,10 +32,12 @@ import { Socket, Server, Namespace } from 'socket.io';
 export class ChatGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
+    constructor (private ChatService: ChatService) {}
   private logger: Logger = new Logger('ChatGateway BRRRR');
 
   @WebSocketServer()
   io: Namespace;
+    prisma: any;
 
 
   afterInit(server: any) {
@@ -55,10 +58,21 @@ export class ChatGateway
     client.join(payload.room_id);
   }
   @SubscribeMessage('message')
-  message(client: Socket, payload: any) {
-    console.log(payload);
+  async message(client: Socket, payload: any) {
     this.io.to(payload.room_id).emit('recieveMessage', payload);
-	
+    console.log("payload ", payload);
+    
+    const check = await this.ChatService.pushMsg(payload)
+    console.log("check :", check);
+    
+    // const msg = this.prisma.chat.create(
+    //     {
+    //         data: {
+    //             // userId: use,
+    //             // con
+    //         }
+    //     }
+    // )
   }
 }
 

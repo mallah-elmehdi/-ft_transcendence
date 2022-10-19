@@ -11,7 +11,22 @@ export class UsersService {
 
 		constructor(private readonly prisma : PrismaService) {}
 
-
+    async GetMatchHistory(user) {
+        // find a way to get 
+        const match_result = await this.prisma.match_history.findMany({
+			where : {
+				OR:[
+					{
+						userId: Number(user)
+					},
+					{
+						opponent_id: Number(user)
+					}
+				]
+			}
+		})
+        return match_result
+    }
 	// inserting to a table with Foreing keys
 	async CheckUpdatedStatus(user_id)
 	{	

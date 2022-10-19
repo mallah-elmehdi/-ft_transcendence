@@ -26,7 +26,8 @@ let UsersController = class UsersController {
         this.cloudinary = cloudinary;
     }
     async CheckUpdatedStatus(req) {
-        const user = 1;
+        const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+        const user = user_info.user_id;
         return this.UsersService.CheckUpdatedStatus(user).catch((err) => {
             throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
         });
@@ -37,7 +38,8 @@ let UsersController = class UsersController {
         });
     }
     async GetRooms(req) {
-        const user = 1;
+        const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+        const user = user_info.user_id;
         return this.UsersService.getRooms(user).catch((err) => {
             throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
         });
@@ -67,7 +69,8 @@ let UsersController = class UsersController {
         });
     }
     async BlockUserById(param, req) {
-        const user = 1;
+        const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+        const user = user_info.user_id;
         return this.UsersService.BlockUserById(user, param).catch((err) => {
             throw new common_1.HttpException('NOT FOUND', common_1.HttpStatus.NOT_FOUND);
         });
@@ -93,8 +96,8 @@ let UsersController = class UsersController {
         });
     }
     async CreateRoom(RoomInfoDto, file, req) {
-        const user_info = await this.UsersService.getUserbyLogin('aymaatou');
-        const user = 1;
+        const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+        const user = user_info.user_id;
         if (file) {
             const cloud = await this.cloudinary.uploadImage(file);
             if (cloud) {
@@ -116,7 +119,7 @@ let UsersController = class UsersController {
             }
         }
         const room_updated = await this.UsersService.UpdateRooom(room_id, RoomInfoDto).catch((erro) => {
-            throw new common_1.HttpException("CANT UPDATE DATA", common_1.HttpStatus.UNAUTHORIZED);
+            throw new common_1.HttpException('CANT UPDATE DATA', common_1.HttpStatus.UNAUTHORIZED);
         });
         return room_updated;
     }
@@ -136,7 +139,10 @@ let UsersController = class UsersController {
     async getMe(req) {
         return await this.UsersService.getUserbyLogin(req.user['userLogin']);
     }
-    async getMachHistory() {
+    async getMachHistory(req) {
+        const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+        const user = user_info.user_id;
+        return await this.UsersService.GetMatchHistory(user);
     }
     async getUser(login) {
         return await this.UsersService.getUser(login).catch((err) => {
@@ -164,9 +170,8 @@ let UsersController = class UsersController {
         return await this.UsersService.updateUserData(Number(userRecord.user_id), userDataDto);
     }
     async getAllChats(room_id) {
-        return await this.UsersService.getAllChats(room_id)
-            .catch((error) => {
-            throw new common_1.HttpException("NO MSG FOUND", common_1.HttpStatus.NOT_FOUND);
+        return await this.UsersService.getAllChats(room_id).catch((error) => {
+            throw new common_1.HttpException('NO MSG FOUND', common_1.HttpStatus.NOT_FOUND);
         });
     }
 };
@@ -196,7 +201,7 @@ __decorate([
 ], UsersController.prototype, "GetRooms", null);
 __decorate([
     (0, common_1.Patch)('group/update/:id'),
-    (0, swagger_1.ApiTags)("Change Member status"),
+    (0, swagger_1.ApiTags)('Change Member status'),
     (0, common_1.HttpCode)(200),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id')),
@@ -327,10 +332,11 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getMe", null);
 __decorate([
-    (0, common_1.Get)('match'),
+    (0, common_1.Get)('match_history'),
     (0, common_1.HttpCode)(200),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getMachHistory", null);
 __decorate([
@@ -366,7 +372,7 @@ __decorate([
         limits: {
             files: 1,
             fileSize: 10000000,
-        }
+        },
     })),
     __param(0, (0, common_1.Param)('login')),
     __param(1, (0, common_1.Req)()),

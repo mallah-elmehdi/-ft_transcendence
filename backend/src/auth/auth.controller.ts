@@ -46,7 +46,7 @@ export class AuthController {
     this.AuthService.createAccount(req.user.username, req.user.avatar);
     const accessToken = this.AuthService.signToken(req.user.username);
     res.cookie('jwt', accessToken, { httpOnly: false });
-    return res.redirect('http://10.30.238.174:3000');
+    return res.redirect('http://192.168.100.3:3000');
   }
 
   @Get('test')

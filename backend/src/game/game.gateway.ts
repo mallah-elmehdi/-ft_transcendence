@@ -16,6 +16,7 @@ import {
   animals,
 } from 'unique-names-generator';
 import { threadId } from 'worker_threads';
+import { GameService } from './game.service';
 
 @WebSocketGateway(3003, {
   cors: {
@@ -27,6 +28,7 @@ import { threadId } from 'worker_threads';
 export class GameGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
+  constructor(private GameService: GameService) {}
   @WebSocketServer()
   io: Namespace;
   rooms: any[];
@@ -175,6 +177,32 @@ export class GameGateway
         this.rooms[room_index].players[1].score === 5
       ) {
         // update match history
+        clearInterval(this.rooms[room_index].intervalID);
+        const player0 = this.rooms[room_index].players[0];
+        const player1 = this.rooms[room_index].players[1];
+
+        // ---------------
+        const updated = this.GameService.pushScore({
+          userId: player0.user_id,
+          user_score: player0.score,
+          opponent_id: player1.user_id,
+          opponent_score: player1.score,
+        });
+
+        // ---------------
+        const result0 = this.GameService.updateUserStatisticsData({
+          userId: player0.user_id,
+          games_lost: player0.score < player1.score ? 1 : 0,
+          games_won: player0.score > player1.score ? 1 : 0,
+          games_drawn: player0.score === player1.score ? 1 : 0,
+        });
+        const result1 = this.GameService.updateUserStatisticsData({
+          userId: player1.user_id,
+          games_lost: player1.score < player0.score ? 1 : 0,
+          games_won: player1.score > player0.score ? 1 : 0,
+          games_drawn: player1.score === player0.score ? 1 : 0,
+        });
+
         this.io
           .to(this.rooms[room_index].name)
           .emit('matchDone', this.rooms[room_index]);
@@ -259,6 +287,7 @@ export class GameGateway
       username: payload.username,
       avatar: payload.avatar,
       login: payload.login,
+      user_id: payload.user_id,
       score: 0,
       movement: this.getMove(this.rooms[room_index].canvas, player_num),
     };
@@ -410,5 +439,16 @@ export class GameGateway
   @SubscribeMessage('getLiveMatch')
   getLiveMatch() {
     this.liveMatch();
+  }
+  @SubscribeMessage('canvas')
+  canvasWidth(client: Socket, payload: any) {
+    for (let i = 0; i < this.rooms.length; i++) {
+      for (let j = 0; j < this.rooms[i].players.length; j++) {
+        if (this.rooms[i].players[j].login === payload.login) {
+          this.rooms[i].canvas = payload.canvas;
+          return;
+        }
+      }
+    }
   }
 }

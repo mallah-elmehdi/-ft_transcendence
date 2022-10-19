@@ -23,7 +23,7 @@ export declare class UsersController {
     GetAllUsers(): Promise<import(".prisma/client").User[]>;
     getAllFriends(): Promise<number[]>;
     getMe(req: Request): Promise<import(".prisma/client").User>;
-    getMachHistory(): Promise<void>;
+    getMachHistory(req: any): Promise<import(".prisma/client").match_history[]>;
     getUser(login: number): Promise<import(".prisma/client").User>;
     uploadImageToCloudinary(file: any): Promise<import("cloudinary").UploadApiResponse | import("cloudinary").UploadApiErrorResponse>;
     setUsername(login: string, req: any, usernameDto: usernameDto): Promise<import(".prisma/client").User>;

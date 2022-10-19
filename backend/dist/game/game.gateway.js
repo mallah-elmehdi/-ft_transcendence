@@ -13,8 +13,10 @@ exports.GameGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
 const unique_names_generator_1 = require("unique-names-generator");
+const game_service_1 = require("./game.service");
 let GameGateway = class GameGateway {
-    constructor() {
+    constructor(GameService) {
+        this.GameService = GameService;
         this.PLAYER_HEIGHT = 80;
         this.PLAYER_WIDTH = 10;
         this.BALL_RADIUS = 7;
@@ -150,6 +152,27 @@ let GameGateway = class GameGateway {
             this.rooms[room_index].ball.y += this.rooms[room_index].ball.d.y;
             if (this.rooms[room_index].players[0].score === 5 ||
                 this.rooms[room_index].players[1].score === 5) {
+                clearInterval(this.rooms[room_index].intervalID);
+                const player0 = this.rooms[room_index].players[0];
+                const player1 = this.rooms[room_index].players[1];
+                const updated = this.GameService.pushScore({
+                    userId: player0.user_id,
+                    user_score: player0.score,
+                    opponent_id: player1.user_id,
+                    opponent_score: player1.score,
+                });
+                const result0 = this.GameService.updateUserStatisticsData({
+                    userId: player0.user_id,
+                    games_lost: player0.score < player1.score ? 1 : 0,
+                    games_won: player0.score > player1.score ? 1 : 0,
+                    games_drawn: player0.score === player1.score ? 1 : 0,
+                });
+                const result1 = this.GameService.updateUserStatisticsData({
+                    userId: player1.user_id,
+                    games_lost: player1.score < player0.score ? 1 : 0,
+                    games_won: player1.score > player0.score ? 1 : 0,
+                    games_drawn: player1.score === player0.score ? 1 : 0,
+                });
                 this.io
                     .to(this.rooms[room_index].name)
                     .emit('matchDone', this.rooms[room_index]);
@@ -214,6 +237,7 @@ let GameGateway = class GameGateway {
             username: payload.username,
             avatar: payload.avatar,
             login: payload.login,
+            user_id: payload.user_id,
             score: 0,
             movement: this.getMove(this.rooms[room_index].canvas, player_num),
         };
@@ -341,6 +365,16 @@ let GameGateway = class GameGateway {
     getLiveMatch() {
         this.liveMatch();
     }
+    canvasWidth(client, payload) {
+        for (let i = 0; i < this.rooms.length; i++) {
+            for (let j = 0; j < this.rooms[i].players.length; j++) {
+                if (this.rooms[i].players[j].login === payload.login) {
+                    this.rooms[i].canvas = payload.canvas;
+                    return;
+                }
+            }
+        }
+    }
 };
 __decorate([
     (0, websockets_1.WebSocketServer)(),
@@ -370,6 +404,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], GameGateway.prototype, "getLiveMatch", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('canvas'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
+    __metadata("design:returntype", void 0)
+], GameGateway.prototype, "canvasWidth", null);
 GameGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(3003, {
         cors: {
@@ -377,7 +417,8 @@ GameGateway = __decorate([
             credentials: true,
         },
         namespace: 'game',
-    })
+    }),
+    __metadata("design:paramtypes", [game_service_1.GameService])
 ], GameGateway);
 exports.GameGateway = GameGateway;
 //# sourceMappingURL=game.gateway.js.map

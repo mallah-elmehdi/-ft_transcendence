@@ -1,6 +1,9 @@
 import { OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Socket, Namespace } from 'socket.io';
+import { GameService } from './game.service';
 export declare class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+    private GameService;
+    constructor(GameService: GameService);
     io: Namespace;
     rooms: any[];
     PLAYER_HEIGHT: number;
@@ -43,4 +46,5 @@ export declare class GameGateway implements OnGatewayInit, OnGatewayConnection, 
     moveKey(client: Socket, payload: any): void;
     watcher(client: Socket, payload: any): void;
     getLiveMatch(): void;
+    canvasWidth(client: Socket, payload: any): void;
 }

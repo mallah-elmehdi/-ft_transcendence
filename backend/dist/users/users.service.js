@@ -17,6 +17,21 @@ let UsersService = class UsersService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async GetMatchHistory(user) {
+        const match_result = await this.prisma.match_history.findMany({
+            where: {
+                OR: [
+                    {
+                        userId: Number(user)
+                    },
+                    {
+                        opponent_id: Number(user)
+                    }
+                ]
+            }
+        });
+        return match_result;
+    }
     async CheckUpdatedStatus(user_id) {
         console.log("are you here");
         const updated = await this.prisma.user.updateMany({
