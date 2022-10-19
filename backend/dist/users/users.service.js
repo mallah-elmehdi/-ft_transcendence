@@ -94,17 +94,12 @@ let UsersService = class UsersService {
         return private_room;
     }
     async getAllChats(room_id) {
-        try {
-            const all_msg = await this.prisma.chats.findMany({
-                where: {
-                    to_id: Number(room_id)
-                }
-            });
-            return all_msg;
-        }
-        catch (error) {
-            throw new common_1.HttpException("CAN'T LOAD MSG", common_1.HttpStatus.NOT_FOUND);
-        }
+        const all_msg = await this.prisma.chats.findMany({
+            where: {
+                to_id: Number(room_id)
+            }
+        });
+        return all_msg;
     }
     async BlockUserById(me, DeletedUser) {
         const private_room = await this.prisma.room_info.findFirst({
@@ -211,6 +206,7 @@ let UsersService = class UsersService {
         return rooms;
     }
     async getRoombyId(id) {
+        console.log("Id: ", id);
         const room = await this.prisma.room_info.findUnique({
             where: {
                 room_id: Number(id),

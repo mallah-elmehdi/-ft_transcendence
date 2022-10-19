@@ -8,21 +8,34 @@ import {
   WebSocketServer,
   ConnectedSocket,
 } from '@nestjs/websockets';
-import { Socket, Server } from 'socket.io';
+// <<<<<<< HEAD
+import { Socket, Server, Namespace } from 'socket.io';
 
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
 
-@WebSocketGateway(3002, {cors: {
-	origin: '*',
-	credentials: true
-	},	namespace : 'dm'
+// @WebSocketGateway(3002, {
+// =======
+// import { Socket, Server } from 'socket.io';
+
+//https://gabrieltanner.org/blog/nestjs-realtime-chat/
+
+// <<<<<<< HEAD
+@WebSocketGateway(3003, {
+// >>>>>>> 02e12a4fd13aad1b83ccec36c8e7ef2f11d200c4
+  cors: {
+    origin: '*',
+    credentials: true,
+  },
+  namespace: 'dm',
 })
-export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect { 
- 
-	private logger: Logger = new Logger('ChatGateway BRRRR');
+export class ChatGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
+  private logger: Logger = new Logger('ChatGateway BRRRR');
 
   @WebSocketServer()
-  server: Server;
+  io: Namespace;
+
 
   afterInit(server: any) {
     this.logger.log('Init');
@@ -32,26 +45,21 @@ export class ChatGateway implements  OnGatewayInit, OnGatewayConnection, OnGatew
     this.logger.log(`Client connected: ${client.id}`);
   }
 
-	handleDisconnect(client: any) {
-		this.logger.log(`Client disconnected: ${client.id}`);
-	}
-  
-	@SubscribeMessage('msgToServer') // Equivalent to socket.on('msgToServer') listening to any 'msgToServer' event
-	handleMessage(client: Socket, payload) {
-		console.log("You am the palof", payload)
+  handleDisconnect(client: any) {
+    this.logger.log(`Client disconnected: ${client.id}`);
+  }
 
-		
-		//const token = client.handshake.query.token.toString();
-		//const payload = verifyAccessToken(token);
-		const roomId = payload.roomId;
-		
-		//const user = payload && (await this.prismaService.findOne(payload.id));
-		//const room = user?.room;
-		client.join(roomId);
-		this.server.to(roomId).emit(payload.message);
-		//console.log(`Message from ${client.id}: ${payloadJson.name} or ${payload}`);
-		//client.emit('msgToClient', payload);
-	}
+  @SubscribeMessage('ping') // Equivalent to socket.on('msgToServer') listening to any 'msgToServer' event
+  ping(client: Socket, payload: any) {
+    console.log('ping(): ', payload);
+    client.join(payload.room_id);
+  }
+  @SubscribeMessage('message')
+  message(client: Socket, payload: any) {
+    console.log(payload);
+    this.io.to(payload.room_id).emit('recieveMessage', payload);
+	
+  }
 }
 
 //!https://wanago.io/2021/01/25/api-nestjs-chat-websockets/

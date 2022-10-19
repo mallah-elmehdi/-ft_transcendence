@@ -78,7 +78,7 @@ export class UsersController {
   @HttpCode(200)
   async GetRooms(@Req() req: Request) {
     // here get the room for the current user
-    const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+    // const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
     // const user = user_info.user_id;
     const user = 1;
     return this.UsersService.getRooms(user).catch((err) => {
@@ -378,11 +378,12 @@ export class UsersController {
 
   //! SHOUD BE MOVED TO CHAT CONTROLER
 
-  @Get('msg/:roo')
+  @Get('/msg/:room_id')
   @HttpCode(200)
   async getAllChats(@Param('room_id') room_id: number) {
     
-    return await this.UsersService.getAllChats(room_id).catch(
+    return await this.UsersService.getAllChats(room_id)
+    .catch(
       (error) => 
       {
         throw new HttpException("NO MSG FOUND", HttpStatus.NOT_FOUND)

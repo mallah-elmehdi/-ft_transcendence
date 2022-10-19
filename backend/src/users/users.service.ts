@@ -123,7 +123,7 @@ export class UsersService {
 	//! SHOULD BE MOVED TO CHAT SERVICES
 	async getAllChats (room_id:number)
 	{
-		try {
+		// try {
 			const all_msg = await this.prisma.chats.findMany({
 				where:
 				{
@@ -132,9 +132,9 @@ export class UsersService {
 			})
 			
 			return all_msg
-		} catch (error) {
-			throw new HttpException("CAN'T LOAD MSG", HttpStatus.NOT_FOUND)
-		}
+		// } catch (error) {
+		// 	throw new HttpException("CAN'T LOAD MSG", HttpStatus.NOT_FOUND)
+		// }
 
 	}
 
@@ -288,6 +288,7 @@ export class UsersService {
 
 	async getRoombyId (id: Number)
 	{
+			console.log("Id: ", id);
 			const room = await this.prisma.room_info.findUnique(
 				{
 					where :

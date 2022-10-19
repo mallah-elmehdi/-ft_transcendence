@@ -37,7 +37,6 @@ let UsersController = class UsersController {
         });
     }
     async GetRooms(req) {
-        const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
         const user = 1;
         return this.UsersService.getRooms(user).catch((err) => {
             throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
@@ -165,7 +164,8 @@ let UsersController = class UsersController {
         return await this.UsersService.updateUserData(Number(userRecord.user_id), userDataDto);
     }
     async getAllChats(room_id) {
-        return await this.UsersService.getAllChats(room_id).catch((error) => {
+        return await this.UsersService.getAllChats(room_id)
+            .catch((error) => {
             throw new common_1.HttpException("NO MSG FOUND", common_1.HttpStatus.NOT_FOUND);
         });
     }
@@ -377,7 +377,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "setData", null);
 __decorate([
-    (0, common_1.Get)('msg/:roo'),
+    (0, common_1.Get)('/msg/:room_id'),
     (0, common_1.HttpCode)(200),
     __param(0, (0, common_1.Param)('room_id')),
     __metadata("design:type", Function),
