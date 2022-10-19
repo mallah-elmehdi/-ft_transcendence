@@ -35,7 +35,7 @@ import { pagesContent } from '../constants';
 // Context
 // import { useRedirect } from '../hooks/useRedirect';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getFriendInfo, getUserInfo, signOut } from '../State/Api';
+import { getFriendInfo, getUserInfo, signOut, updatedProfile } from '../State/Api';
 import { GlobalContext } from '../State/Provider';
 
 const ProfilePage = () => {
@@ -72,6 +72,7 @@ const ProfilePage = () => {
                     setMe(params?.user_id === 'me');
                     if (!info?.updated) {
                         setUpdateProfile(true);
+                        updatedProfile(dispatch)
                     }
                 })
                 .catch(() => {

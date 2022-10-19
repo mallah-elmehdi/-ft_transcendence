@@ -9,6 +9,7 @@ const URLS = {
     USER: API + '/user',
     SIGNOUT: API + '/42/signout',
     UPDATE_PROFILE: API + '/user/update/profile',
+    UPDATED_PROFILE: API + '/user/check',
 };
 
 export const getUserInfo = async (dispatch: any) => {
@@ -80,6 +81,19 @@ export const updatePtofile = async (
         );
         dispatch(storeUserInfo(response.data));
         dispatch(newNotification({ type: 'Success', message: 'Profile updated successfuly' }));
+    } catch (error: any) {
+        dispatch(errorMessage(error.message));
+        throw error.message;
+    } finally {
+        dispatch(completed());
+    }
+};
+
+export const updatedProfile = async (dispatch: any) => {
+    dispatch(inProgress());
+    try {
+        const response = await axios.get(URLS.UPDATED_PROFILE);
+        dispatch(storeUserInfo(response.data));
     } catch (error: any) {
         dispatch(errorMessage(error.message));
         throw error.message;
