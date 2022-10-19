@@ -3,6 +3,7 @@ import { userDataDto, RoomInfoDto } from './DTO/username.dto';
 export declare class UsersService {
     private readonly prisma;
     constructor(prisma: PrismaService);
+    CheckUpdatedStatus(user_id: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
     friendReq(user: Number, friend_id: Number): Promise<import(".prisma/client").Friend>;
     BlockUserFromGroupById(group_id: any, user_id: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
     getDmRoom(me: any, friend_id: any): Promise<import(".prisma/client").Room_info>;

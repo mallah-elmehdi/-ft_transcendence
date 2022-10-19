@@ -17,6 +17,20 @@ let UsersService = class UsersService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async CheckUpdatedStatus(user_id) {
+        console.log("are you here");
+        const updated = await this.prisma.user.updateMany({
+            where: {
+                user_id: Number(user_id),
+                updated: false,
+            },
+            data: {
+                updated: true,
+            }
+        });
+        console.log(updated);
+        return updated;
+    }
     async friendReq(user, friend_id) {
         try {
             const update = await this.prisma.friend.create({ data: { friendId: Number(friend_id), user: { connect: { user_id: Number(user) }
@@ -82,10 +96,9 @@ let UsersService = class UsersService {
     async getAllChats(room_id) {
         const all_msg = await this.prisma.chats.findMany({
             where: {
-                to_id: Number(room_id),
-            },
+                to_id: Number(room_id)
+            }
         });
-        console.log("MSG", all_msg);
         return all_msg;
     }
     async BlockUserById(me, DeletedUser) {

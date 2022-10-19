@@ -52,7 +52,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ChatGateway.prototype, "message", null);
 ChatGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(3002, {
+    (0, websockets_1.WebSocketGateway)(3003, {
         cors: {
             origin: '*',
             credentials: true,

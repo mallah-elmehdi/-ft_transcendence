@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
+const passport_1 = require("@nestjs/passport");
 const platform_express_1 = require("@nestjs/platform-express");
 const username_dto_1 = require("./DTO/username.dto");
 const clodinary_service_1 = require("./clodinary/clodinary.service");
@@ -23,6 +24,12 @@ let UsersController = class UsersController {
     constructor(UsersService, cloudinary) {
         this.UsersService = UsersService;
         this.cloudinary = cloudinary;
+    }
+    async CheckUpdatedStatus(req) {
+        const user = 1;
+        return this.UsersService.CheckUpdatedStatus(user).catch((err) => {
+            throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
+        });
     }
     async GetAllRooms(req) {
         return this.UsersService.getAllRooms().catch((err) => {
@@ -163,6 +170,14 @@ let UsersController = class UsersController {
         });
     }
 };
+__decorate([
+    (0, common_1.Get)('check'),
+    (0, common_1.HttpCode)(200),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "CheckUpdatedStatus", null);
 __decorate([
     (0, common_1.Get)('group/all'),
     (0, common_1.HttpCode)(200),
@@ -371,6 +386,7 @@ __decorate([
 ], UsersController.prototype, "getAllChats", null);
 UsersController = __decorate([
     (0, common_1.Controller)('user'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __metadata("design:paramtypes", [users_service_1.UsersService,
         clodinary_service_1.CloudinaryService])
 ], UsersController);

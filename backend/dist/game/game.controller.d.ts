@@ -1,3 +1,3 @@
 export declare class GameController {
-    game(): string;
+    liveMatch(): string;
 }

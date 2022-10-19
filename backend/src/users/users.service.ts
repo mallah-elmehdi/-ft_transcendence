@@ -13,6 +13,34 @@ export class UsersService {
 
 
 	// inserting to a table with Foreing keys
+	async CheckUpdatedStatus(user_id)
+	{	
+		// const user  = await this.prisma.user.findUnique({
+		// 	where:
+		// 	{
+		// 		user_id: Number(user_id),
+		// 	}
+		// })
+	
+			console.log("are you here")
+		 	const updated = await this.prisma.user.updateMany(
+				{
+					where:
+					{
+						user_id:  Number(user_id),
+						updated : false,
+
+					},
+					data:
+					{
+						updated: true,
+					}
+				}
+			)
+			console.log(  updated )
+		
+		return updated
+	}
 	async  friendReq(user :Number, friend_id:Number) {
 		try
 		{
@@ -97,12 +125,11 @@ export class UsersService {
 	{
 		// try {
 			const all_msg = await this.prisma.chats.findMany({
-        where: {
-          to_id: Number(room_id),
-        },
-      });
-			
-			console.log("MSG",all_msg);
+				where:
+				{
+					to_id : Number(room_id)
+				}
+			})
 			
 			return all_msg
 		// } catch (error) {

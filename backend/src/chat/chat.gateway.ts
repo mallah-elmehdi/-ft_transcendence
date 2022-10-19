@@ -8,11 +8,20 @@ import {
   WebSocketServer,
   ConnectedSocket,
 } from '@nestjs/websockets';
+// <<<<<<< HEAD
 import { Socket, Server, Namespace } from 'socket.io';
 
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
 
-@WebSocketGateway(3002, {
+// @WebSocketGateway(3002, {
+// =======
+// import { Socket, Server } from 'socket.io';
+
+//https://gabrieltanner.org/blog/nestjs-realtime-chat/
+
+// <<<<<<< HEAD
+@WebSocketGateway(3003, {
+// >>>>>>> 02e12a4fd13aad1b83ccec36c8e7ef2f11d200c4
   cors: {
     origin: '*',
     credentials: true,
@@ -26,6 +35,7 @@ export class ChatGateway
 
   @WebSocketServer()
   io: Namespace;
+
 
   afterInit(server: any) {
     this.logger.log('Init');
@@ -48,7 +58,6 @@ export class ChatGateway
   message(client: Socket, payload: any) {
     console.log(payload);
     this.io.to(payload.room_id).emit('recieveMessage', payload);
-	// console.log(this.io.adapter.rooms);
 	
   }
 }
