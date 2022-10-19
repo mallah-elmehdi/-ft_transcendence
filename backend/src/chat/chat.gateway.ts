@@ -1,66 +1,109 @@
 import { chatController } from './chat.controller';
 import { Logger } from '@nestjs/common';
 import {
-	OnGatewayInit,
-	SubscribeMessage,
-	WebSocketGateway,
-	OnGatewayConnection,
-	OnGatewayDisconnect,
-	WebSocketServer,
-	ConnectedSocket,
+  OnGatewayInit,
+  SubscribeMessage,
+  WebSocketGateway,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  WebSocketServer,
+  ConnectedSocket,
 } from '@nestjs/websockets';
+// <<<<<<< HEAD
 import { Socket, Server, Namespace } from 'socket.io';
-import { ChatService } from './chat.service'
+import { ChatService } from './chat.service';
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
 
+// @WebSocketGateway(3002, {
+// =======
+// import { Socket, Server } from 'socket.io';
+
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
 
-
+// <<<<<<< HEAD
 @WebSocketGateway(3003, {
-	cors: {
-		origin: '*',
-		credentials: true,
-	},
-	namespace: 'dm',
+  // >>>>>>> 02e12a4fd13aad1b83ccec36c8e7ef2f11d200c4
+  cors: {
+    origin: '*',
+    credentials: true,
+  },
+  namespace: 'dm',
 })
 export class ChatGateway
-	implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-		constructor (private ChatService: ChatService) {}
-	private logger: Logger = new Logger('ChatGateway BRRRR');
+  constructor(private ChatService: ChatService) {}
+  private logger: Logger = new Logger('ChatGateway BRRRR');
 
-	@WebSocketServer()
-	io: Namespace;
-		prisma: any;
+  @WebSocketServer()
+  io: Namespace;
+  prisma: any;
+  muted: any[];
+  afterInit(server: any) {
+    this.logger.log('Init');
+    this.muted = [];
+  }
 
+  handleConnection(client: Socket, ...args: any[]) {
+    this.logger.log(`Client connected: ${client.id}`);
+  }
 
-	afterInit(server: any) {
-		this.logger.log('Init');
-	}
+  handleDisconnect(client: any) {
+    this.logger.log(`Client disconnected: ${client.id}`);
+  }
+  isMuted(client: Socket, user_id: any) {
+    console.log(this.muted, user_id);
 
-	handleConnection(client: Socket, ...args: any[]) {
-		this.logger.log(`Client connected: ${client.id}`);
-	}
+    for (let i = 0; i < this.muted.length; i++) {
+      const item = this.muted[i];
+      if (item.user_id === user_id) {
+        if (Date.now() - item.time < parseInt(item.period) * 1000 * 60) {
+          client.emit('imMuted', {
+            time:
+              ((parseInt(item.period) * 1000 * 60 - (Date.now() - item.time)) /
+              (1000 * 60)).toFixed(2),
+          });
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  @SubscribeMessage('ping') // Equivalent to socket.on('msgToServer') listening to any 'msgToServer' event
+  ping(client: Socket, payload: any) {
+    console.log('ping(): ', payload);
 
-	handleDisconnect(client: any) {
-		this.logger.log(`Client disconnected: ${client.id}`);
-	}
+    client.join(payload.room_id);
+  }
+  @SubscribeMessage('message')
+  async message(client: Socket, payload: any) {
+    if (!this.isMuted(client, payload.userId)) {
+      this.io.to(payload.room_id).emit('recieveMessage', payload);
+      console.log('payload ', payload);
 
-	@SubscribeMessage('ping') // Equivalent to socket.on('msgToServer') listening to any 'msgToServer' event
-	ping(client: Socket, payload: any) {
-		console.log('ping(): ', payload);
-		client.join(payload.room_id);
-	}
-	@SubscribeMessage('message')
-	async message(client: Socket, payload: any) {
-		this.io.to(payload.room_id).emit('recieveMessage', payload);
-		console.log("payload ", payload);
-	
-		
-		const check = await this.ChatService.pushMsg(payload)
-		console.log("check :", check);
-	
-	}
+      const check = await this.ChatService.pushMsg(payload);
+      console.log('check :', check);
+    }
+  }
+
+  @SubscribeMessage('muteUser')
+  async mute(client: Socket, payload: any) {
+    // this.io.to(payload.room_id).emit('recieveMessage', payload);
+    console.log('mute:  ', payload);
+    this.muted.push(payload);
+    // const check = await this.ChatService.pushMsg(payload);
+    // console.log('check :', check);
+  }
+
+  @SubscribeMessage('blockUser')
+  async block(client: Socket, payload: any) {
+    // this.io.to(payload.room_id).emit('recieveMessage', payload);
+    console.log('mute:  ', payload);
+    this.io.emit("blocked")
+    // ----- haydo mn database
+    // const check = await this.ChatService.pushMsg(payload);
+    // console.log('check :', check);
+  }
 }
 
 //!https://wanago.io/2021/01/25/api-nestjs-chat-websockets/

@@ -98,13 +98,18 @@ export class UsersController {
     @Req() req: Request,
   ) {
     // GET ID USER FROM JWT
+    const user_info = await this.UsersService.getUserbyLogin(
+        req.user['userLogin'],
+      );
+      const user = user_info.user_id;
     const member = await this.UsersService.getMembersbyIdRoom(
       status.room_id,
-      1,
+      user,
     );
 
-    if (member[0].prev != ('owner' || 'admin'))
-      throw new HttpException('Password Invalid', HttpStatus.UNAUTHORIZED);
+        //kandn zyda 
+    // if (member[0].prev != ('owner' || 'admin'))
+    //   throw new HttpException('You can\'t', HttpStatus.UNAUTHORIZED);
 
     return this.UsersService.ChangeMemberStatus(
       param,
@@ -134,7 +139,13 @@ export class UsersController {
   @Get('/dm/:friend_id')
   async GetDmRoomId(@Param('friend_id') friend_id: Number, @Req() req) {
     //get user from JWT
-    return await this.UsersService.getDmRoom(1, friend_id).catch(() => {
+    const user_info = await this.UsersService.getUserbyLogin(
+        req.user['userLogin'],
+      );
+    const user = user_info.user_id;
+    //! THE PROBLEM IS HERE
+    // SOLUTION: GET USER USER  FROM JWT
+    return await this.UsersService.getDmRoom(user, friend_id).catch(() => {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     });
   }
@@ -259,9 +270,9 @@ export class UsersController {
     @Req() req: Request,
   ) {
     // here you after succesfully creating room add the creator as the the owner
-    // const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
-    // const user = user_info.user_id;
-    const user = 1;
+    const user_info = await this.UsersService.getUserbyLogin(req.user['userLogin']);
+    const user = user_info.user_id;
+    // const user = 1;
     if (file) {
       const cloud = await this.cloudinary.uploadImage(file);
       if (cloud) {
@@ -279,25 +290,35 @@ export class UsersController {
   }
   @Post('add/:id')
   @HttpCode(201)
-  async AddFriend(@Param('id') friend_id: Number) {
-    const user_info = await this.UsersService.getUserbyLogin('aymaatou');
-    // const user = user_info.user_id;
-    const user = 1;
+  async AddFriend(@Param('id') friend_id: Number, @Req() req) {
+    const user_info = await this.UsersService.getUserbyLogin(
+        req.user['userLogin'],
+      );
+    const user = user_info.user_id;
+    // const user = 1;
     return await this.UsersService.friendReq(user, friend_id);
   }
 
   @Get('list/all')
   @HttpCode(200)
-  async GetAllUsers() {
+  async GetAllUsers(@Req() req) {
     // add JWT ID user
-    return await this.UsersService.getAllUsers(1);
+    const user_info = await this.UsersService.getUserbyLogin(
+        req.user['userLogin'],
+      );
+    const user = user_info.user_id;
+    return await this.UsersService.getAllUsers(user);
   }
 
   @Get('friends')
   @HttpCode(200)
-  async getAllFriends() {
+  async getAllFriends(@Req() req) {
     /// add here JWT user
-    return await this.UsersService.getAllFriends(1).catch((err) => {
+    const user_info = await this.UsersService.getUserbyLogin(
+        req.user['userLogin'],
+      );
+    const user = user_info.user_id;
+    return await this.UsersService.getAllFriends(user).catch((err) => {
       throw new BadRequestException(err);
     });
   }

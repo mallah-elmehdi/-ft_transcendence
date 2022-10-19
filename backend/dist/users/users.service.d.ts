@@ -1,0 +1,31 @@
+import { PrismaService } from 'src/prisma/prisma.service';
+import { userDataDto, RoomInfoDto } from './DTO/username.dto';
+export declare class UsersService {
+    private readonly prisma;
+    constructor(prisma: PrismaService);
+    GetMatchHistory(user: any): Promise<import(".prisma/client").match_history[]>;
+    CheckUpdatedStatus(user_id: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
+    friendReq(user: Number, friend_id: Number): Promise<import(".prisma/client").Friend>;
+    BlockUserFromGroupById(group_id: any, user_id: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
+    getDmRoom(me: any, friend_id: any): Promise<import(".prisma/client").Room_info>;
+    getAllChats(room_id: number): Promise<import(".prisma/client").Chats[]>;
+    BlockUserById(me: number, DeletedUser: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
+    AddToRoom(user: any, rool: any, roomId: any): Promise<import(".prisma/client").Members>;
+    ChangeMemberStatus(user: any, rool: any, roomId: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
+    UpdateRooom(room_id: any, RoomInfoDto: RoomInfoDto): Promise<import(".prisma/client").Room_info>;
+    CreateRooom(RoomInfoDto: RoomInfoDto): Promise<import(".prisma/client").Room_info>;
+    check_password(room_password: any, hash: any): boolean;
+    getRooms(id: Number): Promise<import(".prisma/client").Members[]>;
+    getRoombyId(id: Number): Promise<import(".prisma/client").Room_info>;
+    getAllRooms(): Promise<import(".prisma/client").Room_info[]>;
+    DeleteRoombyId(id: Number): Promise<import(".prisma/client").Room_info>;
+    getMembersbyId(id: Number): Promise<import(".prisma/client").Members[]>;
+    getMembersbyIdRoom(id: Number, user: Number): Promise<import(".prisma/client").Members[]>;
+    getAllUsers(me: any): Promise<import(".prisma/client").User[]>;
+    getAllFriends(login: number): Promise<number[]>;
+    getUser(login: number): Promise<import(".prisma/client").User>;
+    getUserbyLogin(login: string): Promise<import(".prisma/client").User>;
+    setUsername(login: string, username: string): Promise<import(".prisma/client").User>;
+    updateUserData(login: Number, userDataDto: userDataDto): Promise<import(".prisma/client").User>;
+    setUserState(login: any, state: boolean): Promise<void>;
+}
