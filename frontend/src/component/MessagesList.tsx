@@ -21,8 +21,9 @@ function MessagesList() {
 
   useEffect(() => {
     axios
-      .get(MESSAGES + roomDm)
+      .get(MESSAGES + (selectedChat.chat === "F" ? roomDm : selectedChat.id))
       .then((res: any) => {
+        console.log("all messages here ", res.data);
         dispatch({
           type: "SET_MESSAGES",
           data: res.data,
