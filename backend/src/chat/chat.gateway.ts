@@ -1,79 +1,66 @@
 import { chatController } from './chat.controller';
 import { Logger } from '@nestjs/common';
 import {
-  OnGatewayInit,
-  SubscribeMessage,
-  WebSocketGateway,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
-  WebSocketServer,
-  ConnectedSocket,
+	OnGatewayInit,
+	SubscribeMessage,
+	WebSocketGateway,
+	OnGatewayConnection,
+	OnGatewayDisconnect,
+	WebSocketServer,
+	ConnectedSocket,
 } from '@nestjs/websockets';
-// <<<<<<< HEAD
 import { Socket, Server, Namespace } from 'socket.io';
 import { ChatService } from './chat.service'
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
 
-// @WebSocketGateway(3002, {
-// =======
-// import { Socket, Server } from 'socket.io';
-
 //https://gabrieltanner.org/blog/nestjs-realtime-chat/
 
-// <<<<<<< HEAD
+
 @WebSocketGateway(3003, {
-// >>>>>>> 02e12a4fd13aad1b83ccec36c8e7ef2f11d200c4
-  cors: {
-    origin: '*',
-    credentials: true,
-  },
-  namespace: 'dm',
+	cors: {
+		origin: '*',
+		credentials: true,
+	},
+	namespace: 'dm',
 })
 export class ChatGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+	implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-    constructor (private ChatService: ChatService) {}
-  private logger: Logger = new Logger('ChatGateway BRRRR');
+		constructor (private ChatService: ChatService) {}
+	private logger: Logger = new Logger('ChatGateway BRRRR');
 
-  @WebSocketServer()
-  io: Namespace;
-    prisma: any;
+	@WebSocketServer()
+	io: Namespace;
+		prisma: any;
 
 
-  afterInit(server: any) {
-    this.logger.log('Init');
-  }
+	afterInit(server: any) {
+		this.logger.log('Init');
+	}
 
-  handleConnection(client: Socket, ...args: any[]) {
-    this.logger.log(`Client connected: ${client.id}`);
-  }
+	handleConnection(client: Socket, ...args: any[]) {
+		this.logger.log(`Client connected: ${client.id}`);
+	}
 
-  handleDisconnect(client: any) {
-    this.logger.log(`Client disconnected: ${client.id}`);
-  }
+	handleDisconnect(client: any) {
+		this.logger.log(`Client disconnected: ${client.id}`);
+	}
 
-  @SubscribeMessage('ping') // Equivalent to socket.on('msgToServer') listening to any 'msgToServer' event
-  ping(client: Socket, payload: any) {
-    console.log('ping(): ', payload);
-    client.join(payload.room_id);
-  }
-  @SubscribeMessage('message')
-  async message(client: Socket, payload: any) {
-    this.io.to(payload.room_id).emit('recieveMessage', payload);
-    console.log("payload ", payload);
-    
-    const check = await this.ChatService.pushMsg(payload)
-    console.log("check :", check);
-    
-    // const msg = this.prisma.chat.create(
-    //     {
-    //         data: {
-    //             // userId: use,
-    //             // con
-    //         }
-    //     }
-    // )
-  }
+	@SubscribeMessage('ping') // Equivalent to socket.on('msgToServer') listening to any 'msgToServer' event
+	ping(client: Socket, payload: any) {
+		console.log('ping(): ', payload);
+		client.join(payload.room_id);
+	}
+	@SubscribeMessage('message')
+	async message(client: Socket, payload: any) {
+		this.io.to(payload.room_id).emit('recieveMessage', payload);
+		console.log("payload ", payload);
+	
+		
+		const check = await this.ChatService.pushMsg(payload)
+		console.log("check :", check);
+	
+	}
 }
 
 //!https://wanago.io/2021/01/25/api-nestjs-chat-websockets/
