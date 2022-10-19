@@ -17,7 +17,8 @@ import {
 } from '@chakra-ui/react'
 
 import { Text, HStack } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
+import { ChatContext } from '../State/ChatProvider'
 
 type Props = {
     isOpen: boolean,
@@ -28,9 +29,17 @@ type Props = {
 }
 
 export default function MuteMember({ isOpen, onClose, memberId, name, roomId }: Props) {
-    const [minute, setMinute] = useState<any>(5);
+    const [minute, setMinute] = useState<any>(1);
+    const {state, socket} = useContext<any>(ChatContext)
     const muteMemberHandler = () => {
-        console.log(`Mute {name: ${name}, id: ${memberId}} for ${minute} from roomId: ${roomId}`)
+        const payload = {
+            user_id : memberId,
+            room_id : roomId,
+            period  : minute,
+            time: Date.now(),
+        }
+        socket.emit("muteUser", payload)
+        console.log(`Mute ${payload}`)
     }
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -41,8 +50,8 @@ export default function MuteMember({ isOpen, onClose, memberId, name, roomId }: 
                 <ModalBody>
                     <Text mb={4} > Mute {name} from the room?  </Text>
                     <HStack justifyContent={'center'} > <NumberInput
-                        defaultValue={5}
-                        min={5}
+                        defaultValue={1}
+                        min={1}
                         max={5000}
                         maxW='100px'
                         value={minute}

@@ -5,27 +5,23 @@ import { ChatContext } from '../State/ChatProvider';
 import { SOCKET } from '../constants';
 import { io } from 'socket.io-client';
 import { GlobalContext } from '../State/Provider';
+import { newNotification } from '../State/Action';
 
 const MessageInput = () => {
+    const globalDispatch = useContext<any>(GlobalContext).dispatch;
     const [typingMessage, setTypingMessage] = useState<any>('');
     const msgInputBg = useColorModeValue('white', 'rgb(33,33,33)');
     // const { socket } = useContext<any>(ChatContext);
     const { selectedChat } = useContext<any>(ChatContext);
-    const { dispatch, state } = useContext<any>(ChatContext);
-    const { newFriends, newGroups, roomDm } = state;
+    const { state } = useContext<any>(ChatContext);
+    const { roomDm } = state;
     const { data } = React.useContext<any>(GlobalContext);
     const { userInfo } = data;
 
     function sendMessageHandler() {
         if (typingMessage.trim()) {
-            // let newDate = Date.now();
-            // console.log(newDate);
-            // console.log("sendMessage: ", {
-            //   room_id: selectedChat.chat === "F" ? roomDm : selectedChat.id,
-            //   message: typingMessage.trim(),
-            //   userId: ,
-            //   // currentTime: newDate,
-            // });
+            console.log('roomDm', roomDm);
+
             const payload = {
                 room_id: selectedChat.chat === 'F' ? roomDm : selectedChat.id,
                 message: typingMessage.trim(),
@@ -36,6 +32,11 @@ const MessageInput = () => {
 
             const socket = io(SOCKET + '/dm');
             socket.emit('message', payload);
+            socket.on('imMuted', (payload: any) => {
+                console.log('MUTED');
+
+                globalDispatch(newNotification({ type: 'Error', message: 'You are muted for ' + payload.time + ' min' }));
+            });
         }
         setTypingMessage('');
     }

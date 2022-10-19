@@ -49,6 +49,7 @@ function Tabs() {
     const { data } = useContext<any>(GlobalContext);
 
     function isFriend(id: any) {
+        if (!data.userInfo) return false;
         if (id === data.userInfo.user_id) return true;
         return newFriends.findIndex((f: any) => f.id == id) == -1 ? false : true;
     }
@@ -62,6 +63,8 @@ function Tabs() {
 
     function sendFriendReq(id: any) {
         const user = users.find((element: any) => element.user_id == id);
+        console.log('send f req to: ', user);
+
         axios
             .post(FRIEND_REQ + id)
             .then((res) => {
@@ -135,97 +138,42 @@ function Tabs() {
 
     return (
         <>
-            <ChakraTabs
-                as={motion.div}
-                initial={{ opacity: 0, scale: 0.99 }}
-                animate={{ y: 0, opacity: 1, scale: 1 }}
-                exit={{ transition: { duration: 0.1 }, opacity: 0, scale: 0.99 }}
-                pt={3}
-                w={'90%'}
-                h={'99%'}
-                m={0}
-                overflow={'hidden'}
-                align="center"
-                _selected={{ color: 'pink' }}
-                position={'relative'}
-            >
-                <TabList>
-                    <Tab _selected={{ color: 'red' }}>
-                        <Text fontSize={20}>Friends</Text>
-                    </Tab>
-                    <Tab _selected={{ color: 'red' }}>
-                        <Text fontSize={20}>Channels</Text>
-                    </Tab>
-                    <Tab _selected={{ color: 'red' }}>
-                        <Text fontSize={20}>All Users</Text>
-                    </Tab>
-                    <Tab _selected={{ color: 'red' }}>
-                        <Text fontSize={20}>All Channels</Text>
-                    </Tab>
-                </TabList>
-                <TabPanels h={'100%'} p={2}>
-                    <TabPanel overflow={'auto'} h={'100%'} w={'100%'} m={0} p={0}>
-                        <VStack pb={10} spacing={0} w={'100%'}>
-                            {newFriends.length ? (
-                                newFriends.map((friend: any, index: any) => (
-                                    <HStack
-                                        as={'button'}
-                                        p={5}
-                                        alignItems={'center'}
-                                        _hover={{ bg: value }}
-                                        rounded={5}
-                                        h={'4.5em'}
-                                        w={'100%'}
-                                        key={index.toString()}
-                                        onClick={() => {
-                                            setSelectedChat({ chat: 'F', id: friend.id });
-                                        }}
-                                    >
-                                        <ChakraAvatar name={friend.name.toString()} src={friend.avatar.toString()}></ChakraAvatar>
-                                        <Text>{friend.name.length > 10 ? friend.name.slice(0, 10) + '...' : friend.name}</Text>
-                                    </HStack>
-                                ))
-                            ) : (
-                                <Flex h={'100%'} justifyContent={'center'} alignItems={'center'}>
-                                    <Text>No friends yet</Text>
-                                </Flex>
-                            )}
-                        </VStack>
-                    </TabPanel>
-                    <TabPanel h={'100%'} w={'100%'} m={0} p={0} overflow={'auto'}>
-                        <VStack pb={10} spacing={0} w={'100%'}>
-                            {newGroups.length ? (
-                                newGroups.map((group: any, index: any) => (
-                                    <HStack
-                                        onClick={() => {
-                                            setSelectedChat({ chat: 'G', id: group.id });
-                                        }}
-                                        as={'button'}
-                                        p={5}
-                                        alignItems={'center'}
-                                        _hover={{ bg: value }}
-                                        rounded={5}
-                                        h={'4.5em'}
-                                        w={'100%'}
-                                        key={index.toString()}
-                                    >
-                                        <ChakraAvatar name={group.name.toString()} src={group.avatar}></ChakraAvatar>
-                                        <Text>{group.name.length > 10 ? group.name.slice(0, 10) + '...' : group.name}</Text>
-                                    </HStack>
-                                ))
-                            ) : (
-                                <Flex h={'100%'} justifyContent={'center'} alignItems={'center'}>
-                                    <Text>No channels yet</Text>
-                                </Flex>
-                            )}
-                        </VStack>
-                    </TabPanel>
-                    <TabPanel h={'100%'} w={'100%'} m={0} p={0} overflow={'auto'}>
-                        <VStack pb={10} spacing={0} w={'100%'}>
-                            {users.length ? (
-                                users.map((user: any, index: any) =>
-                                    !isFriend(user.user_id) ? (
+            <HStack h={'100%'} w={'100%'}>
+                <ChakraTabs
+                    as={motion.div}
+                    initial={{ opacity: 0, scale: 0.99 }}
+                    animate={{ y: 0, opacity: 1, scale: 1 }}
+                    exit={{ transition: { duration: 0.1 }, opacity: 0, scale: 0.99 }}
+                    pt={3}
+                    w={'90%'}
+                    h={'99%'}
+                    m={0}
+                    overflow={'hidden'}
+                    align="center"
+                    _selected={{ color: 'pink' }}
+                    position={'relative'}
+                >
+                    <TabList>
+                        <Tab _selected={{ color: 'red' }}>
+                            <Text fontSize={20}>Friends</Text>
+                        </Tab>
+                        <Tab _selected={{ color: 'red' }}>
+                            <Text fontSize={20}>Channels</Text>
+                        </Tab>
+                        <Tab _selected={{ color: 'red' }}>
+                            <Text fontSize={20}>All Users</Text>
+                        </Tab>
+                        <Tab _selected={{ color: 'red' }}>
+                            <Text fontSize={20}>All Channels</Text>
+                        </Tab>
+                    </TabList>
+                    <TabPanels h={'100%'} p={2}>
+                        <TabPanel overflow={'auto'} h={'100%'} w={'100%'} m={0} p={0}>
+                            <VStack pb={10} spacing={0} w={'100%'}>
+                                {newFriends.length ? (
+                                    newFriends.map((friend: any, index: any) => (
                                         <HStack
+                                            as={'button'}
                                             p={5}
                                             alignItems={'center'}
                                             _hover={{ bg: value }}
@@ -233,38 +181,30 @@ function Tabs() {
                                             h={'4.5em'}
                                             w={'100%'}
                                             key={index.toString()}
+                                            onClick={() => {
+                                                setSelectedChat({ chat: 'F', id: friend.id });
+                                            }}
                                         >
-                                            <ChakraAvatar name={user.user_name.toString()} src={user.user_avatar}></ChakraAvatar>
-                                            <Text>{user.user_name.length > 10 ? user.user_name.slice(0, 10) + '...' : user.user_name}</Text>
-                                            <Tooltip label={'send Friend request'} openDelay={500}>
-                                                <IconButton
-                                                    onClick={() => {
-                                                        sendFriendReq(user.user_id);
-                                                    }}
-                                                    fontSize={18}
-                                                    rounded={30}
-                                                    color={'green'}
-                                                    variant={'ghost'}
-                                                    aria-label={'new channel'}
-                                                    icon={<AiOutlineUserAdd />}
-                                                />
-                                            </Tooltip>
+                                            <ChakraAvatar name={friend.name.toString()} src={friend.avatar.toString()}></ChakraAvatar>
+                                            <Text>{friend.name.length > 10 ? friend.name.slice(0, 10) + '...' : friend.name}</Text>
                                         </HStack>
-                                    ) : undefined
-                                )
-                            ) : (
-                                <Flex h={'100%'} justifyContent={'center'} alignItems={'center'}>
-                                    <Text>No Users yet</Text>
-                                </Flex>
-                            )}
-                        </VStack>
-                    </TabPanel>
-                    <TabPanel h={'100%'} w={'100%'} m={0} p={0} overflow={'auto'}>
-                        <VStack pb={10} spacing={0} w={'100%'}>
-                            {allGroups.length ? (
-                                allGroups.map((group: any, index: any) =>
-                                    !isMember(group.id) ? (
+                                    ))
+                                ) : (
+                                    <Flex h={'100%'} justifyContent={'center'} alignItems={'center'}>
+                                        <Text>No friends yet</Text>
+                                    </Flex>
+                                )}
+                            </VStack>
+                        </TabPanel>
+                        <TabPanel h={'100%'} w={'100%'} m={0} p={0} overflow={'auto'}>
+                            <VStack pb={10} spacing={0} w={'100%'}>
+                                {newGroups.length ? (
+                                    newGroups.map((group: any, index: any) => (
                                         <HStack
+                                            onClick={() => {
+                                                setSelectedChat({ chat: 'G', id: group.id });
+                                            }}
+                                            as={'button'}
                                             p={5}
                                             alignItems={'center'}
                                             _hover={{ bg: value }}
@@ -275,69 +215,136 @@ function Tabs() {
                                         >
                                             <ChakraAvatar name={group.name.toString()} src={group.avatar}></ChakraAvatar>
                                             <Text>{group.name.length > 10 ? group.name.slice(0, 10) + '...' : group.name}</Text>
-                                            <Tooltip label={'Joing Room'} openDelay={500}>
-                                                <IconButton
-                                                    onClick={() => {
-                                                        setGroup({
-                                                            id: group.id,
-                                                            password: group.password,
-                                                            type: group.type,
-                                                            name: group.name,
-                                                        });
-                                                        if (group.type === 'protected') onOpen();
-                                                        else
-                                                            joinGroup({
+                                        </HStack>
+                                    ))
+                                ) : (
+                                    <Flex h={'100%'} justifyContent={'center'} alignItems={'center'}>
+                                        <Text>No channels yet</Text>
+                                    </Flex>
+                                )}
+                            </VStack>
+                        </TabPanel>
+                        <TabPanel h={'100%'} w={'100%'} m={0} p={0} overflow={'auto'}>
+                            <VStack pb={10} spacing={0} w={'100%'}>
+                                {users.length ? (
+                                    users.map((user: any, index: any) =>
+                                        !isFriend(user.user_id) ? (
+                                            <HStack
+                                                p={5}
+                                                alignItems={'center'}
+                                                _hover={{ bg: value }}
+                                                rounded={5}
+                                                h={'4.5em'}
+                                                w={'100%'}
+                                                key={index.toString()}
+                                            >
+                                                <ChakraAvatar name={user.user_name.toString()} src={user.user_avatar}></ChakraAvatar>
+                                                <Text>
+                                                    {user.user_name.length > 10 ? user.user_name.slice(0, 10) + '...' : user.user_name}
+                                                </Text>
+                                                <Tooltip label={'send Friend request'} openDelay={500}>
+                                                    <IconButton
+                                                        onClick={() => {
+                                                            sendFriendReq(user.user_id);
+                                                        }}
+                                                        fontSize={18}
+                                                        rounded={30}
+                                                        color={'green'}
+                                                        variant={'ghost'}
+                                                        aria-label={'new channel'}
+                                                        icon={<AiOutlineUserAdd />}
+                                                    />
+                                                </Tooltip>
+                                            </HStack>
+                                        ) : undefined
+                                    )
+                                ) : (
+                                    <Flex h={'100%'} justifyContent={'center'} alignItems={'center'}>
+                                        <Text>No Users yet</Text>
+                                    </Flex>
+                                )}
+                            </VStack>
+                        </TabPanel>
+                        <TabPanel h={'100%'} w={'100%'} m={0} p={0} overflow={'auto'}>
+                            <VStack pb={10} spacing={0} w={'100%'}>
+                                {allGroups.length ? (
+                                    allGroups.map((group: any, index: any) =>
+                                        !isMember(group.id) ? (
+                                            <HStack
+                                                p={5}
+                                                alignItems={'center'}
+                                                _hover={{ bg: value }}
+                                                rounded={5}
+                                                h={'4.5em'}
+                                                w={'100%'}
+                                                key={index.toString()}
+                                            >
+                                                <ChakraAvatar name={group.name.toString()} src={group.avatar}></ChakraAvatar>
+                                                <Text>{group.name.length > 10 ? group.name.slice(0, 10) + '...' : group.name}</Text>
+                                                <Tooltip label={'Joing Room'} openDelay={500}>
+                                                    <IconButton
+                                                        onClick={() => {
+                                                            setGroup({
                                                                 id: group.id,
                                                                 password: group.password,
                                                                 type: group.type,
                                                                 name: group.name,
                                                             });
-                                                    }}
-                                                    fontSize={18}
-                                                    rounded={30}
-                                                    color={'green'}
-                                                    variant={'ghost'}
-                                                    aria-label={'new channel'}
-                                                    icon={<AiOutlineUsergroupAdd />}
-                                                />
-                                            </Tooltip>
-                                            {group.type === 'protected' && (
-                                                <Tooltip label={'Protected Room'} openDelay={500}>
-                                                    <Box>
-                                                        <BsFillKeyFill />
-                                                    </Box>
+                                                            if (group.type === 'protected') onOpen();
+                                                            else
+                                                                joinGroup({
+                                                                    id: group.id,
+                                                                    password: group.password,
+                                                                    type: group.type,
+                                                                    name: group.name,
+                                                                });
+                                                        }}
+                                                        fontSize={18}
+                                                        rounded={30}
+                                                        color={'green'}
+                                                        variant={'ghost'}
+                                                        aria-label={'new channel'}
+                                                        icon={<AiOutlineUsergroupAdd />}
+                                                    />
                                                 </Tooltip>
-                                            )}
-                                        </HStack>
-                                    ) : undefined
-                                )
-                            ) : (
-                                <Flex h={'100%'} justifyContent={'center'} alignItems={'center'}>
-                                    <Text>There is no groups in the website yet</Text>
-                                </Flex>
-                            )}
-                        </VStack>
-                    </TabPanel>
-                    <FloatingActionButton />
-                </TabPanels>
-            </ChakraTabs>
-            <Modal onClose={onClose} size="md" isOpen={isOpen} isCentered>
-                <ModalContent w={'20em'} h={'14em'} bg={value}>
-                    <ModalHeader>Join Channel</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <Input type="text" onChange={(e) => setPassword(e.target.value)} />
-                    </ModalBody>
-                    <ModalFooter pb={6}>
-                        <Button variant={'ghost'} colorScheme="purple" mr={3} onClick={onClose}>
-                            CANCEL
-                        </Button>
-                        <Button variant={'ghost'} color="customRed" mr={3} onClick={submit}>
-                            SUBMIT
-                        </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
+                                                {group.type === 'protected' && (
+                                                    <Tooltip label={'Protected Room'} openDelay={500}>
+                                                        <Box>
+                                                            <BsFillKeyFill />
+                                                        </Box>
+                                                    </Tooltip>
+                                                )}
+                                            </HStack>
+                                        ) : undefined
+                                    )
+                                ) : (
+                                    <Flex h={'100%'} justifyContent={'center'} alignItems={'center'}>
+                                        <Text>There is no groups in the website yet</Text>
+                                    </Flex>
+                                )}
+                            </VStack>
+                        </TabPanel>
+                        <FloatingActionButton />
+                    </TabPanels>
+                </ChakraTabs>
+                <Modal onClose={onClose} size="md" isOpen={isOpen} isCentered>
+                    <ModalContent w={'20em'} h={'14em'} bg={value}>
+                        <ModalHeader>Join Channel</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <Input type="text" onChange={(e) => setPassword(e.target.value)} />
+                        </ModalBody>
+                        <ModalFooter pb={6}>
+                            <Button variant={'ghost'} colorScheme="purple" mr={3} onClick={onClose}>
+                                CANCEL
+                            </Button>
+                            <Button variant={'ghost'} color="customRed" mr={3} onClick={submit}>
+                                SUBMIT
+                            </Button>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
+            </HStack>
         </>
     );
 }
